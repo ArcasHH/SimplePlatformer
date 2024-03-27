@@ -17,7 +17,7 @@ int main()
 {
 	RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Game"/*, sf::Style::Fullscreen*/);
 	view.reset(FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
-
+	menu(window);//âûçîâ ìåíş
 	///////////////////ÌÓÇÛÊÀ
 	Music die_music;
 	die_music.openFromFile("audio/die.ogg");
@@ -31,8 +31,6 @@ int main()
 	jump_sound.setBuffer(jump_buffer);
 
 	
-
-	menu(window);//âûçîâ ìåíş
 	 
 	///////////////////ÊÀĞÒÀ
 	Image map_image;
@@ -57,7 +55,6 @@ int main()
 	SpriteManager playerSprite("hero1.png", "Hero");
 	Player p("hero1.png", START_X, START_Y, W, H);
 
-	float currentFrame = 0;
 	Clock clock, gameTimeClock; //âğåìÿ èãğû 
 	int gameTime = 0;
 	float dX = 0, dY = 0;
@@ -79,10 +76,19 @@ int main()
 			if ((event.type == sf::Event::Closed))
 				window.close();
 		}
-		//if (Keyboard::isKeyPressed(Keyboard::Tab)) { return true; }// ğåñòàğò.
 		if (Keyboard::isKeyPressed(Keyboard::Escape)) { return false; }//ÂÛÕÎÄ ÈÇ ÈÃĞÛ ÍÀ Escape
-		if (Keyboard::isKeyPressed(Keyboard::R)) { window.close(); }
+		if (Keyboard::isKeyPressed(Keyboard::R)) { 
+			//window.close();
+			die_music.stop();
+			music.stop();
+			menu(window);
+			p.x = START_X;
+			p.y = START_Y;
+			p.speed = 0, p.dx = 0, p.dy = 0;
+			p.life = true, p.win = false, p.isMove = false, p.onGround = false;
 
+			
+		}
 
 		for (int i = 0; i < HEIGHT_MAP; i++)//ÎÒĞÈÑÎÂÊÀ ÊÀĞÒÛ
 			for (int j = 0; j < WIDTH_MAP; j++)
@@ -105,57 +111,33 @@ int main()
 			window.draw(win_text);
 		}
 		else if (!p.life){ // ×ÒÎ ÏĞÎÈÑÕÎÄÈÒ ÏĞÈ ÑÌÅĞÒÈ///
-#if 0
-			sf::Clock clock;
-			float time = 0;
-			while (time < 3.5)
-			{
-				time = clock.getElapsedTime().asSeconds();
-				view.move(0, 1.5);
-				die_text.setPosition(view.getCenter().x - 150, view.getCenter().y - 100);
-				window.draw(die_text);
-				if (time >= 3) {
-					//menu(window);//âûçîâ ìåíş
-					break;
-				}
-			}
-#else
+
 			if (die_music.getStatus() == SoundSource::Status::Stopped) {
 				die_music.play();
 				music.pause();
 			}
-			if(view.getCenter().y < 3.5 * WINDOW_HEIGHT)
+			if(view.getCenter().y < 3.5 * WINDOW_HEIGHT){
 				view.move(0, 1);
-			if (die_music.getStatus() != SoundSource::Status::Paused) {
 				die_text.setPosition(view.getCenter().x - 150, view.getCenter().y - 100);
 				window.draw(die_text);
 			}
-			if (die_music.getStatus() == SoundSource::Status::Paused) {
+			else {//ÌÓÇÛÊÀ ÏĞÈ ÑÌÅĞÒÈ
+				die_music.pause();
 				restart_text.setPosition(view.getCenter().x - 150, view.getCenter().y - 100);
 				window.draw(restart_text);
 			}
-			
-#endif
-		}
-		if (view.getCenter().y > 3.4 * WINDOW_HEIGHT) {//ÌÓÇÛÊÀ ÏĞÈ ÑÌÅĞÒÈ
-			die_music.pause();
-			//window.close();
-			//menu(window);//âûçîâ ìåíş
-			//break;
 		}
 		if (p.onGround&&p.life) {//ÇÂÓÊÈ ÏĞÛÆÊÀ
 			jump_sound.play();
 		}
-		
+		////////ÂÛÂÎÄ ÂĞÅÌÅÍÈ ÍÀ İÊĞÀÍ
 		std::ostringstream gameTimeString; 
 		gameTimeString << gameTime;		
 		text.setString("time elapsed :  " + gameTimeString.str()); 
 		text.setPosition(view.getCenter().x - WINDOW_WIDTH/2 +50, view.getCenter().y - WINDOW_HEIGHT/2 +50);
-
-		
 		window.draw(text);
+
 		window.display();
 	}
-	music.stop();
 	return 0;
 }

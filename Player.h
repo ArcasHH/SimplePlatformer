@@ -12,7 +12,6 @@ class Player {
 public:
 	float w, h, dx, dy, speed;
 	float x, y;
-	int dir, playerScore;
 	bool life, win, isMove, onGround;
 	enum { left, right, up, down, jump, stay } state;
 	String File;
@@ -21,7 +20,7 @@ public:
 	Sprite sprite;
 	Player(String F, float X, float Y, float W, float H) {
 
-		dir = 0, speed = 0, playerScore = 0, dx = 0, dy = 0;
+		speed = 0, dx = 0, dy = 0;
 		life = true, win = false, isMove = false, onGround = false;
 		File = F;
 		w = W;

@@ -15,15 +15,15 @@ constexpr float PLAYER_SPEED = 0.1f;
 constexpr float JUMP = -0.3f;
 constexpr float GRAVITATION = 0.0002f;
 
-constexpr unsigned START_X = 100; //начальное положение игрока
-constexpr unsigned START_Y = 700;
+constexpr int START_X = 100; //начальное положение игрока
+constexpr int START_Y = 700;
  
 constexpr float W = 96.f;  //ширина и высота спрайта слизня. Необходимо кратность 2
 constexpr float H = 54.f;
 
 
 // параметры меню
-constexpr unsigned MENU_X = 100; //сдвиг текста меню по горизонтали
+constexpr unsigned MENU_X = 50; //сдвиг текста меню по горизонтали
 constexpr unsigned NEW_GAME_Y = 200;//положение кнопки "новая игра"
 constexpr unsigned EXIT_Y = 300;//положение кнопки "выход"
 
