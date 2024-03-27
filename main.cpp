@@ -51,6 +51,7 @@ int main()
 	Text text("", font, TEXT_SIZE);
 	Text die_text("YOU DIED", font, BIG_TEXT_SIZE);
 	Text win_text("YOU WIN", font, BIG_TEXT_SIZE);
+	Text restart_text("press R", font, BIG_TEXT_SIZE);
 
 
 	SpriteManager playerSprite("hero1.png", "Hero");
@@ -80,7 +81,7 @@ int main()
 		}
 		//if (Keyboard::isKeyPressed(Keyboard::Tab)) { return true; }// ğåñòàğò.
 		if (Keyboard::isKeyPressed(Keyboard::Escape)) { return false; }//ÂÛÕÎÄ ÈÇ ÈÃĞÛ ÍÀ Escape
-		
+		if (Keyboard::isKeyPressed(Keyboard::R)) { window.close(); }
 
 
 		for (int i = 0; i < HEIGHT_MAP; i++)//ÎÒĞÈÑÎÂÊÀ ÊÀĞÒÛ
@@ -119,18 +120,28 @@ int main()
 				}
 			}
 #else
-			view.move(0, 1.5);
-			die_text.setPosition(view.getCenter().x - 150, view.getCenter().y - 100);
-			window.draw(die_text);
 			if (die_music.getStatus() == SoundSource::Status::Stopped) {
 				die_music.play();
 				music.pause();
 			}
+			if(view.getCenter().y < 3.5 * WINDOW_HEIGHT)
+				view.move(0, 1);
+			if (die_music.getStatus() != SoundSource::Status::Paused) {
+				die_text.setPosition(view.getCenter().x - 150, view.getCenter().y - 100);
+				window.draw(die_text);
+			}
+			if (die_music.getStatus() == SoundSource::Status::Paused) {
+				restart_text.setPosition(view.getCenter().x - 150, view.getCenter().y - 100);
+				window.draw(restart_text);
+			}
+			
 #endif
 		}
-		if ((die_music.getStatus() == SoundSource::Status::Stopped) && view.getCenter().y > 2.5 * WINDOW_HEIGHT) {//ÌÓÇÛÊÀ ÏĞÈ ÑÌÅĞÒÈ
-			window.close();
+		if (view.getCenter().y > 3.4 * WINDOW_HEIGHT) {//ÌÓÇÛÊÀ ÏĞÈ ÑÌÅĞÒÈ
+			die_music.pause();
+			//window.close();
 			//menu(window);//âûçîâ ìåíş
+			//break;
 		}
 		if (p.onGround&&p.life) {//ÇÂÓÊÈ ÏĞÛÆÊÀ
 			jump_sound.play();
@@ -145,5 +156,6 @@ int main()
 		window.draw(text);
 		window.display();
 	}
+	music.stop();
 	return 0;
 }

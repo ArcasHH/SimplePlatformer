@@ -12,7 +12,7 @@ void menu(RenderWindow& window) {
 
 	menuBackground.loadFromFile("images/screen.jpg");
 	Sprite menu1(menuTexture1), menu2(menuTexture2), menuBg(menuBackground);
-	bool isMenu = 1;
+	bool isMenu = true;
 	int menuNum = 0;
 	menu1.setPosition(MENU_X, NEW_GAME_Y);
 	menu2.setPosition(MENU_X, EXIT_Y);
@@ -33,8 +33,10 @@ void menu(RenderWindow& window) {
 		Event event;
 		while (window.pollEvent(event))
 		{
-			if ((event.type == sf::Event::Closed))
+			if ((event.type == sf::Event::Closed)) {
 				window.close();
+				return;
+			}
 		}
 		if (Mouse::isButtonPressed(Mouse::Left))
 		{
