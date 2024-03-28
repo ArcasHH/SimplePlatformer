@@ -54,7 +54,7 @@ public:
 		}
 #endif
 	}
-	void update(float time)
+	void update(float time, const sf::String Map[HEIGHT_MAP])
 	{
 		control();
 		switch (state)
@@ -64,9 +64,9 @@ public:
 			case jump: break;
 		}
 		x += dx * time;
-		checkCollisionWithMap(dx, 0);
+		checkCollisionWithMap(dx, 0, Map);
 		y += dy * time;
-		checkCollisionWithMap(0, dy);
+		checkCollisionWithMap(0, dy, Map);
 		if (!isMove) { speed = 0; }
 		sprite.setPosition(x + w / 2, y + h / 2);
 		dy = dy + GRAVITATION * time;
@@ -80,23 +80,23 @@ public:
 		return y;
 	}
 
-	void checkCollisionWithMap(float Dx, float Dy)
+	void checkCollisionWithMap(float Dx, float Dy, const sf::String Map[HEIGHT_MAP])
 	{
 		for (int i = y / TILE_SIZE; i < (y + h) / TILE_SIZE; i++)
 			for (int j = x / TILE_SIZE; j < (x + w) / TILE_SIZE; j++)
 			{
-				if (TileMap[i][j] == '0')//ÑÒÎËÊÍÎÂÅÍÈß Ñ ÏËÀÒÔÎÐÌÀÌÈ
+				if (Map[i][j] == '0')//ÑÒÎËÊÍÎÂÅÍÈß Ñ ÏËÀÒÔÎÐÌÀÌÈ
 				{
 					if (Dy > 0) { y = i * TILE_SIZE - h;  dy = 0; onGround = true; }
 					if (Dy < 0) { y = i * TILE_SIZE + TILE_SIZE;  dy = 0; }
 					if (Dx > 0) { x = j * TILE_SIZE - w; }
 					if (Dx < 0) { x = j * TILE_SIZE + TILE_SIZE; }
 				}
-				if (TileMap[i][j] == 'X')//ÑÌÅÐÒÜ
+				if (Map[i][j] == 'X')//ÑÌÅÐÒÜ
 				{
 					life = false;
 				}
-				if (TileMap[i][j] == 'W')//ÏÎÁÅÄÀ
+				if (Map[i][j] == 'W')//ÏÎÁÅÄÀ
 				{
 					win = true;
 				}

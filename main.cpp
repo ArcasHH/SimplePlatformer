@@ -17,7 +17,7 @@
 
 using namespace sf;
 
-void StartGame(RenderWindow &window) {
+void StartGame(RenderWindow &window, const sf::String Map[HEIGHT_MAP]) {
 	SpriteManager playerSprite("hero1.png", "Hero");
 	Player p("hero1.png", START_X, START_Y, W, H);
 
@@ -30,7 +30,7 @@ void StartGame(RenderWindow &window) {
 		clock.restart();
 		time = time / TIME_SCALE;
 
-		p.update(time);
+		p.update(time, Map);
 
 		window.setView(view);
 		window.clear();
@@ -42,7 +42,7 @@ void StartGame(RenderWindow &window) {
 			if ((event.type == sf::Event::Closed))
 				window.close();
 		}
-		//if (Keyboard::isKeyPressed(Keyboard::Escape)) { return false; }//¬€’Œƒ »« »√–€ Õ¿ Escape
+		if (Keyboard::isKeyPressed(Keyboard::Escape)) { break; }//¬€’Œƒ »« »√–€ Õ¿ Escape
 		if (Keyboard::isKeyPressed(Keyboard::R)) {
 			//window.close();
 			die_music.stop();
@@ -57,10 +57,10 @@ void StartGame(RenderWindow &window) {
 		for (int i = 0; i < HEIGHT_MAP; i++)//Œ“–»—Œ¬ ¿  ¿–“€
 			for (int j = 0; j < WIDTH_MAP; j++)
 			{
-				if (TileMap[i][j] == ' ')  s_map.setTextureRect(IntRect(0, 0, TILE_SIZE, TILE_SIZE));
-				if (TileMap[i][j] == 'X')  s_map.setTextureRect(IntRect(TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
-				if ((TileMap[i][j] == '0')) s_map.setTextureRect(IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
-				if ((TileMap[i][j] == 'W')) s_map.setTextureRect(IntRect(3 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
+				if (Map[i][j] == ' ')  s_map.setTextureRect(IntRect(0, 0, TILE_SIZE, TILE_SIZE));
+				if (Map[i][j] == 'X')  s_map.setTextureRect(IntRect(TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
+				if ((Map[i][j] == '0')) s_map.setTextureRect(IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
+				if ((Map[i][j] == 'W')) s_map.setTextureRect(IntRect(3 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
 				s_map.setPosition(static_cast<float>(j * TILE_SIZE), static_cast<float>(i * TILE_SIZE));
 				window.draw(s_map);
 			}
@@ -133,9 +133,8 @@ int main()
 	win_text.setFont(font);
 	restart_text.setFont(font);
 
-	StartGame(window);
+	StartGame(window, Map1);
 	
-
 	music.play();
 	
 	return 0;
