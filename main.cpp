@@ -3,55 +3,21 @@
 #include <SFML/Audio.hpp>
 #include <iostream> 
 #include <sstream>
+
 #include "Constants.h"
-#include "map.h"
+
 #include "view.h"
 #include "Player.h"
 #include "Menu.h"
 #include "SpriteManager.h"
+
+#include "resources.h"
+#include "map.h"
 //#include "level.h"
 
 using namespace sf;
 
-int main()
-{
-	RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Game"/*, sf::Style::Fullscreen*/);
-	view.reset(FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
-	menu(window);//вызов меню
-	///////////////////МУЗЫКА
-	Music die_music;
-	die_music.openFromFile("audio/die.ogg");
-	Music music;
-	music.openFromFile("audio/yuka-kitamura-epilogue.ogg");
-	music.play();
-	///////////////////ЗВУКИ
-	sf::SoundBuffer jump_buffer;
-	jump_buffer.loadFromFile("audio/jump.ogg");// тут загружаем в буфер что то
-	sf::Sound jump_sound;
-	jump_sound.setBuffer(jump_buffer);
-
-	
-	 
-	///////////////////КАРТА
-	Image map_image;
-	map_image.loadFromFile("images/map.png");
-	Texture map;
-	map.loadFromImage(map_image);
-	Sprite s_map;
-	s_map.setTexture(map);
-
-	//Level lvl;//создали экземпляр класса уровень
-	//lvl.LoadFromFile("map.tmx");//загрузили в него карту, внутри класса с помощью методов он ее обработает.
-
-	//////////////////ТЕКСТЫ
-	Font font;
-	font.loadFromFile("nyashasans.ttf");
-	Text text("", font, TEXT_SIZE);
-	Text die_text("YOU DIED", font, BIG_TEXT_SIZE);
-	Text win_text("YOU WIN", font, BIG_TEXT_SIZE);
-	Text restart_text("press R", font, BIG_TEXT_SIZE);
-
-
+void StartGame(RenderWindow &window) {
 	SpriteManager playerSprite("hero1.png", "Hero");
 	Player p("hero1.png", START_X, START_Y, W, H);
 
@@ -76,8 +42,8 @@ int main()
 			if ((event.type == sf::Event::Closed))
 				window.close();
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Escape)) { return false; }//ВЫХОД ИЗ ИГРЫ НА Escape
-		if (Keyboard::isKeyPressed(Keyboard::R)) { 
+		//if (Keyboard::isKeyPressed(Keyboard::Escape)) { return false; }//ВЫХОД ИЗ ИГРЫ НА Escape
+		if (Keyboard::isKeyPressed(Keyboard::R)) {
 			//window.close();
 			die_music.stop();
 			music.stop();
@@ -86,8 +52,6 @@ int main()
 			p.y = START_Y;
 			p.speed = 0, p.dx = 0, p.dy = 0;
 			p.life = true, p.win = false, p.isMove = false, p.onGround = false;
-
-			
 		}
 
 		for (int i = 0; i < HEIGHT_MAP; i++)//ОТРИСОВКА КАРТЫ
@@ -110,13 +74,13 @@ int main()
 			win_text.setPosition(view.getCenter().x - 150, view.getCenter().y - 100);
 			window.draw(win_text);
 		}
-		else if (!p.life){ // ЧТО ПРОИСХОДИТ ПРИ СМЕРТИ///
+		else if (!p.life) { // ЧТО ПРОИСХОДИТ ПРИ СМЕРТИ///
 
 			if (die_music.getStatus() == SoundSource::Status::Stopped) {
 				die_music.play();
 				music.pause();
 			}
-			if(view.getCenter().y < 3.5 * WINDOW_HEIGHT){
+			if (view.getCenter().y < 3.5 * WINDOW_HEIGHT) {
 				view.move(0, 1);
 				die_text.setPosition(view.getCenter().x - 150, view.getCenter().y - 100);
 				window.draw(die_text);
@@ -127,17 +91,52 @@ int main()
 				window.draw(restart_text);
 			}
 		}
-		if (p.onGround&&p.life) {//ЗВУКИ ПРЫЖКА
+		if (p.onGround && p.life) {//ЗВУКИ ПРЫЖКА
 			jump_sound.play();
 		}
 		////////ВЫВОД ВРЕМЕНИ НА ЭКРАН
-		std::ostringstream gameTimeString; 
-		gameTimeString << gameTime;		
-		text.setString("time elapsed :  " + gameTimeString.str()); 
-		text.setPosition(view.getCenter().x - WINDOW_WIDTH/2 +50, view.getCenter().y - WINDOW_HEIGHT/2 +50);
+		std::ostringstream gameTimeString;
+		gameTimeString << gameTime;
+		text.setString("time elapsed :  " + gameTimeString.str());
+		text.setPosition(view.getCenter().x - WINDOW_WIDTH / 2 + 50, view.getCenter().y - WINDOW_HEIGHT / 2 + 50);
 		window.draw(text);
-
 		window.display();
 	}
+}
+
+
+int main()
+{
+	RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Game"/*, sf::Style::Fullscreen*/);
+	view.reset(FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
+
+	menu(window);//вызов меню
+
+	///////////////////МУЗЫКА
+	die_music.openFromFile("audio/die.ogg");
+	music.openFromFile("audio/yuka-kitamura-epilogue.ogg");
+	
+	///////////////////ЗВУКИ
+	jump_buffer.loadFromFile("audio/jump.ogg");// тут загружаем в буфер что то
+	jump_sound.setBuffer(jump_buffer);
+
+	
+	///////////////////КАРТА
+	map_image.loadFromFile("images/map.png");
+	map.loadFromImage(map_image);
+	s_map.setTexture(map);
+
+	//////////////////ТЕКСТЫ
+	font.loadFromFile("nyashasans.ttf");
+	text.setFont(font);
+	die_text.setFont(font);
+	win_text.setFont(font);
+	restart_text.setFont(font);
+
+	StartGame(window);
+	
+
+	music.play();
+	
 	return 0;
 }

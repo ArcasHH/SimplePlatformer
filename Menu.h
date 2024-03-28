@@ -1,8 +1,7 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include "Constants.h"
 #include "view.h"
-#include <SFML/Audio.hpp>
+#include "resources.h"
 
 
 void menu(RenderWindow& window) {
@@ -20,12 +19,12 @@ void menu(RenderWindow& window) {
 	menuBg.setPosition(350, 0);
 	view.setCenter(WINDOW_WIDTH/2-100, WINDOW_HEIGHT/2);
 	window.setView(view);
-
-	Music music_menu;
+	//œ–Œ»√–€¬¿Õ»≈ Ã”«€ » Ã≈Õﬁ
 	music_menu.openFromFile("audio/yuka-kitamura-epilogue.ogg");
 	if (music_menu.getStatus() == SoundSource::Status::Stopped) {
 		music_menu.play();
 	}
+
 	//////////////////////////////Ã≈Õﬁ///////////////////
 	while (isMenu)
 	{
@@ -52,7 +51,6 @@ void menu(RenderWindow& window) {
 			if (menuNum == 2) { window.close(); isMenu = false; }
 
 		}
-
 		window.draw(menuBg);
 		window.draw(menu1);
 		window.draw(menu2);
