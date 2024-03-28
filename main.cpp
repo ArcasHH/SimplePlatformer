@@ -133,8 +133,11 @@ int main()
 	win_text.setFont(font);
 	restart_text.setFont(font);
 
-	StartGame(window, Map1);
-	
+	short lvl = 3;
+	if (lvl == 1) { StartGame(window, Map1); }
+	if (lvl == 2) { StartGame(window, Map2); }
+	if (lvl == 3) { StartGame(window, Map3); }
+
 	music.play();
 	
 	return 0;
