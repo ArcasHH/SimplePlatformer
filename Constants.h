@@ -3,6 +3,7 @@
 constexpr unsigned WINDOW_HEIGHT = 720;
 constexpr unsigned WINDOW_WIDTH = 1280;
 constexpr int TILE_SIZE = 32;
+constexpr int LVL_NUM_SIZE = 128;
 constexpr unsigned TEXT_SIZE = 20;
 constexpr unsigned BIG_TEXT_SIZE =50;
 
@@ -29,3 +30,5 @@ constexpr unsigned EXIT_Y = 300;//положение кнопки "выход"
 
 constexpr unsigned BUTTON_WIDTH = 300;
 constexpr unsigned BUTTON_HEIGHT = 50;
+constexpr unsigned LVL_NUM_X = 350;
+constexpr unsigned LVL_NUM_Y = 100;

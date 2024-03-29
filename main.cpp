@@ -13,7 +13,6 @@
 
 #include "resources.h"
 #include "map.h"
-//#include "level.h"
 
 using namespace sf;
 
@@ -44,14 +43,13 @@ void StartGame(RenderWindow &window, const sf::String Map[HEIGHT_MAP]) {
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Escape)) { break; }//¬€’Œƒ »« »√–€ Õ¿ Escape
 		if (Keyboard::isKeyPressed(Keyboard::R)) {
-			//window.close();
 			die_music.stop();
 			music.stop();
 			menu(window);
-			p.x = START_X;
-			p.y = START_Y;
-			p.speed = 0, p.dx = 0, p.dy = 0;
-			p.life = true, p.win = false, p.isMove = false, p.onGround = false;
+			if (lvl == 1) { StartGame(window, Map1); }
+			if (lvl == 2) { StartGame(window, Map2); }
+			if (lvl == 3) { StartGame(window, Map3); }
+
 		}
 
 		for (int i = 0; i < HEIGHT_MAP; i++)//Œ“–»—Œ¬ ¿  ¿–“€
@@ -133,7 +131,7 @@ int main()
 	win_text.setFont(font);
 	restart_text.setFont(font);
 
-	short lvl = 3;
+	
 	if (lvl == 1) { StartGame(window, Map1); }
 	if (lvl == 2) { StartGame(window, Map2); }
 	if (lvl == 3) { StartGame(window, Map3); }

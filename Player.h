@@ -7,7 +7,7 @@
 
 using namespace sf;
 
-
+int lvl = 1;
 class Player {
 public:
 	float w, h, dx, dy, speed;
