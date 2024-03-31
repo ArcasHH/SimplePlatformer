@@ -11,7 +11,7 @@ void die_screen(RenderWindow& window);
 void win_screen(RenderWindow& window);
 void menu(RenderWindow& window);
 
-void StartGame(RenderWindow& window, sf::String Map[HEIGHT_MAP]) {
+void StartGame(RenderWindow& window, sf::String *Map) {
 	music.play();
 	SpriteManager playerSprite("hero1.png", "Hero");
 	Player p("hero1.png", START_X, START_Y, W, H);
@@ -172,10 +172,10 @@ void win_screen(RenderWindow& window) {
 	PushButton next_button("next.png", view.getCenter().x - 300, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
 	PushButton menu_button("menu.png", view.getCenter().x - 100, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
 	PushButton exit_button("exit.png", view.getCenter().x + 100, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
-	BackgroundImage dance("sprite_dragon.png", 500, 500);
+	//BackgroundImage dance("sprite_dragon.png", 500, 500);
+	Animation dance("sprite_dragon.png", 100, 100, 498, 391);
 	
 /////////////////////////////////////////////////////////
-
 
 	bool isWinScreen = true;
 	win_text.setPosition(view.getCenter().x - 150, view.getCenter().y - 100);
@@ -184,30 +184,12 @@ void win_screen(RenderWindow& window) {
 	{
 		window.clear(Color::Black);
 		//window.draw(dance.sprite);
-#if 0
-		if (win_clock.getElapsedTime().asSeconds() > 1.0f) {
-			if (rectSourceSprite.left == 2490 - 498) {
-				rectSourceSprite.left = 0;
-				rectSourceSprite.top += 391;
-			}
-			else if (rectSourceSprite.top != 391 * 44) {
-				rectSourceSprite.left += 498;
-			}
-			else {
-				rectSourceSprite.left = 0;
-				rectSourceSprite.top = 0;
-			}
-				
 
-			win_sprite.setTextureRect(rectSourceSprite);
-			win_clock.restart();
-		}
-#endif
-		
 
 		next_button.paint_button(window);
 		menu_button.paint_button(window);
 		exit_button.paint_button(window);
+		dance.draw_anim();
 
 		Event event;
 		while (window.pollEvent(event))
@@ -243,10 +225,11 @@ void win_screen(RenderWindow& window) {
 			}
 			if (exit_button.is_pos(window)) {
 				win_music.stop();
+				//window.close(); // надо написать функцию, закрывающую все окна и выключающую всю музыку
 				return;
 			}
 		}
-		window.draw(dance.sprite);
+		//window.draw(dance.sprite);
 		window.draw(next_button.sprite);
 		window.draw(menu_button.sprite);
 		window.draw(exit_button.sprite);

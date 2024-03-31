@@ -80,3 +80,47 @@ public:
 		sprite.setPosition(posX, posY);
 	}
 };
+class Animation {
+public:
+	String file;
+	sf::Texture texture;
+	sf::IntRect rect;
+	sf::Sprite sprite;
+	int posX, posY, rect_w, rect_h;
+	sf::Clock anim_clock;
+
+	Animation(String f, int x, int y, int w, int h) {
+		file = f;
+		posX = x, posY = y;
+		rect_h = h, rect_w = w;
+
+		rect.left = 0;
+		rect.top = 0;
+		rect.width = w;
+		rect.height = h;
+
+		texture.loadFromFile("images/" + file);
+		//sprite.setTexture(texture);
+		sprite.setTextureRect(rect);
+		sprite.setPosition(posX, posY);
+		anim_clock.restart();
+	}
+	void draw_anim() {
+		
+		if (anim_clock.getElapsedTime().asSeconds() > 0.5f) {
+			if (rect.left == 2490 - rect_w) {
+				rect.left = 0;
+				rect.top += rect_h;
+			}
+			else if (rect.top != rect_h * 44) {
+				rect.left += rect_w;
+			}
+			else { // заново
+				rect.left = 0;
+				rect.top = 0;
+			}
+			sprite.setTextureRect(rect);
+			anim_clock.restart();
+		}
+	}
+};
