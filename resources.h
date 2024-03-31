@@ -22,7 +22,7 @@ sf::Font font;
 sf::Text text("", font, TEXT_SIZE);
 sf::Text die_text("YOU DIED", font, BIG_TEXT_SIZE);
 sf::Text win_text("YOU WIN", font, BIG_TEXT_SIZE);
-sf::Text restart_text("press R to exit menu", font, BIG_TEXT_SIZE);
+//sf::Text restart_text("press R to exit menu", font, BIG_TEXT_SIZE);
 
 class PushButton {
 public:

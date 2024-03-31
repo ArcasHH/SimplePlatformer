@@ -2,10 +2,11 @@
 #include "Constants.h"
 #include "view.h"
 #include "resources.h"
-
+#include "Player.h"
+using namespace sf;
 
 void menu(RenderWindow& window) {
-	
+
 	menuTexture1.loadFromFile("images/111.png");//ÍÌÓÔÍ‡ ÌÓ‚ÓÈ Ë„˚
 	menuTexture2.loadFromFile("images/222.png");//ÍÌÓÔÍ‡ ‚˚ıÓ‰‡
 
@@ -22,7 +23,7 @@ void menu(RenderWindow& window) {
 	menu2.setPosition(MENU_X, EXIT_Y);
 	menuBg.setPosition(MENU_X + 500, 0);
 
-	view.setCenter(WINDOW_WIDTH/2-100, WINDOW_HEIGHT/2);
+	view.setCenter(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2);
 	window.setView(view);
 	//œ–Œ»√–€¬¿Õ»≈ Ã”«€ » Ã≈Õﬁ
 	music_menu.openFromFile("audio/yuka-kitamura-epilogue.ogg");
@@ -39,9 +40,9 @@ void menu(RenderWindow& window) {
 		menuNum = 0;
 		window.clear(Color::Black);
 
-		if (IntRect(MENU_X, NEW_GAME_Y, BUTTON_WIDTH, BUTTON_HEIGHT).contains(Mouse::getPosition(window))) { 
-			menu1.setColor(Color(200,90,90)); 
-			menuNum = 1; 
+		if (IntRect(MENU_X, NEW_GAME_Y, BUTTON_WIDTH, BUTTON_HEIGHT).contains(Mouse::getPosition(window))) {
+			menu1.setColor(Color(200, 90, 90));
+			menuNum = 1;
 		}
 		if (IntRect(MENU_X, EXIT_Y, BUTTON_WIDTH, BUTTON_HEIGHT).contains(Mouse::getPosition(window))) {
 			menu2.setColor(Color(200, 90, 90));
@@ -50,7 +51,7 @@ void menu(RenderWindow& window) {
 		num1.paint_button(window);
 		num2.paint_button(window);
 		num3.paint_button(window);
-			
+
 		Event event;
 		while (window.pollEvent(event))
 		{
@@ -83,7 +84,7 @@ void menu(RenderWindow& window) {
 			num1.paint_button(window);
 			num2.paint_button(window);
 			num3.paint_button(window);
-				
+
 			if (menuNum == 1) isMenu = false;
 			if (menuNum == 2) { window.close(); isMenu = false; }
 		}
@@ -99,4 +100,3 @@ void menu(RenderWindow& window) {
 	}
 	music_menu.stop();
 }
-
