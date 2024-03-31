@@ -4,8 +4,6 @@
 #include "resources.h"
 #include "Player.h"
 #include "SpriteManager.h"
-//#include "menu.h"
-//#include "dieScreen.h"
 
 using namespace sf;
 
@@ -13,16 +11,15 @@ void die_screen(RenderWindow& window);
 void menu(RenderWindow& window);
 
 void StartGame(RenderWindow& window, sf::String Map[HEIGHT_MAP]) {
-
-	//RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Game");
-	//view.reset(FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
+	music.play();
 	SpriteManager playerSprite("hero1.png", "Hero");
 	Player p("hero1.png", START_X, START_Y, W, H);
 
 	Clock clock, gameTimeClock; //âðåìÿ èãðû 
 	int gameTime = 0;
 	float dX = 0, dY = 0;
-	while (window.isOpen())
+	bool game = true;
+	while (game)
 	{
 		float time = static_cast<float>(clock.getElapsedTime().asMicroseconds());
 		clock.restart();
@@ -40,13 +37,16 @@ void StartGame(RenderWindow& window, sf::String Map[HEIGHT_MAP]) {
 			if ((event.type == sf::Event::Closed))
 				window.close();
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Escape)) { break; }//ÂÛÕÎÄ ÈÇ ÈÃÐÛ ÍÀ Escape
+		if (Keyboard::isKeyPressed(Keyboard::Escape)) { //ÂÛÕÎÄ ÈÇ ÈÃÐÛ ÍÀ Escape
+			if (music.getStatus() == SoundSource::Status::Playing) {
+				music.stop();
+			}
+			break; 
+		}
 		if (Keyboard::isKeyPressed(Keyboard::R)) {
-			die_music.stop();
 			music.stop();
+			game = false;
 			menu(window);
-			
-
 		}
 
 		for (int i = 0; i < HEIGHT_MAP; i++)//ÎÒÐÈÑÎÂÊÀ ÊÀÐÒÛ
@@ -66,37 +66,15 @@ void StartGame(RenderWindow& window, sf::String Map[HEIGHT_MAP]) {
 			window.draw(p.sprite);
 		}
 		if (p.win) { //×ÒÎ ÏÐÎÈÑÕÎÄÈÒ ÏÐÈ ÏÎÁÅÄÅ
+			music.stop();
+			game = false;
 			win_text.setPosition(view.getCenter().x - 150, view.getCenter().y - 100);
 			window.draw(win_text);
 		}
 		else if (!p.life) { // ×ÒÎ ÏÐÎÈÑÕÎÄÈÒ ÏÐÈ ÑÌÅÐÒÈ///
-			if (die_music.getStatus() == SoundSource::Status::Stopped) {
-				die_music.play();//ÌÓÇÛÊÀ ÏÐÈ ÑÌÅÐÒÈ
-				music.pause();
-			}
+			music.stop();
+			game = false;
 			die_screen(window);
-#if 0	
-			if (die_music.getStatus() == SoundSource::Status::Stopped) {
-				die_music.play();//ÌÓÇÛÊÀ ÏÐÈ ÑÌÅÐÒÈ
-				music.pause();
-			}
-			if (view.getCenter().y < 3.5 * WINDOW_HEIGHT) {
-				view.move(0, 1);
-			}
-			die_text.setPosition(view.getCenter().x - 150, view.getCenter().y - 100);
-			window.draw(die_text);
-
-			if (view.getCenter().y < 3.5 * WINDOW_HEIGHT) {
-				view.move(0, 1);
-				die_text.setPosition(view.getCenter().x - 150, view.getCenter().y - 100);
-				window.draw(die_text);
-			}
-			else {
-				die_music.pause();
-				restart_text.setPosition(view.getCenter().x - 150, view.getCenter().y - 100);
-				window.draw(restart_text);
-			}
-#endif
 		}
 		if (p.onGround && p.life) {//ÇÂÓÊÈ ÏÐÛÆÊÀ
 			jump_sound.play();
@@ -109,30 +87,26 @@ void StartGame(RenderWindow& window, sf::String Map[HEIGHT_MAP]) {
 		window.draw(text);
 		window.display();
 	}
-	window.close();
+	if (music.getStatus() == SoundSource::Status::Playing) {
+		music.stop();
+	}
 }
 
 void die_screen(RenderWindow& window) {
-	//RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Menu");
-	//view.reset(FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
+
+	die_music.play();
 	view.setCenter(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2);
 	window.setView(view);
-	//music.stop();
 	PushButton restart_button("restart.png", view.getCenter().x - 300, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
 	PushButton menu_button("menu.png", view.getCenter().x - 100, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
 	PushButton exit_button("exit.png", view.getCenter().x + 100, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
 	bool isDieScreen = true;
+	die_text.setPosition(view.getCenter().x - 150, view.getCenter().y - 100);
 
 	while (isDieScreen)
 	{
 		window.clear(Color::Black);
 
-		if (die_music.getStatus() == SoundSource::Status::Stopped) {
-			die_music.play();//ÌÓÇÛÊÀ ÏÐÈ ÑÌÅÐÒÈ
-			music.pause();
-		}
-
-		die_text.setPosition(view.getCenter().x - 150, view.getCenter().y - 100);
 		window.draw(die_text);
 
 		restart_button.paint_button(window);
@@ -144,93 +118,65 @@ void die_screen(RenderWindow& window) {
 		{
 			if ((event.type == sf::Event::Closed)) {
 				window.close();
-				music_menu.stop();
 				return;
 			}
 		}
+		//ÄÅÉÑÒÂÈß ÏÐÈ ÍÀÆÀÒÈÈ ÊÍÎÏÎÊ
 		if (Mouse::isButtonPressed(Mouse::Left))
 		{
 			if (restart_button.is_pos(window)) {
 				die_music.stop();
-				music_menu.stop();
-				music.play();
 				isDieScreen = false;
 				if (lvl == 1) { StartGame(window, Map1); }
 				if (lvl == 2) { StartGame(window, Map2); }
 				if (lvl == 3) { StartGame(window, Map3); }
 			}
-
 			if (menu_button.is_pos(window)) {
 				die_music.stop();
-				music_menu.play();
+				isDieScreen = false;
 				menu(window);
 			}
 			if (exit_button.is_pos(window)) {
 				die_music.stop();
-				music_menu.stop();
-				window.close();
-				
 				return;
 			}
-
 		}
 		window.draw(restart_button.sprite);
 		window.draw(menu_button.sprite);
 		window.draw(exit_button.sprite);
 		window.display();
 	}
-	music_menu.stop();
-	//window.close();
+	if (die_music.getStatus() == SoundSource::Status::Playing) {
+		die_music.stop();
+	}
 }
 
 
 void menu(RenderWindow& window) {
 
-	//RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Menu");
-	//view.reset(FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
-
-	menuTexture1.loadFromFile("images/111.png");//êíîïêà íîâîé èãðû
-	menuTexture2.loadFromFile("images/222.png");//êíîïêà âûõîäà
-
+	//ÊÍÎÏÊÈ Â ÌÅÍÞ
+	PushButton Exit_button("222.png", MENU_X, EXIT_Y, BUTTON_WIDTH-100, BUTTON_HEIGHT, Color::White, Color::Red);
+	PushButton NewGame_button("111.png", MENU_X, NEW_GAME_Y, BUTTON_WIDTH-100, BUTTON_HEIGHT, Color::White, Color::Red);
 	PushButton num1("1.png", LVL_NUM_X, LVL_NUM_Y, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
-	PushButton num2("2.png", LVL_NUM_X, LVL_NUM_Y + LVL_NUM_SIZE, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Green);
-	PushButton num3("3.png", LVL_NUM_X, LVL_NUM_Y + 2 * LVL_NUM_SIZE, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Blue);
-	menuBackground.loadFromFile("images/screen.jpg");// çàäíèé ôîí
+	PushButton num2("2.png", LVL_NUM_X, LVL_NUM_Y + LVL_NUM_SIZE, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
+	PushButton num3("3.png", LVL_NUM_X, LVL_NUM_Y + 2 * LVL_NUM_SIZE, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
 
-	Sprite menu1(menuTexture1), menu2(menuTexture2), menuBg(menuBackground);
-	bool isMenu = true;
-	int menuNum = 0;
-
-	menu1.setPosition(MENU_X, NEW_GAME_Y);
-	menu2.setPosition(MENU_X, EXIT_Y);
-	menuBg.setPosition(MENU_X + 500, 0);
-
+	BackgroundImage bg("screen.jpg", MENU_X + 500, 0);
+	
 	view.setCenter(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2);
 	window.setView(view);
-	//ÏÐÎÈÃÐÛÂÀÍÈÅ ÌÓÇÛÊÈ ÌÅÍÞ
-	music_menu.openFromFile("audio/Akira_Yamaoka_Never_Forgive_Me_Never_Forget_Me.ogg");
-	if (music_menu.getStatus() == SoundSource::Status::Stopped) {
-		music_menu.setVolume(10);
-		music_menu.play();
-	}
 
+	//ÏÐÎÈÃÐÛÂÀÍÈÅ ÌÓÇÛÊÈ ÌÅÍÞ
+	music_menu.play();
+
+	bool isMenu = true;
 	//////////////////////////////ÌÅÍÞ///////////////////
 	while (isMenu)
 	{
-		menu1.setColor(Color::White);
-		menu2.setColor(Color::White);
-
-		menuNum = 0;
 		window.clear(Color::Black);
 
-		if (IntRect(MENU_X, NEW_GAME_Y, BUTTON_WIDTH, BUTTON_HEIGHT).contains(Mouse::getPosition(window))) {
-			menu1.setColor(Color(200, 90, 90));
-			menuNum = 1;
-		}
-		if (IntRect(MENU_X, EXIT_Y, BUTTON_WIDTH, BUTTON_HEIGHT).contains(Mouse::getPosition(window))) {
-			menu2.setColor(Color(200, 90, 90));
-			menuNum = 2;
-		}
+		NewGame_button.paint_button(window);
+		Exit_button.paint_button(window);
 		num1.paint_button(window);
 		num2.paint_button(window);
 		num3.paint_button(window);
@@ -240,7 +186,6 @@ void menu(RenderWindow& window) {
 		{
 			if ((event.type == sf::Event::Closed)) {
 				window.close();
-				music_menu.stop();
 				return;
 			}
 		}
@@ -267,25 +212,30 @@ void menu(RenderWindow& window) {
 			num1.paint_button(window);
 			num2.paint_button(window);
 			num3.paint_button(window);
-
-			if (menuNum == 1) isMenu = false;
-			if (menuNum == 2) { window.close(); isMenu = false; }
+			if (NewGame_button.is_pos(window)) {
+				music_menu.stop();
+				isMenu = false;
+			}
+			if (Exit_button.is_pos(window)) {
+				music_menu.stop();
+				return;
+			}
 		}
-		window.draw(menuBg);
-		window.draw(menu1);
-		window.draw(menu2);
 
+		window.draw(bg.sprite);
+		window.draw(NewGame_button.sprite);
+		window.draw(Exit_button.sprite);
 		window.draw(num1.sprite);
 		window.draw(num2.sprite);
 		window.draw(num3.sprite);
 
 		window.display();
 	}
+	if (music_menu.getStatus() == SoundSource::Status::Playing) {
+		music_menu.stop();
+	}
+
 	if (lvl == 1) { StartGame(window, Map1); }
 	if (lvl == 2) { StartGame(window, Map2); }
 	if (lvl == 3) { StartGame(window, Map3); }
-	music_menu.stop();
-	//window.close();
 }
-
-
