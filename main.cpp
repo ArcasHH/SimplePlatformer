@@ -24,6 +24,7 @@ int main()
 	music.openFromFile("audio/yuka-kitamura-epilogue.ogg");
 	music_menu.openFromFile("audio/Akira_Yamaoka_Never_Forgive_Me_Never_Forget_Me.ogg");
 	music_menu.setVolume(10);
+	win_music.setVolume(10);
 
 	///////////////////ֲַ׃Êָ
 	jump_buffer.loadFromFile("audio/jump.ogg");
@@ -39,6 +40,8 @@ int main()
 	text.setFont(font);
 	die_text.setFont(font);
 	win_text.setFont(font);
+
+	dragon.loadFromFile("images/sprite_dragon.png");
 	
 	menu(window);//גûחמג לום‏
 

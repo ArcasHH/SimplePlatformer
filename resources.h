@@ -7,6 +7,7 @@
 
 sf::Image map_image;
 sf::Texture map;
+sf::Texture dragon;
 sf::Sprite s_map;
 sf::Texture menuTexture1, menuTexture2, menuBackground, num1, num2, num3;  //рейярспйх дкъ лемч
 

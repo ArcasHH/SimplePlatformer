@@ -1,7 +1,7 @@
 #pragma once
 // экран
-constexpr unsigned WINDOW_HEIGHT = 720;
-constexpr unsigned WINDOW_WIDTH = 1280;
+constexpr unsigned WINDOW_HEIGHT = 1080;
+constexpr unsigned WINDOW_WIDTH = 1920;
 constexpr int TILE_SIZE = 32;
 constexpr int LVL_NUM_SIZE = 128;
 constexpr unsigned TEXT_SIZE = 20;
