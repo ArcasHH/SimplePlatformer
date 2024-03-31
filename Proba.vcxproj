@@ -135,8 +135,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h" />
-    <ClInclude Include="dieScreen.h" />
-    <ClInclude Include="menu.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="loops.h" />
     <ClInclude Include="Player.h" />

@@ -18,13 +18,14 @@ using namespace sf;
 
 int main()
 {
-	RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Game"/*, sf::Style::Fullscreen*/);
+	RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Game");
 	view.reset(FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
 
-	menu(window);//גûחמג לום‏
+	
 
 	///////////////////ּ׃ַÛÊְ
 	die_music.openFromFile("audio/die.ogg");
+	win_music.openFromFile("audio/dragon_dance.ogg");
 	music.openFromFile("audio/yuka-kitamura-epilogue.ogg");
 	
 	///////////////////ֲַ׃Êָ
@@ -44,10 +45,10 @@ int main()
 	win_text.setFont(font);
 	//restart_text.setFont(font);
 
-	
-	if (lvl == 1) { StartGame(window, Map1); }
-	if (lvl == 2) { StartGame(window, Map2); }
-	if (lvl == 3) { StartGame(window, Map3); }
+	menu(window);//גûחמג לום‏
+	//if (lvl == 1) { StartGame(window, Map1); }
+	//if (lvl == 2) { StartGame(window, Map2); }
+	//if (lvl == 3) { StartGame(window, Map3); }
 
 	music.play();
 	

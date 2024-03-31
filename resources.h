@@ -11,6 +11,7 @@ sf::Sprite s_map;
 sf::Texture menuTexture1, menuTexture2, menuBackground, num1, num2, num3;  //рейярспйх дкъ лемч
 
 sf::Music die_music;
+sf::Music win_music;
 sf::Music music;
 sf::Music music_menu;
 sf::SoundBuffer jump_buffer;
