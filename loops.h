@@ -107,9 +107,9 @@ void die_screen(RenderWindow& window) {
 
 	view.setCenter(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2);
 	window.setView(view);
-	PushButton restart_button("restart.png", view.getCenter().x - 300, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
-	PushButton menu_button("menu.png", view.getCenter().x - 100, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
-	PushButton exit_button("exit.png", view.getCenter().x + 100, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
+	PushButton restart_button("restart.png", view.getCenter().x - 300, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color(184, 221, 20));
+	PushButton menu_button("menu.png", view.getCenter().x - 100, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color(184,221,20));
+	PushButton exit_button("exit.png", view.getCenter().x + 100, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color(184, 221, 20));
 	bool isDieScreen = true;
 	die_text.setPosition(view.getCenter().x - 150, view.getCenter().y - 100);
 
@@ -178,9 +178,9 @@ void win_screen(RenderWindow& window) {
 	view.setCenter(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2);
 	window.setView(view);
 
-	PushButton next_button("next.png", view.getCenter().x - 300, view.getCenter().y + 100, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
-	PushButton menu_button("menu.png", view.getCenter().x - 100, view.getCenter().y + 100, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
-	PushButton exit_button("exit.png", view.getCenter().x + 100, view.getCenter().y + 100, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
+	PushButton next_button("next.png", view.getCenter().x - 300, view.getCenter().y + 100, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color(184, 221, 20));
+	PushButton menu_button("menu.png", view.getCenter().x - 100, view.getCenter().y + 100, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color(184, 221, 20));
+	PushButton exit_button("exit.png", view.getCenter().x + 100, view.getCenter().y + 100, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color(184, 221, 20));
 	
 /////////////////////////////////////////////////////////
 
@@ -254,11 +254,11 @@ void menu(RenderWindow& window) {
 	MyMusic menu("Akira_Yamaoka_Never_Forgive_Me_Never_Forget_Me.ogg", 10, true);
 	menu.music.play();
 	// ÕŒœ » ¬ Ã≈Õﬁ
-	PushButton Exit_button("exit256.png", MENU_X, EXIT_Y, 256, 256, Color::White, Color::Red);
-	PushButton NewGame_button("play256.png", MENU_X, NEW_GAME_Y, 256 , 256, Color::White, Color::Red);
-	PushButton num1("1.png", LVL_NUM_X,                    NEW_GAME_Y + 64, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
-	PushButton num2("2.png", LVL_NUM_X + LVL_NUM_SIZE,     NEW_GAME_Y + 64, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
-	PushButton num3("3.png", LVL_NUM_X + 2 * LVL_NUM_SIZE, NEW_GAME_Y + 64, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
+	PushButton Exit_button("exit256.png", MENU_X, EXIT_Y, 256, 256, Color::White, Color(184, 221, 20));
+	PushButton NewGame_button("play256.png", MENU_X, NEW_GAME_Y, 256 , 256, Color::White, Color(184, 221, 20));
+	PushButton num1("1.png", LVL_NUM_X,                    NEW_GAME_Y + 64, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color(184, 221, 20));
+	PushButton num2("2.png", LVL_NUM_X + LVL_NUM_SIZE,     NEW_GAME_Y + 64, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color(184, 221, 20));
+	PushButton num3("3.png", LVL_NUM_X + 2 * LVL_NUM_SIZE, NEW_GAME_Y + 64, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color(184, 221, 20));
 
 	BackgroundImage bg("menu_bg.png", MENU_X + 900, 200);
 	

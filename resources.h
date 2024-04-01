@@ -14,6 +14,7 @@ sf::Texture menuTexture1, menuTexture2, menuBackground, num1, num2, num3;  //рей
 
 
 
+
 class MyMusic {
 public:
 	sf::Music music;
