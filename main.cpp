@@ -30,8 +30,19 @@ int main()
 	win_text.setFont(font);
 
 	dragon.loadFromFile("images/sprite_dragon.png");
-
-	menu(window);//вызов меню
+	while (window.isOpen())
+	{
+		
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				window.close();
+		}
+		menu(window);//вызов меню
+		window.close();
+	}
+	
 
 	return 0;
 }

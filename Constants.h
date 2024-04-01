@@ -26,11 +26,11 @@ constexpr float H = 54.f;
 // параметры меню
 constexpr unsigned MENU_X = 50; //сдвиг текста меню по горизонтали
 constexpr unsigned NEW_GAME_Y = 200;//положение кнопки "новая игра"
-constexpr unsigned EXIT_Y = 300;//положение кнопки "выход"
+constexpr unsigned EXIT_Y = 500;//положение кнопки "выход"
 
 constexpr unsigned BUTTON_WIDTH = 300;
 constexpr unsigned BUTTON_HEIGHT = 50;
-constexpr unsigned LVL_NUM_X = 350;
+constexpr unsigned LVL_NUM_X = 500;
 constexpr unsigned LVL_NUM_Y = 100;
 
 constexpr float SPEED_ANIM = 0.05f;

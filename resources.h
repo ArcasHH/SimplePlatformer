@@ -14,44 +14,38 @@ sf::Texture menuTexture1, menuTexture2, menuBackground, num1, num2, num3;  //ТЕК
 
 
 
-class AllMusic {
+class MyMusic {
 public:
-	sf::Music die;
-	sf::Music win;
-	sf::Music game;
-	sf::Music menu;
-	sf::SoundBuffer jump_buffer;
-	sf::Sound jump_sound;
-	
+	sf::Music music;
+	String file;
 	int volume;
 	bool is_loop;
-	AllMusic() {
-		is_loop = true;
-		///////////////////МУЗЫКА
-		die.openFromFile("audio/die.ogg");
-		win.openFromFile("audio/dragon_dance.ogg");
-		game.openFromFile("audio/yuka-kitamura-epilogue.ogg");
-		menu.openFromFile("audio/Akira_Yamaoka_Never_Forgive_Me_Never_Forget_Me.ogg");
-		//Громкость
-		menu.setVolume(10);
-		win.setVolume(10);
-		//Зацикливание
-		game.setLoop(is_loop);
-		win.setLoop(is_loop);
-		menu.setLoop(is_loop);
-		
 
-		///////////////////ЗВУКИ
-		jump_buffer.loadFromFile("audio/jump.ogg");
-		jump_sound.setBuffer(jump_buffer);
-		
-	}
-	void not_loop() {
-		game.setLoop(false);
-		win.setLoop(false);
-		menu.setLoop(false);
+	MyMusic(String f, int v, bool loop) {
+		file = f;
+		volume = v;
+		is_loop = loop;
+		music.openFromFile("audio/" + file);
+		music.setVolume(volume);
+		music.setLoop(is_loop);	
 	}
 };
+class MySound {
+public:
+	String file;
+	sf::SoundBuffer buffer;
+	sf::Sound sound;
+	int volume;
+	MySound(String f, int v) {
+		file = f;
+		volume = v;
+		buffer.loadFromFile("audio/" + file);
+		sound.setBuffer(buffer);
+		sound.setVolume(volume);
+	}
+};
+
+
 
 sf::Font font;
 
