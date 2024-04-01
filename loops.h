@@ -18,7 +18,7 @@ void StartGame(RenderWindow& window, sf::String *Map) {
 	play.music.play();
 	MySound jump("jump.ogg", 100);
 
-	Player p("hero1.png", START_X, START_Y, W, H);
+	Player p("left.png", "right.png", START_X, START_Y, 128, 128);
 	Clock clock, gameTimeClock; //âğåìÿ èãğû 
 	int gameTime = 0;
 	float dX = 0, dY = 0;
@@ -67,6 +67,12 @@ void StartGame(RenderWindow& window, sf::String *Map) {
 				s_map.setPosition(static_cast<float>(j * TILE_SIZE), static_cast<float>(i * TILE_SIZE));
 				window.draw(s_map);
 			}
+		////////ÂÛÂÎÄ ÂĞÅÌÅÍÈ ÍÀ İÊĞÀÍ
+		std::ostringstream gameTimeString;
+		gameTimeString << gameTime;
+		text.setString("time elapsed :  " + gameTimeString.str());
+		text.setPosition(view.getCenter().x - WINDOW_WIDTH / 2 + 50, view.getCenter().y - WINDOW_HEIGHT / 2 + 50);
+		window.draw(text);
 
 		if (p.life) {//×ÒÎ ÄÅËÀÒÜ ÏÎÊÀ ÆÈÂÛ
 			gameTime = static_cast<int>(gameTimeClock.getElapsedTime().asSeconds());
@@ -88,12 +94,6 @@ void StartGame(RenderWindow& window, sf::String *Map) {
 		if (game && p.onGround && p.life) {//ÇÂÓÊÈ ÏĞÛÆÊÀ
 			jump.sound.play();
 		}
-		////////ÂÛÂÎÄ ÂĞÅÌÅÍÈ ÍÀ İÊĞÀÍ
-		std::ostringstream gameTimeString;
-		gameTimeString << gameTime;
-		text.setString("time elapsed :  " + gameTimeString.str());
-		text.setPosition(view.getCenter().x - WINDOW_WIDTH / 2 + 50, view.getCenter().y - WINDOW_HEIGHT / 2 + 50);
-		window.draw(text);
 		window.display();
 	}
 	if (play.music.getStatus() == SoundSource::Status::Playing) {

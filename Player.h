@@ -14,35 +14,42 @@ public:
 	float x, y;
 	bool life, win, isMove, onGround;
 	enum { left, right, up, down, jump, stay } state;
-	String File;
-	Image image;
-	Texture texture;
+	String File_left, File_right;
+	Image image_left, image_right;
+	Texture texture_left;
+	Texture texture_right;
 	Sprite sprite;
-	Player(String F, float X, float Y, float W, float H) {
+	Player(String F_left, String F_right, float X, float Y, float W, float H) {
 
 		speed = 0, dx = 0, dy = 0;
 		life = true, win = false, isMove = false, onGround = false;
-		File = F;
 		w = W;
 		h = H;
-		image.loadFromFile("images/" + File);
-		//image.createMaskFromColor();
-		texture.loadFromImage(image);
-		sprite.setTexture(texture);
+		File_left = F_left;
+		image_left.loadFromFile("images/" + File_left);
+		texture_left.loadFromImage(image_left);
+		//sprite.setTexture(texture_left);
+		File_right = F_right;
+		image_right.loadFromFile("images/" + File_right);
+		texture_right.loadFromImage(image_right);
+		sprite.setTexture(texture_right);
 
 		x = X;
 		y = Y;
-		sprite.setTextureRect(IntRect(0, 134, w, h));
+		sprite.setTextureRect(IntRect(0, 0, w, h));
 		sprite.setOrigin(w / 2, h / 2);
 	}
 	void control() {
 		if ((Keyboard::isKeyPressed(Keyboard::Left)) || (Keyboard::isKeyPressed(Keyboard::A))) {
 			state = left;
 			speed = PLAYER_SPEED;
+			sprite.setTexture(texture_left);
+
 		}
 		if ((Keyboard::isKeyPressed(Keyboard::Right)) || (Keyboard::isKeyPressed(Keyboard::D))) {
 			state = right;
 			speed = PLAYER_SPEED;
+			sprite.setTexture(texture_right);
 		}
 #if 0
 		if (((Keyboard::isKeyPressed(Keyboard::Up)) || (Keyboard::isKeyPressed(Keyboard::Space))) && (onGround)) {
