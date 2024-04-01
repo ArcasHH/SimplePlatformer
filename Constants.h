@@ -32,3 +32,6 @@ constexpr unsigned BUTTON_WIDTH = 300;
 constexpr unsigned BUTTON_HEIGHT = 50;
 constexpr unsigned LVL_NUM_X = 350;
 constexpr unsigned LVL_NUM_Y = 100;
+
+constexpr float SPEED_ANIM = 0.05f;
+

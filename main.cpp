@@ -25,7 +25,11 @@ int main()
 	music_menu.openFromFile("audio/Akira_Yamaoka_Never_Forgive_Me_Never_Forget_Me.ogg");
 	music_menu.setVolume(10);
 	win_music.setVolume(10);
-
+	music.setLoop(true);
+	win_music.setLoop(true);
+	music_menu.setLoop(true);
+	die_music.setLoop(false);
+	
 	///////////////////«¬” »
 	jump_buffer.loadFromFile("audio/jump.ogg");
 	jump_sound.setBuffer(jump_buffer);

@@ -35,8 +35,12 @@ void StartGame(RenderWindow& window, sf::String *Map) {
 		Event event;
 		while (window.pollEvent(event))
 		{
-			if ((event.type == sf::Event::Closed))
+			if ((event.type == sf::Event::Closed)){
+				music.stop();
+				game = false;
 				window.close();
+			}
+				
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Escape)) { //ÂÛÕÎÄ ÈÇ ÈÃĞÛ ÍÀ Escape
 			if (music.getStatus() == SoundSource::Status::Playing) {
@@ -71,13 +75,15 @@ void StartGame(RenderWindow& window, sf::String *Map) {
 			music.stop();
 			game = false;
 			win_screen(window);
+			return;
 		}
 		else if (!p.life) { // ×ÒÎ ÏĞÎÈÑÕÎÄÈÒ ÏĞÈ ÑÌÅĞÒÈ///
 			music.stop();
 			game = false;
 			die_screen(window);
+			return;
 		}
-		if (p.onGround && p.life) {//ÇÂÓÊÈ ÏĞÛÆÊÀ
+		if (game && p.onGround && p.life) {//ÇÂÓÊÈ ÏĞÛÆÊÀ
 			jump_sound.play();
 		}
 		////////ÂÛÂÎÄ ÂĞÅÌÅÍÈ ÍÀ İÊĞÀÍ
@@ -118,8 +124,8 @@ void die_screen(RenderWindow& window) {
 		while (window.pollEvent(event))
 		{
 			if ((event.type == sf::Event::Closed)) {
+				die_music.stop();
 				window.close();
-				return;
 			}
 		}
 		//ÄÅÉÑÒÂÈß ÏĞÈ ÍÀÆÀÒÈÈ ÊÍÎÏÎÊ
@@ -128,18 +134,28 @@ void die_screen(RenderWindow& window) {
 			if (restart_button.is_pos(window)) {
 				die_music.stop();
 				isDieScreen = false;
-				if (lvl == 1) { StartGame(window, Map1); }
-				if (lvl == 2) { StartGame(window, Map2); }
-				if (lvl == 3) { StartGame(window, Map3); }
+				if (lvl == 1) { 
+					StartGame(window, Map1); 
+					return;
+				}
+				if (lvl == 2) { 
+					StartGame(window, Map2); 
+					return;
+				}
+				if (lvl == 3) { 
+					StartGame(window, Map3); 
+					return;
+				}
 			}
 			if (menu_button.is_pos(window)) {
 				die_music.stop();
 				isDieScreen = false;
 				menu(window);
+				return;
 			}
 			if (exit_button.is_pos(window)) {
 				die_music.stop();
-				return;
+				window.close();
 			}
 		}
 		window.draw(restart_button.sprite);
@@ -154,26 +170,13 @@ void die_screen(RenderWindow& window) {
 
 void win_screen(RenderWindow& window) {
 
-	
-	
-
-	
-	
-
-	//sf::IntRect rectSourceSprite(0, 0, 498,391);
-	//sf::Sprite win_sprite(dragon, rectSourceSprite);
-	//win_sprite.setPosition(100, 100);
-	//sf::Clock win_clock;
-
 	win_music.play();
 	view.setCenter(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2);
 	window.setView(view);
 
-	PushButton next_button("next.png", view.getCenter().x - 300, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
-	PushButton menu_button("menu.png", view.getCenter().x - 100, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
-	PushButton exit_button("exit.png", view.getCenter().x + 100, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
-	//BackgroundImage dance("sprite_dragon.png", 500, 500);
-	Animation dance("sprite_dragon.png", 100, 100, 498, 391);
+	PushButton next_button("next.png", view.getCenter().x - 300, view.getCenter().y + 100, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
+	PushButton menu_button("menu.png", view.getCenter().x - 100, view.getCenter().y + 100, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
+	PushButton exit_button("exit.png", view.getCenter().x + 100, view.getCenter().y + 100, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
 	
 /////////////////////////////////////////////////////////
 
@@ -183,20 +186,18 @@ void win_screen(RenderWindow& window) {
 	while (isWinScreen)
 	{
 		window.clear(Color::Black);
-		//window.draw(dance.sprite);
-
 
 		next_button.paint_button(window);
 		menu_button.paint_button(window);
 		exit_button.paint_button(window);
-		dance.draw_anim();
+		dancing_dragon.draw_anim();
 
 		Event event;
 		while (window.pollEvent(event))
 		{
 			if ((event.type == sf::Event::Closed)) {
+				win_music.stop();
 				window.close();
-				return;
 			}
 		}
 		//ÄÅÉÑÒÂÈß ÏĞÈ ÍÀÆÀÒÈÈ ÊÍÎÏÎÊ
@@ -208,28 +209,31 @@ void win_screen(RenderWindow& window) {
 				if (lvl == 1) { 
 					lvl = 2;
 					StartGame(window, Map2); 
+					return;
 				}
-				if (lvl == 2) { 
+				 if (lvl == 2) { 
 					lvl = 3;
 					StartGame(window, Map3);
+					return;
 				}
-				if (lvl == 3) { 
+				 if (lvl == 3) { 
 					lvl = 1;
 					StartGame(window, Map1); 
+					return;
 				}
 			}
 			if (menu_button.is_pos(window)) {
 				win_music.stop();
 				isWinScreen = false;
 				menu(window);
+				return;
 			}
 			if (exit_button.is_pos(window)) {
 				win_music.stop();
-				//window.close(); // íàäî íàïèñàòü ôóíêöèş, çàêğûâàşùóş âñå îêíà è âûêëş÷àşùóş âñş ìóçûêó
-				return;
+				window.close(); // íàäî íàïèñàòü ôóíêöèş, çàêğûâàşùóş âñå îêíà è âûêëş÷àşùóş âñş ìóçûêó
 			}
 		}
-		//window.draw(dance.sprite);
+		window.draw(dancing_dragon.sprite);
 		window.draw(next_button.sprite);
 		window.draw(menu_button.sprite);
 		window.draw(exit_button.sprite);
@@ -251,10 +255,11 @@ void menu(RenderWindow& window) {
 	PushButton num2("2.png", LVL_NUM_X, LVL_NUM_Y + LVL_NUM_SIZE, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
 	PushButton num3("3.png", LVL_NUM_X, LVL_NUM_Y + 2 * LVL_NUM_SIZE, LVL_NUM_SIZE, LVL_NUM_SIZE, Color::White, Color::Red);
 
-	BackgroundImage bg("screen.jpg", MENU_X + 500, 0);
+	BackgroundImage bg("dragon.png", MENU_X + 500, 0);
 	
 	view.setCenter(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2);
 	window.setView(view);
+	
 
 	//ÏĞÎÈÃĞÛÂÀÍÈÅ ÌÓÇÛÊÈ ÌÅÍŞ
 	music_menu.play();
@@ -270,13 +275,14 @@ void menu(RenderWindow& window) {
 		num1.paint_button(window);
 		num2.paint_button(window);
 		num3.paint_button(window);
+		
 
 		Event event;
 		while (window.pollEvent(event))
 		{
 			if ((event.type == sf::Event::Closed)) {
+				music_menu.stop();
 				window.close();
-				return;
 			}
 		}
 		if (Mouse::isButtonPressed(Mouse::Left))
@@ -308,10 +314,9 @@ void menu(RenderWindow& window) {
 			}
 			if (Exit_button.is_pos(window)) {
 				music_menu.stop();
-				return;
+				window.close();
 			}
 		}
-
 		window.draw(bg.sprite);
 		window.draw(NewGame_button.sprite);
 		window.draw(Exit_button.sprite);
@@ -325,7 +330,7 @@ void menu(RenderWindow& window) {
 		music_menu.stop();
 	}
 
-	if (lvl == 1) { StartGame(window, Map1); }
-	if (lvl == 2) { StartGame(window, Map2); }
-	if (lvl == 3) { StartGame(window, Map3); }
+	if (lvl == 1) { StartGame(window, Map1); return; }
+	if (lvl == 2) { StartGame(window, Map2); return; }
+	if (lvl == 3) { StartGame(window, Map3); return; }
 }

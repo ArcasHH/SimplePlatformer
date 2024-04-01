@@ -4,6 +4,7 @@
 #include <SFML/Audio.hpp>
 #include <iostream> 
 #include <sstream>
+#include <string>
 
 sf::Image map_image;
 sf::Texture map;
@@ -24,7 +25,6 @@ sf::Font font;
 sf::Text text("", font, TEXT_SIZE);
 sf::Text die_text("YOU DIED", font, BIG_TEXT_SIZE);
 sf::Text win_text("YOU WIN", font, BIG_TEXT_SIZE);
-//sf::Text restart_text("press R to exit menu", font, BIG_TEXT_SIZE);
 
 class PushButton {
 public:
@@ -80,47 +80,43 @@ public:
 		sprite.setPosition(posX, posY);
 	}
 };
-class Animation {
+class Animation_frame {
 public:
 	String file;
 	sf::Texture texture;
-	sf::IntRect rect;
 	sf::Sprite sprite;
-	int posX, posY, rect_w, rect_h;
+	int posX, posY;
 	sf::Clock anim_clock;
+	int frame;
+	std::vector<sf::Texture> textures;
+	int num_frames;
 
-	Animation(String f, int x, int y, int w, int h) {
-		file = f;
+	Animation_frame( int num, int x, int y) {
+		num_frames = num;
+		frame = 0;
+		std::string s;
+		for (int i = 0; i < num_frames+1; ++i) {
+			s = std::to_string(i);
+			file = s + "_sprite_dragon.png";
+			texture.loadFromFile("images/background/sprite_dragon/" + file);
+			textures.push_back(texture);
+		}
 		posX = x, posY = y;
-		rect_h = h, rect_w = w;
-
-		rect.left = 0;
-		rect.top = 0;
-		rect.width = w;
-		rect.height = h;
-
-		texture.loadFromFile("images/" + file);
-		//sprite.setTexture(texture);
-		sprite.setTextureRect(rect);
+		sprite.setTexture(textures[0]);
 		sprite.setPosition(posX, posY);
 		anim_clock.restart();
 	}
 	void draw_anim() {
-		
-		if (anim_clock.getElapsedTime().asSeconds() > 0.5f) {
-			if (rect.left == 2490 - rect_w) {
-				rect.left = 0;
-				rect.top += rect_h;
-			}
-			else if (rect.top != rect_h * 44) {
-				rect.left += rect_w;
+		if (anim_clock.getElapsedTime().asSeconds() > SPEED_ANIM) {
+			if (frame < num_frames) {
+				++frame;
 			}
 			else { // заново
-				rect.left = 0;
-				rect.top = 0;
+				frame = 0;
 			}
-			sprite.setTextureRect(rect);
+			sprite.setTexture(textures[frame]);
 			anim_clock.restart();
 		}
 	}
 };
+Animation_frame dancing_dragon(223, 600, 50);
