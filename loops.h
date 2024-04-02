@@ -5,6 +5,179 @@
 #include "Player.h"
 #include "SpriteManager.h"
 
+
+sf::Clock gameClock, gameTimeClock; //‚ÂÏˇ Ë„˚
+bool isMenu = false, isGame = false, isDie = false, isWin = false, isExit = false;
+
+void StartGame(sf::RenderWindow& window, sf::String* Map, Player& p, int gameTime) {
+
+		float time = static_cast<float>(gameClock.getElapsedTime().asMicroseconds());
+		gameClock.restart();
+		time = time / TIME_SCALE;
+
+		p.update(time, Map);
+		window.setView(view);
+
+		//Œ“–»—Œ¬ ¿  ¿–“€
+		for (int i = 0; i < HEIGHT_MAP; i++)
+			for (int j = 0; j < WIDTH_MAP; j++)
+			{
+				if (Map[i][j] == ' ')  s_map.setTextureRect(sf::IntRect(0, 0, TILE_SIZE, TILE_SIZE));
+				if (Map[i][j] == 'X')  s_map.setTextureRect(sf::IntRect(TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
+				if ((Map[i][j] == '0')) s_map.setTextureRect(sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
+				if ((Map[i][j] == 'W')) s_map.setTextureRect(sf::IntRect(3 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
+				s_map.setPosition(static_cast<float>(j * TILE_SIZE), static_cast<float>(i * TILE_SIZE));
+				window.draw(s_map);
+			}
+
+		////////¬€¬Œƒ ¬–≈Ã≈Õ» Õ¿ › –¿Õ
+		std::ostringstream gameTimeString;
+		gameTimeString << gameTime;
+		text.setString("time elapsed :  " + gameTimeString.str());
+		text.setPosition(view.getCenter().x - WINDOW_WIDTH / 2 + 50, view.getCenter().y - WINDOW_HEIGHT / 2 + 50);
+		window.draw(text);
+
+		if (p.life) {//◊“Œ ƒ≈À¿“‹ œŒ ¿ ∆»¬€
+			gameTime = static_cast<int>(gameTimeClock.getElapsedTime().asSeconds());
+			getplayercoordinateforview(p.getplayercoordinateX(), p.getplayercoordinateY());
+			window.draw(p.sprite);
+		}
+		if (p.win) { //◊“Œ œ–Œ»—’Œƒ»“ œ–» œŒ¡≈ƒ≈
+			isGame = false;
+			isWin = true;
+			return;
+		}
+		else if (!p.life) { // ◊“Œ œ–Œ»—’Œƒ»“ œ–» —Ã≈–“»///
+			isGame = false; 
+			isDie = true;
+			return;
+		}
+}
+
+void dieScreen(sf::RenderWindow& window, PushButton& restart_button, PushButton& menu_button, PushButton& exit_button) {
+		
+	restart_button.paint_button(window);
+	menu_button.paint_button(window);
+	exit_button.paint_button(window);
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+		if (restart_button.is_pos(window)) {
+			isDie = false;
+			isGame = true;
+			return;
+		}
+		if (menu_button.is_pos(window)) {
+			isDie = false;
+			isMenu = true;	
+			return;
+		}
+		if (exit_button.is_pos(window)) {
+			isExit = true;
+		}
+	}
+	window.draw(die_text);
+	window.draw(restart_button.sprite);
+	window.draw(menu_button.sprite);
+	window.draw(exit_button.sprite);
+}
+
+void winScreen(sf::RenderWindow& window, PushButton& next_button, PushButton& menu_button, PushButton& exit_button) {
+
+	next_button.paint_button(window);
+	menu_button.paint_button(window);
+	exit_button.paint_button(window);
+	dancing_dragon.draw_anim();
+	window.draw(win_text);
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+		if (next_button.is_pos(window)) {
+			if (lvl == 1) {
+				lvl = 2;
+				isWin = false;
+				isGame = true;
+				return;
+			}
+			else if (lvl == 2) {
+				lvl = 3;
+				isWin = false;
+				isGame = true;
+				return;
+			}
+			else if (lvl == 3) {
+				lvl = 1;
+				isWin = false;
+				isGame = true;
+				return;
+			}
+		}
+		if (menu_button.is_pos(window)) {
+			isWin = false;
+			isMenu = true;
+			return;
+		}
+		if (exit_button.is_pos(window)) {
+			isExit = true;
+			return;
+		}
+	}
+	window.draw(dancing_dragon.sprite);
+	window.draw(next_button.sprite);
+	window.draw(menu_button.sprite);
+	window.draw(exit_button.sprite);
+	
+}
+
+
+void menuScreen(sf::RenderWindow& window, BackgroundImage& bg, PushButton& NewGame_button, PushButton& Exit_button, PushButton& num1, PushButton& num2, PushButton& num3) {
+
+		NewGame_button.paint_button(window);
+		Exit_button.paint_button(window);
+		num1.paint_button(window);
+		num2.paint_button(window);
+		num3.paint_button(window);
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+		if (num1.is_pos(window)) {
+			num1.is_clicked = true;
+			num2.is_clicked = false;
+			num3.is_clicked = false;
+			lvl = 1;
+		}
+		if (num2.is_pos(window)) {
+			num1.is_clicked = false;
+			num2.is_clicked = true;
+			num3.is_clicked = false;
+			lvl = 2;
+		}
+		if (num3.is_pos(window)) {
+			num1.is_clicked = false;
+			num2.is_clicked = false;
+			num3.is_clicked = true;
+			lvl = 3;
+		}
+
+		if (NewGame_button.is_pos(window)) {
+			num1.is_clicked = false;
+			num2.is_clicked = false;
+			num3.is_clicked = false;
+			isMenu = false;
+			isGame = true;
+			return;
+		}
+		if (Exit_button.is_pos(window)) {
+			isExit = true;
+			return;
+		}
+	}
+	window.draw(bg.sprite);
+	window.draw(NewGame_button.sprite);
+	window.draw(Exit_button.sprite);
+	window.draw(num1.sprite);
+	window.draw(num2.sprite);
+	window.draw(num3.sprite);
+}
+
+#if 0
 using namespace sf;
 
 void die_screen(RenderWindow& window);
@@ -339,3 +512,4 @@ void menu(RenderWindow& window) {
 	if (lvl == 2) { StartGame(window, Map2); return; }
 	if (lvl == 3) { StartGame(window, Map3); return; }
 }
+#endif

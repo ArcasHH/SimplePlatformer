@@ -12,17 +12,20 @@ sf::Texture dragon;
 sf::Sprite s_map;
 sf::Texture menuTexture1, menuTexture2, menuBackground, num1, num2, num3;  //“≈ —“”– » ƒЋя ћ≈Ќё
 
-
+sf::Font font;
+sf::Text text("", font, TEXT_SIZE);
+sf::Text die_text("YOU DIED", font, BIG_TEXT_SIZE);
+sf::Text win_text("YOU WIN", font, BIG_TEXT_SIZE);
 
 
 class MyMusic {
 public:
 	sf::Music music;
-	String file;
+	sf::String file;
 	int volume;
 	bool is_loop;
 
-	MyMusic(String f, int v, bool loop) {
+	MyMusic(sf::String f, int v, bool loop) {
 		file = f;
 		volume = v;
 		is_loop = loop;
@@ -33,11 +36,11 @@ public:
 };
 class MySound {
 public:
-	String file;
+	sf::String file;
 	sf::SoundBuffer buffer;
 	sf::Sound sound;
 	int volume;
-	MySound(String f, int v) {
+	MySound(sf::String f, int v) {
 		file = f;
 		volume = v;
 		buffer.loadFromFile("audio/" + file);
@@ -46,17 +49,9 @@ public:
 	}
 };
 
-
-
-sf::Font font;
-
-sf::Text text("", font, TEXT_SIZE);
-sf::Text die_text("YOU DIED", font, BIG_TEXT_SIZE);
-sf::Text win_text("YOU WIN", font, BIG_TEXT_SIZE);
-
 class PushButton {
 public:
-	String file;
+	sf::String file;
 	sf::Texture texture;
 	sf::Sprite sprite;
 	sf::Color base_color, clicked_color;
@@ -69,7 +64,7 @@ public:
 
 	int shift_x, shift_y; //такого не должно быть. где-то ошибка, но спрайт не совпадает с текстуркой по X и без этого наведение идет со сдвигом// надо shift = 0
 	
-	PushButton(String f, int x, int y, int w, int h, sf::Color b_color, sf::Color c_color) {
+	PushButton(sf::String f, int x, int y, int w, int h, sf::Color b_color, sf::Color c_color) {
 		file = f;
 		shift_x = 100, shift_y = -10;
 		posX = x, posY = y;
@@ -87,13 +82,13 @@ public:
 		is_sound = false;
 	}
 
-	bool is_pos(RenderWindow& window) {
-		if (IntRect(posX+shift_x, posY+shift_y, width, height).contains(Mouse::getPosition(window))) {
+	bool is_pos(sf::RenderWindow& window) {
+		if (sf::IntRect(posX+shift_x, posY+shift_y, width, height).contains(sf::Mouse::getPosition(window))) {
 			return true;
 		}
 		return false;
 	}
-	void paint_button(RenderWindow& window) {
+	void paint_button(sf::RenderWindow& window) {
 		if (is_pos(window)){
 			sprite.setColor(clicked_color);
 			if (!is_sound) {
@@ -116,12 +111,12 @@ public:
 };
 class BackgroundImage {
 public:
-	String file;
+	sf::String file;
 	sf::Texture texture;
 	sf::Sprite sprite;
 	int posX, posY;
 
-	BackgroundImage(String f, int x, int y) {
+	BackgroundImage(sf::String f, int x, int y) {
 		file = f;
 		posX = x, posY = y;
 		texture.loadFromFile("images/" + file);
@@ -131,7 +126,7 @@ public:
 };
 class Animation_frame {
 public:
-	String file;
+	sf::String file;
 	sf::Texture texture;
 	sf::Sprite sprite;
 	int posX, posY;

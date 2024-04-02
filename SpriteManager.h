@@ -3,14 +3,14 @@
 
 class SpriteManager {
 public:
-	Image image;
-	Texture texture;
-	Sprite sprite;
-	String name;
-	String file;
+	sf::Image image;
+	sf::Texture texture;
+	sf::Sprite sprite;
+	sf::String name;
+	sf::String file;
 	int widthOfSprite;
 	int heightOfSprite;
-	SpriteManager(String File, String Name) {
+	SpriteManager(sf::String File, sf::String Name) {
 		file = File;
 		name = Name;
 		image.loadFromFile("images/" + file);

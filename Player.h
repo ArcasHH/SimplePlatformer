@@ -5,8 +5,6 @@
 #include "Constants.h"
 #include "map.h"
 
-using namespace sf;
-
 int lvl = 1;
 class Player {
 public:
@@ -14,12 +12,12 @@ public:
 	float x, y;
 	bool life, win, isMove, onGround;
 	enum { left, right, up, down, jump, stay } state;
-	String File_left, File_right;
-	Image image_left, image_right;
-	Texture texture_left;
-	Texture texture_right;
-	Sprite sprite;
-	Player(String F_left, String F_right, float X, float Y, float W, float H) {
+	sf::String File_left, File_right;
+	sf::Image image_left, image_right;
+	sf::Texture texture_left;
+	sf::Texture texture_right;
+	sf::Sprite sprite;
+	Player(sf::String F_left, sf::String F_right, float X, float Y, float W, float H) {
 
 		speed = 0, dx = 0, dy = 0;
 		life = true, win = false, isMove = false, onGround = false;
@@ -36,17 +34,26 @@ public:
 
 		x = X;
 		y = Y;
-		sprite.setTextureRect(IntRect(0, 0, w, h));
+		sprite.setTextureRect(sf::IntRect(0, 0, w, h));
+		sprite.setOrigin(w / 2, h / 2);
+	}
+	void restart(float X, float Y, float W, float H) {
+		speed = 0, dx = 0, dy = 0;
+		life = true, win = false, isMove = false, onGround = false;
+		w = W;
+		h = H;
+		x = X;
+		y = Y;
 		sprite.setOrigin(w / 2, h / 2);
 	}
 	void control() {
-		if ((Keyboard::isKeyPressed(Keyboard::Left)) || (Keyboard::isKeyPressed(Keyboard::A))) {
+		if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) || (sf::Keyboard::isKeyPressed(sf::Keyboard::A))) {
 			state = left;
 			speed = PLAYER_SPEED;
 			sprite.setTexture(texture_left);
 
 		}
-		if ((Keyboard::isKeyPressed(Keyboard::Right)) || (Keyboard::isKeyPressed(Keyboard::D))) {
+		if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) || (sf::Keyboard::isKeyPressed(sf::Keyboard::D))) {
 			state = right;
 			speed = PLAYER_SPEED;
 			sprite.setTexture(texture_right);
