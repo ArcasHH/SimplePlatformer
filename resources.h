@@ -17,7 +17,9 @@ sf::Text text("", font, TEXT_SIZE);
 sf::Text die_text("YOU DIED", font, BIG_TEXT_SIZE);
 sf::Text win_text("YOU WIN", font, BIG_TEXT_SIZE);
 
+class Map {
 
+};
 class MyMusic {
 public:
 	sf::Music music;
@@ -61,12 +63,9 @@ public:
 	sf::SoundBuffer click_buffer;
 	sf::Sound click_sound;
 	bool is_sound;
-
-	int shift_x, shift_y; //такого не должно быть. где-то ошибка, но спрайт не совпадает с текстуркой по X и без этого наведение идет со сдвигом// надо shift = 0
 	
 	PushButton(sf::String f, int x, int y, int w, int h, sf::Color b_color, sf::Color c_color) {
 		file = f;
-		shift_x = 100, shift_y = -10;
 		posX = x, posY = y;
 		width = w, height = h;
 		base_color = b_color, clicked_color = c_color;
@@ -83,7 +82,7 @@ public:
 	}
 
 	bool is_pos(sf::RenderWindow& window) {
-		if (sf::IntRect(posX+shift_x, posY+shift_y, width, height).contains(sf::Mouse::getPosition(window))) {
+		if (sf::IntRect(posX, posY, width, height).contains(sf::Mouse::getPosition(window))) {
 			return true;
 		}
 		return false;
@@ -163,4 +162,22 @@ public:
 		}
 	}
 };
-Animation_frame dancing_dragon(223, 600, 50);
+Animation_frame dancing_dragon(223, 700, 50);
+
+class SpriteManager {
+public:
+	sf::Image image;
+	sf::Texture texture;
+	sf::Sprite sprite;
+	sf::String name;
+	sf::String file;
+	int widthOfSprite;
+	int heightOfSprite;
+	SpriteManager(sf::String File, sf::String Name) {
+		file = File;
+		name = Name;
+		image.loadFromFile("images/" + file);
+		texture.loadFromImage(image);
+		sprite.setTexture(texture);
+	}
+};

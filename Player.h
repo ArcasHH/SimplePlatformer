@@ -96,15 +96,17 @@ public:
 
 	void checkCollisionWithMap(float Dx, float Dy, const sf::String Map[HEIGHT_MAP])
 	{
-		for (int i = y / TILE_SIZE; i < (y + h) / TILE_SIZE; i++)
-			for (int j = x / TILE_SIZE; j < (x + w) / TILE_SIZE; j++)
+		int sw = 32; // сужение спрайта при столкновениях по горизонтали
+		int sh = 16; // сужение спрайта при столкновениях по вертикали (только сверху)
+		for (int i = (y + sh) / TILE_SIZE; i < (y + h ) / TILE_SIZE; i++)
+			for (int j = (x + sw) / TILE_SIZE; j < (x + w - sw) / TILE_SIZE; j++)
 			{
 				if (Map[i][j] == '0')//СТОЛКНОВЕНИЯ С ПЛАТФОРМАМИ
 				{
-					if (Dy > 0) { y = i * TILE_SIZE - h;  dy = 0; onGround = true; }
-					if (Dy < 0) { y = i * TILE_SIZE + TILE_SIZE;  dy = 0; }
-					if (Dx > 0) { x = j * TILE_SIZE - w; }
-					if (Dx < 0) { x = j * TILE_SIZE + TILE_SIZE; }
+					if (Dy > 0) { y = i * TILE_SIZE - h ;  dy = 0; onGround = true; }
+					if (Dy < 0) { y = i * TILE_SIZE + TILE_SIZE - sh ;  dy = 0; }
+					if (Dx > 0) { x = j * TILE_SIZE - w + sw; }
+					if (Dx < 0) { x = j * TILE_SIZE + TILE_SIZE - sw; }
 				}
 				if (Map[i][j] == 'X')//СМЕРТЬ
 				{

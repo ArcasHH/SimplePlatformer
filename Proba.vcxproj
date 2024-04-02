@@ -138,7 +138,6 @@
     <ClInclude Include="map.h" />
     <ClInclude Include="loops.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="SpriteManager.h" />
     <ClInclude Include="resources.h" />
     <ClInclude Include="view.h" />
   </ItemGroup>

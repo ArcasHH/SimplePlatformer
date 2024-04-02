@@ -1,30 +1,34 @@
 #pragma once
-// экран
-constexpr unsigned WINDOW_HEIGHT = 1080;
+// параметры экрана
 constexpr unsigned WINDOW_WIDTH = 1920;
+constexpr unsigned WINDOW_HEIGHT = 1080;
+
+
 constexpr int TILE_SIZE = 32;
 constexpr int LVL_NUM_SIZE = 128;
+
 constexpr unsigned TEXT_SIZE = 20;
 constexpr unsigned BIG_TEXT_SIZE =50;
 
 //скорость отрисовки
 constexpr unsigned TIME_SCALE = 300;
+constexpr float SPEED_ANIM = 0.05f;
 
 
 //игровые константы
-constexpr float PLAYER_SPEED = 0.1f;
+constexpr float PLAYER_SPEED = 0.15f;
 constexpr float JUMP = -0.3f;
 constexpr float GRAVITATION = 0.0002f;
 
 constexpr int START_X = 100; //начальное положение игрока
-constexpr int START_Y = 700;
+constexpr int START_Y = 3600;
  
-constexpr float W = 96.f;  //ширина и высота спрайта слизня. Необходимо кратность 2
-constexpr float H = 54.f;
+constexpr float W = 128.f;  //ширина и высота спрайта 
+constexpr float H = 128.f;
 
 
 // параметры меню
-constexpr unsigned MENU_X = 50; //сдвиг текста меню по горизонтали
+constexpr unsigned MENU_X = 200; //сдвиг текста меню по горизонтали
 constexpr unsigned NEW_GAME_Y = 200;//положение кнопки "новая игра"
 constexpr unsigned EXIT_Y = 500;//положение кнопки "выход"
 
@@ -33,5 +37,5 @@ constexpr unsigned BUTTON_HEIGHT = 50;
 constexpr unsigned LVL_NUM_X = 500;
 constexpr unsigned LVL_NUM_Y = 100;
 
-constexpr float SPEED_ANIM = 0.05f;
+
 

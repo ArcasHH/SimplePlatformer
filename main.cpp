@@ -6,7 +6,6 @@
 #include "view.h"
 #include "Player.h"
 #include "loops.h"
-#include "SpriteManager.h"
 #include "resources.h"
 #include "map.h"
 
@@ -14,7 +13,8 @@ int main()
 {
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Game");
 	view.reset(sf::FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
-
+	window.setVerticalSyncEnabled(true);
+	window.setFramerateLimit(60);
 	/////////////////// ¿–“¿
 	map_image.loadFromFile("images/map.png");
 	map.loadFromImage(map_image);
@@ -24,16 +24,16 @@ int main()
 	font.loadFromFile("nyashasans.ttf");
 	text.setFont(font);
 	die_text.setFont(font);
-	die_text.setPosition(view.getCenter().x - 250, view.getCenter().y - 100);
+	die_text.setPosition(view.getCenter().x - 150, view.getCenter().y - 100);
 	win_text.setFont(font);
-	win_text.setPosition(view.getCenter().x - 250, view.getCenter().y - 100);
+	win_text.setPosition(view.getCenter().x - 150 , view.getCenter().y - 100);
 	//////////////////“≈ —“”–€
 	dragon.loadFromFile("images/sprite_dragon.png");
-	BackgroundImage bg("menu_bg.png", MENU_X + 900, 200);
+	BackgroundImage bg("menu_bg.png", MENU_X + 750, 200);
 
 	//////////////////////////////////////////////////////////////////////////////////////////
 	SpriteManager playerSprite("hero1.png", "Hero");
-	Player p("left.png", "right.png", START_X, START_Y-200, 128, 128);
+	Player p("left.png", "right.png", START_X, START_Y, W, H);
 
 	///////////////////Ã”«€ ¿ » «¬” »
 	MyMusic play("yuka-kitamura-epilogue.ogg", 100, true);
@@ -43,10 +43,10 @@ int main()
 	MySound jump("jump.ogg", 100);
 
 	////////////////// ÕŒœ »
-	PushButton restart_button("restart.png", view.getCenter().x - 400, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, sf::Color::White, sf::Color(184, 221, 20));
-	PushButton next_button("next.png", view.getCenter().x - 400, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, sf::Color::White, sf::Color(184, 221, 20));
-	PushButton menu_button("menu.png", view.getCenter().x - 200, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, sf::Color::White, sf::Color(184, 221, 20));
-	PushButton exit_button("exit.png", view.getCenter().x , view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, sf::Color::White, sf::Color(184, 221, 20));
+	PushButton restart_button("restart.png", view.getCenter().x - 300, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, sf::Color::White, sf::Color(184, 221, 20));
+	PushButton next_button("next.png", view.getCenter().x - 300, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, sf::Color::White, sf::Color(184, 221, 20));
+	PushButton menu_button("menu.png", view.getCenter().x - 100, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, sf::Color::White, sf::Color(184, 221, 20));
+	PushButton exit_button("exit.png", view.getCenter().x + 100, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, sf::Color::White, sf::Color(184, 221, 20));
 	// ÕŒœ » ¬ Ã≈Õﬁ
 	PushButton Exit_button("exit256.png", MENU_X, EXIT_Y, 256, 256, sf::Color::White, sf::Color(184, 221, 20));
 	PushButton NewGame_button("play256.png", MENU_X, NEW_GAME_Y, 256, 256, sf::Color::White, sf::Color(184, 221, 20));
@@ -56,7 +56,7 @@ int main()
 
 	int gameTime = 0;
 	isMenu = true;// ¬ Õ¿◊¿À≈ «¿œ”— ¿≈Ã Ã≈Õﬁ
-	view.setCenter(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2);
+	view.setCenter(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 	window.setView(view);
 
 	while (window.isOpen())
@@ -70,6 +70,7 @@ int main()
 				window.close();
 		}
 
+		//ÓÒÚ‡Ì‡‚ÎË‚‡ÂÏ ÏÛÁ˚ÍÛ, ÂÒÎË ÌÂ ÓÚÍ˚ÚÓ ÒÓÓÚ‚ÂÚÒÚ‚Û˛˘ÂÂ ÓÍÌÓ
 		if (!isGame && (play.music.getStatus() == sf::SoundSource::Status::Playing)) {
 			play.music.stop();
 		}
@@ -87,7 +88,7 @@ int main()
 		if (isMenu && !isExit) {
 			if (menu.music.getStatus() != sf::SoundSource::Status::Playing) {
 				menu.music.play();
-				view.setCenter(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2);
+				view.setCenter(WINDOW_WIDTH / 2 , WINDOW_HEIGHT / 2);
 				window.setView(view);
 			}
 			menuScreen(window, bg, NewGame_button, Exit_button, num1, num2, num3);
@@ -98,7 +99,7 @@ int main()
 		else if (isGame && !isExit) {
 			if (play.music.getStatus() != sf::SoundSource::Status::Playing) {
 				play.music.play();
-				p.restart(START_X, START_Y - 200, 128, 128);
+				p.restart(START_X, START_Y, W, H);
 				gameTime = 0;
 			}
 			if (lvl == 1) { 
@@ -130,7 +131,7 @@ int main()
 		else if (isDie && !isExit) {
 			if (die.music.getStatus() != sf::SoundSource::Status::Playing) {
 				die.music.play();
-				view.setCenter(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2);
+				view.setCenter(WINDOW_WIDTH / 2 , WINDOW_HEIGHT / 2);
 				window.setView(view);
 			}
 			dieScreen(window, restart_button, menu_button, exit_button);
@@ -140,7 +141,7 @@ int main()
 		else if (isWin && !isExit) {
 			if (win.music.getStatus() != sf::SoundSource::Status::Playing) {
 				win.music.play();
-				view.setCenter(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2);
+				view.setCenter(WINDOW_WIDTH / 2 , WINDOW_HEIGHT / 2);
 				window.setView(view);
 			}
 			winScreen(window, next_button, menu_button, exit_button);
