@@ -100,6 +100,7 @@ int main(){
 			if (play.music.getStatus() != sf::SoundSource::Status::Playing) {
 				play.music.play();
 				p.restart(START_X, START_Y, W, H);
+				gameClock.restart();
 			}
 			if (lvl == 1) { 
 				StartGame(window, Map1, p); 

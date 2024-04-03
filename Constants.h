@@ -23,7 +23,7 @@ constexpr float JUMP = -0.3f;
 constexpr float GRAVITATION = 0.0002f;
 
 constexpr int START_X = 100; //начальное положение игрока
-constexpr int START_Y = 3600;
+constexpr int START_Y = 3750;
  
 constexpr float W = 128.f;  //ширина и высота спрайта 
 constexpr float H = 128.f;

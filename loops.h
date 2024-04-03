@@ -10,30 +10,29 @@ sf::Clock gameClock; //БПЕЛЪ ХЦПШ
 bool isMenu = false, isGame = false, isDie = false, isWin = false, isExit = false;
 
 void StartGame(sf::RenderWindow& window, Map play_map, Player& p) {
+	window.setView(view);
+	play_map.renderMap(window);//нрпхянбйю йюпрш
+	
+	float time = static_cast<float>(gameClock.getElapsedTime().asMicroseconds());
+	gameClock.restart();
+	time = time / TIME_SCALE;
+	
+	p.update(time, play_map.map);
 
-		float time = static_cast<float>(gameClock.getElapsedTime().asMicroseconds());
-		gameClock.restart();
-		time = time / TIME_SCALE;
-
-		p.update(time, play_map.map);
-		window.setView(view);
-
-		play_map.renderMap(window);//нрпхянбйю йюпрш
-
-		if (p.life) {//врн декюрэ онйю фхбш
-			getplayercoordinateforview(p.getplayercoordinateX(), p.getplayercoordinateY());
-			window.draw(p.sprite);
-		}
-		if (p.win) { //врн опнхяундхр опх онаеде
-			isGame = false;
-			isWin = true;
-			return;
-		}
-		else if (!p.life) { // врн опнхяундхр опх ялепрх///
-			isGame = false; 
-			isDie = true;
-			return;
-		}
+	if (p.life) {//врн декюрэ онйю фхбш
+		getplayercoordinateforview(p.getplayercoordinateX(), p.getplayercoordinateY());
+		window.draw(p.sprite);
+	}
+	if (p.win) { //врн опнхяундхр опх онаеде
+		isGame = false;
+		isWin = true;
+		return;
+	}
+	else if (!p.life) { // врн опнхяундхр опх ялепрх///
+		isGame = false; 
+		isDie = true;
+		return;
+	}
 }
 
 void dieScreen(sf::RenderWindow& window, PushButton& restart_button, PushButton& menu_button, PushButton& exit_button) {

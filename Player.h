@@ -6,6 +6,7 @@
 #include "map.h"
 
 int lvl = 1;
+
 class Player {
 public:
 	float w, h, dx, dy, speed;
@@ -45,6 +46,7 @@ public:
 		x = X;
 		y = Y;
 		sprite.setOrigin(w / 2, h / 2);
+
 	}
 	void control() {
 		if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) || (sf::Keyboard::isKeyPressed(sf::Keyboard::A))) {
