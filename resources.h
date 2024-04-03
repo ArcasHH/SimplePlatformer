@@ -6,20 +6,17 @@
 #include <sstream>
 #include <string>
 
-sf::Image map_image;
-sf::Texture map;
+
+
 sf::Texture dragon;
-sf::Sprite s_map;
-sf::Texture menuTexture1, menuTexture2, menuBackground, num1, num2, num3;  //“≈ —“”– » ƒÀﬂ Ã≈Õﬁ
+
 
 sf::Font font;
 sf::Text text("", font, TEXT_SIZE);
 sf::Text die_text("YOU DIED", font, BIG_TEXT_SIZE);
 sf::Text win_text("YOU WIN", font, BIG_TEXT_SIZE);
 
-class Map {
 
-};
 class MyMusic {
 public:
 	sf::Music music;
@@ -36,6 +33,7 @@ public:
 		music.setLoop(is_loop);	
 	}
 };
+
 class MySound {
 public:
 	sf::String file;
@@ -104,10 +102,10 @@ public:
 		else if ((!is_clicked) && (!is_pos(window))) {
 			sprite.setColor(base_color);
 		}
-			
 	}
-
 };
+
+
 class BackgroundImage {
 public:
 	sf::String file;
@@ -123,6 +121,7 @@ public:
 		sprite.setPosition(posX, posY);
 	}
 };
+
 class Animation_frame {
 public:
 	sf::String file;
@@ -154,7 +153,7 @@ public:
 			if (frame < num_frames) {
 				++frame;
 			}
-			else { // Á‡ÌÓ‚Ó
+			else {
 				frame = 0;
 			}
 			sprite.setTexture(textures[frame]);
@@ -162,6 +161,7 @@ public:
 		}
 	}
 };
+
 Animation_frame dancing_dragon(223, 700, 50);
 
 class SpriteManager {

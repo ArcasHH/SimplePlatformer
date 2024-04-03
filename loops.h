@@ -3,34 +3,24 @@
 #include "view.h"
 #include "resources.h"
 #include "Player.h"
+#include "map.h"
 
 
-sf::Clock gameClock, gameTimeClock; //âğåìÿ èãğû
+sf::Clock gameClock; //âğåìÿ èãğû
 bool isMenu = false, isGame = false, isDie = false, isWin = false, isExit = false;
 
-void StartGame(sf::RenderWindow& window, sf::String* Map, Player& p, int gameTime) {
+void StartGame(sf::RenderWindow& window, Map play_map, Player& p) {
 
 		float time = static_cast<float>(gameClock.getElapsedTime().asMicroseconds());
 		gameClock.restart();
 		time = time / TIME_SCALE;
 
-		p.update(time, Map);
+		p.update(time, play_map.map);
 		window.setView(view);
 
-		//ÎÒĞÈÑÎÂÊÀ ÊÀĞÒÛ
-		for (int i = 0; i < HEIGHT_MAP; i++)
-			for (int j = 0; j < WIDTH_MAP; j++)
-			{
-				if (Map[i][j] == ' ')  s_map.setTextureRect(sf::IntRect(0, 0, TILE_SIZE, TILE_SIZE));
-				if (Map[i][j] == 'X')  s_map.setTextureRect(sf::IntRect(TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
-				if ((Map[i][j] == '0')) s_map.setTextureRect(sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
-				if ((Map[i][j] == 'W')) s_map.setTextureRect(sf::IntRect(3 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
-				s_map.setPosition(static_cast<float>(j * TILE_SIZE), static_cast<float>(i * TILE_SIZE));
-				window.draw(s_map);
-			}
+		play_map.renderMap(window);//ÎÒĞÈÑÎÂÊÀ ÊÀĞÒÛ
 
 		if (p.life) {//×ÒÎ ÄÅËÀÒÜ ÏÎÊÀ ÆÈÂÛ
-			gameTime = static_cast<int>(gameTimeClock.getElapsedTime().asSeconds());
 			getplayercoordinateforview(p.getplayercoordinateX(), p.getplayercoordinateY());
 			window.draw(p.sprite);
 		}

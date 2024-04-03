@@ -9,16 +9,11 @@
 #include "resources.h"
 #include "map.h"
 
-int main()
-{
+int main(){
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Game");
 	view.reset(sf::FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(60);
-	/////////////////// ¿–“¿
-	map_image.loadFromFile("images/map.png");
-	map.loadFromImage(map_image);
-	s_map.setTexture(map);
 
 	//////////////////“≈ —“€
 	font.loadFromFile("nyashasans.ttf");
@@ -53,11 +48,16 @@ int main()
 	PushButton num1("1.png", LVL_NUM_X, NEW_GAME_Y + 64, LVL_NUM_SIZE, LVL_NUM_SIZE, sf::Color::White, sf::Color(184, 221, 20));
 	PushButton num2("2.png", LVL_NUM_X + LVL_NUM_SIZE, NEW_GAME_Y + 64, LVL_NUM_SIZE, LVL_NUM_SIZE, sf::Color::White, sf::Color(184, 221, 20));
 	PushButton num3("3.png", LVL_NUM_X + 2 * LVL_NUM_SIZE, NEW_GAME_Y + 64, LVL_NUM_SIZE, LVL_NUM_SIZE, sf::Color::White, sf::Color(184, 221, 20));
+	
+	Map Map1("Map1.txt");
+	Map Map2("Map2.txt");
+	Map Map3("Map3.txt");
 
-	int gameTime = 0;
-	isMenu = true;// ¬ Õ¿◊¿À≈ «¿œ”— ¿≈Ã Ã≈Õﬁ
+
 	view.setCenter(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 	window.setView(view);
+
+	isMenu = true;// ¬ Õ¿◊¿À≈ «¿œ”— ¿≈Ã Ã≈Õﬁ
 
 	while (window.isOpen())
 	{
@@ -100,10 +100,9 @@ int main()
 			if (play.music.getStatus() != sf::SoundSource::Status::Playing) {
 				play.music.play();
 				p.restart(START_X, START_Y, W, H);
-				gameTime = 0;
 			}
 			if (lvl == 1) { 
-				StartGame(window, Map1, p, gameTime); 
+				StartGame(window, Map1, p); 
 				if (p.onGround && p.life) {
 					jump.sound.play();
 				}
@@ -111,7 +110,7 @@ int main()
 				continue;
 			}
 			if (lvl == 2) { 
-				StartGame(window, Map2,  p, gameTime);  
+				StartGame(window, Map2,  p);
 				if ( p.onGround && p.life) {
 					jump.sound.play();
 				}
@@ -119,15 +118,15 @@ int main()
 				continue;
 			}
 			if (lvl == 3) { 
-				StartGame(window, Map3, p, gameTime);  
+				StartGame(window, Map3, p);
 				if ( p.onGround && p.life) {
 					jump.sound.play();
 				}
 				window.display();
 				continue;
 			}
-
 		}
+
 		else if (isDie && !isExit) {
 			if (die.music.getStatus() != sf::SoundSource::Status::Playing) {
 				die.music.play();
@@ -138,6 +137,7 @@ int main()
 			window.display();
 			continue;
 		}
+
 		else if (isWin && !isExit) {
 			if (win.music.getStatus() != sf::SoundSource::Status::Playing) {
 				win.music.play();
