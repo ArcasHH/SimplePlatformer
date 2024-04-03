@@ -6,16 +6,10 @@
 #include <sstream>
 #include <string>
 
-
-
-sf::Texture dragon;
-
-
 sf::Font font;
 sf::Text text("", font, TEXT_SIZE);
 sf::Text die_text("YOU DIED", font, BIG_TEXT_SIZE);
 sf::Text win_text("YOU WIN", font, BIG_TEXT_SIZE);
-
 
 class MyMusic {
 public:

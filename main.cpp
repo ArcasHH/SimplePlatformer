@@ -22,8 +22,8 @@ int main(){
 	die_text.setPosition(view.getCenter().x - 150, view.getCenter().y - 100);
 	win_text.setFont(font);
 	win_text.setPosition(view.getCenter().x - 150 , view.getCenter().y - 100);
+
 	//////////////////“≈ —“”–€
-	dragon.loadFromFile("images/sprite_dragon.png");
 	BackgroundImage bg("menu_bg.png", MENU_X + 750, 200);
 
 	//////////////////////////////////////////////////////////////////////////////////////////

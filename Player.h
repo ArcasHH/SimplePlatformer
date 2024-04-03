@@ -86,7 +86,6 @@ public:
 		dy = dy + GRAVITATION * time;
 	}
 
-
 	float getplayercoordinateX() {
 		return x;
 	}
