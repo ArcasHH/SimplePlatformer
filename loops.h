@@ -113,9 +113,10 @@ void winScreen(sf::RenderWindow& window, PushButton& next_button, PushButton& me
 }
 
 
-void menuScreen(sf::RenderWindow& window, BackgroundImage& bg, PushButton& NewGame_button, PushButton& Exit_button, PushButton& num1, PushButton& num2, PushButton& num3) {
+void menuScreen(sf::RenderWindow& window, BackgroundImage& bg, PushButton& NewGame_button, PushButton& Settings_button, PushButton& Exit_button, PushButton& num1, PushButton& num2, PushButton& num3) {
 
 		NewGame_button.paint_button(window);
+		Settings_button.paint_button(window);
 		Exit_button.paint_button(window);
 		num1.paint_button(window);
 		num2.paint_button(window);
@@ -149,6 +150,11 @@ void menuScreen(sf::RenderWindow& window, BackgroundImage& bg, PushButton& NewGa
 			isGame = true;
 			return;
 		}
+		if (Settings_button.is_pos(window)) {
+			isSettings = true;
+			isMenu = false;
+			return;
+		}
 		if (Exit_button.is_pos(window)) {
 			isExit = true;
 			return;
@@ -157,8 +163,50 @@ void menuScreen(sf::RenderWindow& window, BackgroundImage& bg, PushButton& NewGa
 	window.draw(bg.sprite);
 	window.draw(NewGame_button.sprite);
 	window.draw(Exit_button.sprite);
+	window.draw(Settings_button.sprite);
 	window.draw(num1.sprite);
 	window.draw(num2.sprite);
 	window.draw(num3.sprite);
 }
-
+void settingsScreen(sf::RenderWindow& window, PushButton& Back_button, PushButton& FPS_button, PushButton& button30, PushButton& button60, PushButton& button120) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+		isSettings = false;
+		isMenu = true;
+	}
+	button30.paint_button(window);
+	button60.paint_button(window);
+	button120.paint_button(window);
+	Back_button.paint_button(window);
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+		if (button30.is_pos(window)) {
+			button30.is_clicked = true;
+			button60.is_clicked = false;
+			button120.is_clicked = false;
+			fps = 30;
+		}
+		else if (button60.is_pos(window)) {
+			button30.is_clicked = false;
+			button60.is_clicked = true;
+			button120.is_clicked = false;
+			fps = 60;
+		}
+		else if (button120.is_pos(window)) {
+			button30.is_clicked = false;
+			button60.is_clicked = false;
+			button120.is_clicked = true;
+			fps = 120;
+		}
+		window.setFramerateLimit(fps);
+		 if (Back_button.is_pos(window)) {
+			//isSettings = false;
+			//isMenu = true;
+			return;
+		}
+		
+	}
+	window.draw(FPS_button.sprite);
+	window.draw(Back_button.sprite);
+	window.draw(button30.sprite);
+	window.draw(button60.sprite);
+	window.draw(button120.sprite);
+}

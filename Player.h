@@ -1,5 +1,34 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+
+class Player{
+private:
+	sf::Vector2f position;
+	sf::Sprite sprite;
+	sf::Texture texture;
+
+	bool leftPressed;
+	bool rightPressed;
+
+	float speed;
+
+public:
+	Player();
+	sf::Sprite getSprite();
+	void moveLeft();
+	void moveRight();
+	void stopLeft();
+	void stopRight();
+	void update(float elapsedTime);
+};
+
+
+
+
+
+#if 0
+#pragma once
+#include <SFML/Graphics.hpp>
 #include <iostream> 
 #include <sstream>
 #include "Constants.h"
@@ -123,3 +152,4 @@ public:
 			}
 	}
 };
+#endif

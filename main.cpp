@@ -1,3 +1,25 @@
+#include "Game.h"
+
+int main(){
+	Game game;
+	game.start();
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#if 0
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream> 
@@ -8,15 +30,14 @@
 #include "loops.h"
 #include "resources.h"
 #include "map.h"
-
-int main(){
 	WINDOW_WIDTH = sf::VideoMode::getDesktopMode().width;
 	WINDOW_HEIGHT = sf::VideoMode::getDesktopMode().height;
 
-	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Game", sf::Style::Fullscreen);
+	//sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Game", sf::Style::Fullscreen);
+	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "ToothlessGame");
 	view.reset(sf::FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
 	window.setVerticalSyncEnabled(true);
-	window.setFramerateLimit(60);
+	window.setFramerateLimit(fps);
 
 	//////////////////“≈ —“€
 	font.loadFromFile("nyashasans.ttf");
@@ -46,12 +67,18 @@ int main(){
 	PushButton menu_button("menu.png", view.getCenter().x - 100, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, sf::Color::White, sf::Color(184, 221, 20));
 	PushButton exit_button("exit.png", view.getCenter().x + 100, view.getCenter().y, LVL_NUM_SIZE, LVL_NUM_SIZE, sf::Color::White, sf::Color(184, 221, 20));
 	// ÕŒœ » ¬ Ã≈Õﬁ
-	PushButton Exit_button("exit256.png", MENU_X, EXIT_Y, 256, 256, sf::Color::White, sf::Color(184, 221, 20));
-	PushButton NewGame_button("play256.png", MENU_X, NEW_GAME_Y, 256, 256, sf::Color::White, sf::Color(184, 221, 20));
-	PushButton Settings_button("Settings256.png", MENU_X, SETTINGS_Y, 256, 256, sf::Color::White, sf::Color(184, 221, 20));
-	PushButton num1("1.png", LVL_NUM_X, NEW_GAME_Y + 64, LVL_NUM_SIZE, LVL_NUM_SIZE, sf::Color::White, sf::Color(184, 221, 20));
-	PushButton num2("2.png", LVL_NUM_X + LVL_NUM_SIZE, NEW_GAME_Y + 64, LVL_NUM_SIZE, LVL_NUM_SIZE, sf::Color::White, sf::Color(184, 221, 20));
+	PushButton Exit_button("exit256.png", MENU_X,          EXIT_Y,          256, 256, sf::Color::White, sf::Color(184, 221, 20));
+	PushButton NewGame_button("play256.png", MENU_X,       NEW_GAME_Y,      256, 256, sf::Color::White, sf::Color(184, 221, 20));
+	PushButton Settings_button("Settings256.png", MENU_X,  SETTINGS_Y,      256, 256, sf::Color::White, sf::Color(184, 221, 20));
+	PushButton num1("1.png", LVL_NUM_X,                    NEW_GAME_Y + 64, LVL_NUM_SIZE, LVL_NUM_SIZE, sf::Color::White, sf::Color(184, 221, 20));
+	PushButton num2("2.png", LVL_NUM_X + LVL_NUM_SIZE,     NEW_GAME_Y + 64, LVL_NUM_SIZE, LVL_NUM_SIZE, sf::Color::White, sf::Color(184, 221, 20));
 	PushButton num3("3.png", LVL_NUM_X + 2 * LVL_NUM_SIZE, NEW_GAME_Y + 64, LVL_NUM_SIZE, LVL_NUM_SIZE, sf::Color::White, sf::Color(184, 221, 20));
+	//ÍÌÓÔÍË ‚ Ì‡ÒÚÓÈÍ‡ı
+	PushButton FPS_button("fps256.png", MENU_X,                    SETTINGS_Y, 256, 256, sf::Color::White, sf::Color(184, 221, 20));
+	PushButton Back_button("back256.png", MENU_X,                  EXIT_Y, 256, 256, sf::Color::White, sf::Color(184, 221, 20));
+	PushButton button30("30_256.png", MENU_X + SETTINGS_Y,         SETTINGS_Y, 256, 256, sf::Color::White, sf::Color(184, 221, 20));
+	PushButton button60("60_256.png", MENU_X + SETTINGS_Y + 256,   SETTINGS_Y, 256, 256, sf::Color::White, sf::Color(184, 221, 20));
+	PushButton button120("120_256.png", MENU_X + SETTINGS_Y + 512, SETTINGS_Y, 256, 256, sf::Color::White, sf::Color(184, 221, 20));
 	
 	Map Map1("Map1.txt");
 	Map Map2("Map2.txt");
@@ -65,6 +92,7 @@ int main(){
 
 	while (window.isOpen())
 	{
+		//clock.restart();
 		window.clear(sf::Color::Black);
 
 		sf::Event event;
@@ -95,7 +123,13 @@ int main(){
 				view.setCenter(WINDOW_WIDTH / 2 , WINDOW_HEIGHT / 2);
 				window.setView(view);
 			}
-			menuScreen(window, bg, NewGame_button, Exit_button, num1, num2, num3);
+			menuScreen(window, bg, NewGame_button, Settings_button, Exit_button, num1, num2, num3);
+			window.display();
+			continue;
+		}
+		else if (isSettings && !isExit) {
+			settingsScreen(window, Back_button, FPS_button, button30, button60, button120);
+			//if(!isSettings) isMenu = true;
 			window.display();
 			continue;
 		}
@@ -158,6 +192,9 @@ int main(){
 		}
 
 		if (isExit)	return 0;
+		//sf::sleep(frame - clock.getElapsedTime());
 	}
 	return 0;
+
 }
+#endif
