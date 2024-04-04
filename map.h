@@ -35,7 +35,7 @@ public:
 	void renderMap(sf::RenderWindow& window) {
 		for (int i = 0; i < HEIGHT_MAP; i++)
 			for (int j = 0; j < WIDTH_MAP; j++) {
-				if (map[i][j] == ' ')  s_map.setTextureRect(sf::IntRect(0, 0, TILE_SIZE, TILE_SIZE));
+				if (map[i][j] == ' ') continue;// s_map.setTextureRect(sf::IntRect(0, 0, TILE_SIZE, TILE_SIZE));
 				if (map[i][j] == 'X')  s_map.setTextureRect(sf::IntRect(TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
 				if ((map[i][j] == '0')) s_map.setTextureRect(sf::IntRect(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
 				if ((map[i][j] == 'W')) s_map.setTextureRect(sf::IntRect(3 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));

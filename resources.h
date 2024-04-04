@@ -106,7 +106,7 @@ public:
 	sf::Texture texture;
 	sf::Sprite sprite;
 	int posX, posY;
-
+	BackgroundImage(){}
 	BackgroundImage(sf::String f, int x, int y) {
 		file = f;
 		posX = x, posY = y;

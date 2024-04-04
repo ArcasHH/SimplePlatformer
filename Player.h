@@ -7,6 +7,7 @@
 
 int lvl = 1;
 
+
 class Player {
 public:
 	float w, h, dx, dy, speed;
@@ -19,7 +20,7 @@ public:
 	sf::Texture texture_right;
 	sf::Sprite sprite;
 	Player(sf::String F_left, sf::String F_right, float X, float Y, float W, float H) {
-
+		state = stay;
 		speed = 0, dx = 0, dy = 0;
 		life = true, win = false, isMove = false, onGround = false;
 		w = W;
@@ -40,6 +41,7 @@ public:
 	}
 	void restart(float X, float Y, float W, float H) {
 		speed = 0, dx = 0, dy = 0;
+		state = stay;
 		life = true, win = false, isMove = false, onGround = false;
 		w = W;
 		h = H;
@@ -73,12 +75,13 @@ public:
 	void update(float time, const sf::String Map[HEIGHT_MAP])
 	{
 		control();
-		switch (state)
-		{
+		switch (state){
 			case right: dx = speed; break;
 			case left: dx = -speed; break;
 			case jump: break;
+			case stay: dx = 0; dy = 0; break;
 		}
+
 		x += dx * time;
 		checkCollisionWithMap(dx, 0, Map);
 		y += dy * time;

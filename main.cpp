@@ -10,7 +10,10 @@
 #include "map.h"
 
 int main(){
-	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Game");
+	WINDOW_WIDTH = sf::VideoMode::getDesktopMode().width;
+	WINDOW_HEIGHT = sf::VideoMode::getDesktopMode().height;
+
+	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Game", sf::Style::Fullscreen);
 	view.reset(sf::FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(60);
@@ -25,7 +28,7 @@ int main(){
 
 	//////////////////“≈ —“”–€
 	BackgroundImage bg("menu_bg.png", MENU_X + 750, 200);
-
+	
 	//////////////////////////////////////////////////////////////////////////////////////////
 	SpriteManager playerSprite("hero1.png", "Hero");
 	Player p("left.png", "right.png", START_X, START_Y, W, H);
@@ -45,6 +48,7 @@ int main(){
 	// ÕŒœ » ¬ Ã≈Õﬁ
 	PushButton Exit_button("exit256.png", MENU_X, EXIT_Y, 256, 256, sf::Color::White, sf::Color(184, 221, 20));
 	PushButton NewGame_button("play256.png", MENU_X, NEW_GAME_Y, 256, 256, sf::Color::White, sf::Color(184, 221, 20));
+	PushButton Settings_button("Settings256.png", MENU_X, SETTINGS_Y, 256, 256, sf::Color::White, sf::Color(184, 221, 20));
 	PushButton num1("1.png", LVL_NUM_X, NEW_GAME_Y + 64, LVL_NUM_SIZE, LVL_NUM_SIZE, sf::Color::White, sf::Color(184, 221, 20));
 	PushButton num2("2.png", LVL_NUM_X + LVL_NUM_SIZE, NEW_GAME_Y + 64, LVL_NUM_SIZE, LVL_NUM_SIZE, sf::Color::White, sf::Color(184, 221, 20));
 	PushButton num3("3.png", LVL_NUM_X + 2 * LVL_NUM_SIZE, NEW_GAME_Y + 64, LVL_NUM_SIZE, LVL_NUM_SIZE, sf::Color::White, sf::Color(184, 221, 20));
@@ -97,11 +101,14 @@ int main(){
 		}
 
 		else if (isGame && !isExit) {
+			
 			if (play.music.getStatus() != sf::SoundSource::Status::Playing) {
 				play.music.play();
 				p.restart(START_X, START_Y, W, H);
 				gameClock.restart();
 			}
+			
+
 			if (lvl == 1) { 
 				StartGame(window, Map1, p); 
 				if (p.onGround && p.life) {

@@ -5,12 +5,13 @@
 #include "Player.h"
 #include "map.h"
 
-
+BackgroundImage wasd("wasd.png", START_X-600, START_Y-100);
 sf::Clock gameClock; //âğåìÿ èãğû
-bool isMenu = false, isGame = false, isDie = false, isWin = false, isExit = false;
+bool isMenu = false, isGame = false, isDie = false, isWin = false, isExit = false, isSettings = false;
 
 void StartGame(sf::RenderWindow& window, Map play_map, Player& p) {
 	window.setView(view);
+	window.clear(sf::Color(69, 69, 69));
 	play_map.renderMap(window);//ÎÒĞÈÑÎÂÊÀ ÊÀĞÒÛ
 	
 	float time = static_cast<float>(gameClock.getElapsedTime().asMicroseconds());
@@ -18,10 +19,13 @@ void StartGame(sf::RenderWindow& window, Map play_map, Player& p) {
 	time = time / TIME_SCALE;
 	
 	p.update(time, play_map.map);
-
+	
 	if (p.life) {//×ÒÎ ÄÅËÀÒÜ ÏÎÊÀ ÆÈÂÛ
 		getplayercoordinateforview(p.getplayercoordinateX(), p.getplayercoordinateY());
 		window.draw(p.sprite);
+		if (p.state == p.stay) {
+			window.draw(wasd.sprite);
+		}
 	}
 	if (p.win) { //×ÒÎ ÏĞÎÈÑÕÎÄÈÒ ÏĞÈ ÏÎÁÅÄÅ
 		isGame = false;
@@ -157,3 +161,4 @@ void menuScreen(sf::RenderWindow& window, BackgroundImage& bg, PushButton& NewGa
 	window.draw(num2.sprite);
 	window.draw(num3.sprite);
 }
+
