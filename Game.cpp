@@ -1,21 +1,22 @@
 #include "Game.h"
 
 Game::Game(){
-    //window
+    frames = 60;
+    
     sf::Vector2f resolution;
     resolution.x = sf::VideoMode::getDesktopMode().width;
     resolution.y = sf::VideoMode::getDesktopMode().height;
     window.create(sf::VideoMode(resolution.x, resolution.y), "Simple Game", sf::Style::Fullscreen);
 
-    backgroundTexture.loadFromFile("images/die.jpg");
-    backgroundSprite.setTexture(backgroundTexture);
-
 }
 
-void Game::start()
-{
+void Game::start(){
+    
+
+    Object ob("images/exit.png", 200, 200);
+    w.Objects.push_back(&ob);
+
     sf::Clock clock;
-    //main loop
     while (window.isOpen()){
 
         sf::Event event;
@@ -24,7 +25,6 @@ void Game::start()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-
         sf::Time dt = clock.restart();
         float dtAsSeconds = dt.asSeconds();
 
@@ -38,29 +38,16 @@ void Game::input(){
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
         window.close();
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-        player.moveLeft();
-    }
-    else{
-        player.stopLeft();
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
-        player.moveRight();
-    }
-    else{
-        player.stopRight();
-    }
 }
 
 void Game::update(float dtAsSeconds){
-    player.update(dtAsSeconds);
+    //player.update(dtAsSeconds);
 }
 
 void Game::draw(){
-    window.clear(sf::Color::White);
-
-    window.draw(backgroundSprite);
-    window.draw(player.getSprite());
-
+    window.clear(sf::Color::Black);
+    for (auto&& obj : w.Objects) {
+        obj->draw(window);
+    }
     window.display();
 }

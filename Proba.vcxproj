@@ -133,16 +133,15 @@
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="map.h" />
-    <ClInclude Include="loops.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="resources.h" />
-    <ClInclude Include="view.h" />
+    <ClInclude Include="Windows.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

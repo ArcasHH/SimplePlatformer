@@ -12,7 +12,7 @@ Player::Player(){
     rightPressed = false;
 }
 
-sf::Sprite Player::getSprite(){//private sprite available for the draw()
+sf::Sprite Player::getSprite(){
     return sprite;
 }
 
