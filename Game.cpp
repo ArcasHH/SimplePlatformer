@@ -6,15 +6,17 @@ Game::Game(){
     sf::Vector2f resolution;
     resolution.x = sf::VideoMode::getDesktopMode().width;
     resolution.y = sf::VideoMode::getDesktopMode().height;
-    window.create(sf::VideoMode(resolution.x, resolution.y), "Simple Game", sf::Style::Fullscreen);
+    window.create(sf::VideoMode(resolution.x, resolution.y), "Simple Game");
+    window.setVerticalSyncEnabled(true);
 
 }
 
 void Game::start(){
-    
 
-    Object ob("images/exit.png", 200, 200);
+    Object ob("images/exit.png", 0, 300);
     w.Objects.push_back(&ob);
+    Object ob1("images/exit256.png", 300, 300);
+    w.Objects.push_back(&ob1);
 
     sf::Clock clock;
     while (window.isOpen()){

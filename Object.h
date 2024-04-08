@@ -7,6 +7,7 @@ class Object {
 	sf::Vector2i size;
 	
 public:
+	sf::Sprite getSprite();
 	Object(std::string file, int x, int y);
 	~Object() {};
 	//void input();

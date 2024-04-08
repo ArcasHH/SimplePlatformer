@@ -18,5 +18,5 @@ private:
 public:
     BaseWindow w;
     Game();
-    void start();
+    void start();    
 };
