@@ -7,7 +7,7 @@ class Game{
 private:
 
     sf::RenderWindow window;
-    
+    bool w1;
     //Player player;
     int frames;
 

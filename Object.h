@@ -18,16 +18,19 @@ public:
 };
 
 class PushButton : Object {
-	bool is_pointed, is_clicked;
+	
 	sf::Color base_color;
 	sf::Color clicked_color;
-	enum action {exit, menu, settings, next, restart, play, none} ;
+	//enum action {exit, menu, settings, next, restart, play, none} ;
+	bool is_exit, is_menu;
 	sf::IntRect rect;
 public:
+	bool is_pointed, is_clicked;
 	sf::Sprite getSprite();
-	PushButton(std::string file, int x, int y, sf::IntRect area = sf::IntRect(), sf::Color b_color = sf::Color::White, sf::Color c_color = sf::Color::Red);
+	PushButton(std::string file, int x, int y, bool exit = false, bool menu = false, 
+		sf::IntRect area = sf::IntRect(), sf::Color b_color = sf::Color::White, sf::Color c_color = sf::Color::Red);
 	~PushButton() {};
-	//void input();
+	void input(sf::RenderWindow& window, bool& is_w);
 	void update(sf::RenderWindow& window);
 	void draw(sf::RenderWindow& window);
 	bool  is_pos(sf::RenderWindow& window);

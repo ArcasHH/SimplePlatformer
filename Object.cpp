@@ -15,10 +15,11 @@ sf::Sprite Object::getSprite() {
 	return sprite;
 }
 
-PushButton::PushButton(std::string file, int x, int y, sf::IntRect area, sf::Color b_color, sf::Color c_color) {
-	
+PushButton::PushButton(std::string file, int x, int y, bool exit, bool menu, sf::IntRect area, sf::Color b_color, sf::Color c_color) {
+	is_exit = exit;
+	is_menu = menu;
 	pos.x = x;
-	pos.y = y;
+	pos.y = y; 
 
 	texture.loadFromFile(file);
 	size.x = texture.getSize().x;
@@ -35,16 +36,29 @@ PushButton::PushButton(std::string file, int x, int y, sf::IntRect area, sf::Col
 	is_clicked = false;
 	
 }
-void PushButton::draw(sf::RenderWindow& window) {
-	window.draw(getSprite());
+void PushButton::input(sf::RenderWindow& window, bool& is_w) {
+	if (is_pos(window) && !is_pointed) {
+		is_clicked = true;
+		
+		if (is_exit)
+			window.close();
+		else if (is_menu) {
+			is_w = !is_w;
+			is_pointed = true;
+		}
+	}
 }
 void PushButton::update(sf::RenderWindow& window) {
 	if (is_pos(window) || is_clicked) {
 		sprite.setColor(clicked_color);
 	}
-	else if (!is_clicked)
+	else if (!is_clicked && !is_pos(window))
 		sprite.setColor(base_color);
 }
+void PushButton::draw(sf::RenderWindow& window) {
+	window.draw(getSprite());
+}
+
 bool  PushButton::is_pos(sf::RenderWindow& window) {
 	if (rect.contains(sf::Mouse::getPosition(window))) {
 		return true;

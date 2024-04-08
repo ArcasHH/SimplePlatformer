@@ -2,7 +2,6 @@
 
 Game::Game(){
     frames = 60;
-    
     sf::Vector2f resolution;
     resolution.x = sf::VideoMode::getDesktopMode().width;
     resolution.y = sf::VideoMode::getDesktopMode().height;
@@ -12,13 +11,18 @@ Game::Game(){
 }
 
 void Game::start(){
-
+    BaseWindow w_curr;
     Object ob("images/exit.png", 0, 300);
-    w.Objects.push_back(&ob);
-    Object ob1("images/exit.png", 300, 300);
-    w.Objects.push_back(&ob1);
-    PushButton b("images/exit256.png", 400, 400);
-    w.Buttons.push_back(&b);
+    w_curr.Objects.push_back(&ob);
+    PushButton b("images/exit256.png", 400, 400, true, false);
+    PushButton b1("images/exit256.png", 400, 700, false, true);
+    w_curr.Buttons.push_back(&b);
+    w_curr.Buttons.push_back(&b1);
+    BaseWindow w_next;
+    PushButton b2("images/play256.png", 400, 400, true, false);
+    PushButton b3("images/play256.png", 400, 700, false, true);
+    w_next.Buttons.push_back(&b2);
+    w_next.Buttons.push_back(&b3);
 
     sf::Clock clock;
     while (window.isOpen()){
@@ -32,6 +36,13 @@ void Game::start(){
         sf::Time dt = clock.restart();
         float dtAsSeconds = dt.asSeconds();
 
+        if (w.is_w) {
+            w = w_curr;
+        }
+        else {
+            w = w_next;
+        }
+
         input();
         update(dtAsSeconds);
         draw();
@@ -42,22 +53,19 @@ void Game::input(){
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
         window.close();
     }
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+        w.input(window);
+    }
 }
 
 void Game::update(float dtAsSeconds){
-    //player.update(dtAsSeconds);
-    for (auto&& obj : w.Buttons) {
-        obj->update(window);
-    }
+    w.update(window);
 }
 
 void Game::draw(){
     window.clear(sf::Color::Black);
-    for (auto&& obj : w.Objects) {
-        obj->draw(window);
-    }
-    for (auto&& obj : w.Buttons) {
-        obj->draw(window);
-    }
+
+    w.draw(window);
+
     window.display();
 }
