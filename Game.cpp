@@ -15,8 +15,10 @@ void Game::start(){
 
     Object ob("images/exit.png", 0, 300);
     w.Objects.push_back(&ob);
-    Object ob1("images/exit256.png", 300, 300);
+    Object ob1("images/exit.png", 300, 300);
     w.Objects.push_back(&ob1);
+    PushButton b("images/exit256.png", 400, 400);
+    w.Buttons.push_back(&b);
 
     sf::Clock clock;
     while (window.isOpen()){
@@ -44,11 +46,17 @@ void Game::input(){
 
 void Game::update(float dtAsSeconds){
     //player.update(dtAsSeconds);
+    for (auto&& obj : w.Buttons) {
+        obj->update(window);
+    }
 }
 
 void Game::draw(){
     window.clear(sf::Color::Black);
     for (auto&& obj : w.Objects) {
+        obj->draw(window);
+    }
+    for (auto&& obj : w.Buttons) {
         obj->draw(window);
     }
     window.display();
