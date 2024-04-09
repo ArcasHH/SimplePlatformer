@@ -5,7 +5,6 @@ class BaseWindow {
 public:
     std::vector<Object*> Objects;
     std::vector<PushButton*> Buttons;
-    bool is_w = true;
 
     BaseWindow() {}
     virtual void draw(sf::RenderWindow& window) {
@@ -18,7 +17,7 @@ public:
         for (auto&& Obj : Buttons)
             Obj->update(window);
     }
-    virtual void input(sf::RenderWindow& window) {
+    virtual void input(sf::RenderWindow& window, isW &is_w) {
         for (auto&& Obj : Buttons) {
             Obj->input(window, is_w);
         }
@@ -26,8 +25,10 @@ public:
         
     }
 
-    virtual ~BaseWindow() {
-        for (auto&& Obj : Objects)
-            delete Obj;
+     ~BaseWindow() {
+        //for (auto&& Obj : Objects) // вылетает ошибка
+        //    delete Obj;
+        //for (auto&& Obj : Buttons)
+        //    delete Obj;
     }
 };

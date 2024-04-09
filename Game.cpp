@@ -2,27 +2,30 @@
 
 Game::Game(){
     frames = 60;
+    is_w = isW(0, 1, 0);
     sf::Vector2f resolution;
     resolution.x = sf::VideoMode::getDesktopMode().width;
     resolution.y = sf::VideoMode::getDesktopMode().height;
     window.create(sf::VideoMode(resolution.x, resolution.y), "Simple Game");
     window.setVerticalSyncEnabled(true);
-
 }
 
 void Game::start(){
     BaseWindow w_curr;
     Object ob("images/exit.png", 0, 300);
     w_curr.Objects.push_back(&ob);
-    PushButton b("images/exit256.png", 400, 400, true, false);
-    PushButton b1("images/exit256.png", 400, 700, false, true);
+    PushButton b("images/exit256.png", 400, 400, exit_button());
+    PushButton b1("images/exit256.png", 400, 700, menu_button());
     w_curr.Buttons.push_back(&b);
     w_curr.Buttons.push_back(&b1);
     BaseWindow w_next;
-    PushButton b2("images/play256.png", 400, 400, true, false);
-    PushButton b3("images/play256.png", 400, 700, false, true);
+    PushButton b2("images/play256.png", 700, 400, exit_button());
+    PushButton b3("images/play256.png", 700, 700, settings_button());
     w_next.Buttons.push_back(&b2);
     w_next.Buttons.push_back(&b3);
+    w = &w_curr;
+    bool once_menu = true;
+    bool once_settings = true;
 
     sf::Clock clock;
     while (window.isOpen()){
@@ -35,12 +38,16 @@ void Game::start(){
         }
         sf::Time dt = clock.restart();
         float dtAsSeconds = dt.asSeconds();
-
-        if (w.is_w) {
-            w = w_curr;
+        
+        if (is_w.is_menu && once_menu) {
+            w = &w_next;
+            once_menu = false;
+            once_settings = true;
         }
-        else {
-            w = w_next;
+        if (is_w.is_settings && once_settings) {
+            w = &w_curr;
+            once_settings = false;
+            once_menu = true;
         }
 
         input();
@@ -54,18 +61,18 @@ void Game::input(){
         window.close();
     }
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-        w.input(window);
+        (*w).input(window, is_w);
     }
 }
 
 void Game::update(float dtAsSeconds){
-    w.update(window);
+    (*w).update(window);
 }
 
 void Game::draw(){
     window.clear(sf::Color::Black);
 
-    w.draw(window);
+    (*w).draw(window);
 
     window.display();
 }

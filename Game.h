@@ -7,8 +7,7 @@ class Game{
 private:
 
     sf::RenderWindow window;
-    bool w1;
-    //Player player;
+    isW is_w = isW();
     int frames;
 
     void input();
@@ -16,7 +15,7 @@ private:
     void draw();
 
 public:
-    BaseWindow w;
+    BaseWindow* w;
     Game();
     void start();    
 };
