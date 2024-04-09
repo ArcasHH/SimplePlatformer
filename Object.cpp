@@ -57,13 +57,13 @@ void PushButton::input(sf::RenderWindow& window, isW &is_w) {
 			window.close();
 		}
 		else if (w.is_menu) {
-			is_w.is_menu = true;
-			is_w.is_settings = false;
+			is_w.is_menu = false;
+			is_w.is_settings = true;
 			return;
 		}
 		else if (w.is_settings) {
-			is_w.is_settings = true;
-			is_w.is_menu = false;
+			is_w.is_settings = false;
+			is_w.is_menu = true;
 			return;
 		}
 	}

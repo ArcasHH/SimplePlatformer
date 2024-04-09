@@ -21,8 +21,6 @@ public:
         for (auto&& Obj : Buttons) {
             Obj->input(window, is_w);
         }
-            
-        
     }
 
      ~BaseWindow() {
