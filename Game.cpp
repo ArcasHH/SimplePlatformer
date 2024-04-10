@@ -1,5 +1,7 @@
 #include "Game.h"
 
+#include "GlobalState.h"
+
 Game::Game(){
     sf::Vector2f resolution;
     resolution.x = sf::VideoMode::getDesktopMode().width;
@@ -10,53 +12,39 @@ Game::Game(){
     window.setFramerateLimit(60);
 }
 
-void Game::start(){
+void Game::start() {
     
-    load_menu_objects();
-    load_settings_objects();
-    load_game_objects();
+    auto& Glob = getGlobalState();
+
+    Glob.addWindow<MenuWindow>(MenuWindow::Name);
+    Glob.addWindow<SettingsWindow>(SettingsWindow::Name);
+    Glob.addWindow<GameWindow>(GameWindow::Name);
     
-    w = &w_menu;
+    Glob.setCurrWindow(MenuWindow::Name);
 
     while (window.isOpen()){
 
         sf::Event event;
+
+        BaseWindow* CurrWindow = Glob.getCurrWindow();
+        if (!CurrWindow) {
+            window.close();
+            continue;
+        }
+
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
                 window.close();
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+                window.close();
         }
 
+        CurrWindow->input(window);
+        CurrWindow->update(window);
+        window.clear(sf::Color::Black);
+        CurrWindow->draw(window);
+        window.display();
 
-        input();
-        update();
-        draw();
     }
-}
-
-void Game::input(){
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
-        window.close();
-    }
-    (*w).input(window, is_w);
-}
-
-void Game::update(){
-    if (is_w.is_menu) {
-        w = &w_menu;
-    }
-    if (is_w.is_settings) {
-        w = &w_settings;
-    }
-    if (is_w.is_game) {
-        w = &w_game;
-    }
-
-    (*w).update(window);
-}
-
-void Game::draw(){
-    window.clear(sf::Color::Black);
-    (*w).draw(window);
-    window.display();
 }

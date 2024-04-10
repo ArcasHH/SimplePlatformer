@@ -1,20 +1,5 @@
 #include "Object.h"
-isW exit_button() {
-	isW w(true, false);
-	return w;
-}
-isW menu_button() {
-	isW w;
-	return w;
-}
-isW settings_button() {
-	isW w(false, false, true);
-	return w;
-}
-isW game_button() {
-	isW w(false, false, false, true);
-	return w;
-}
+
 
 Object::Object(std::string file, int x, int y) {
 	pos.x = x;
@@ -31,8 +16,7 @@ sf::Sprite Object::getSprite() {
 	return sprite;
 }
 
-PushButton::PushButton(std::string file, int x, int y, isW ww, sf::IntRect area, sf::Color b_color, sf::Color c_color) {
-	w = ww;
+PushButton::PushButton(std::string file, int x, int y, sf::IntRect area, sf::Color b_color, sf::Color c_color) {
 	pos.x = x;
 	pos.y = y; 
 
@@ -50,34 +34,14 @@ PushButton::PushButton(std::string file, int x, int y, isW ww, sf::IntRect area,
 	is_clicked = false;
 	
 }
-void PushButton::input(sf::RenderWindow& window, isW &is_w) {
-	if (is_pos(window) && !is_clicked && (sf::Mouse::isButtonPressed(sf::Mouse::Left))) {
+void PushButton::input(sf::RenderWindow& window) {
+	if (is_pos(window) && (sf::Mouse::isButtonPressed(sf::Mouse::Left))) {
 		
 		sf::Time t = sf::milliseconds(100);
 		while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) 
 			sf::sleep(t);// ожидание пока не отпустишь кнопку	
 		is_clicked = true;
-		if (w.is_exit) 
-			window.close();
-		else if (w.is_settings) {
-			is_clicked = false;
-			is_w.is_menu = false;
-			is_w.is_settings = true;
-			return;
-		}
-		else if (w.is_menu) {
-			is_clicked = false;
-			is_w.is_settings = false;
-			is_w.is_game = false;
-			is_w.is_menu = true;
-			return;
-		}
-		else if (w.is_game) {
-			is_clicked = false;
-			is_w.is_game = true;
-			is_w.is_menu = false;
-			return;
-		}
+		std::invoke(OnClick);
 	}
 }
 void PushButton::update(sf::RenderWindow& window) {

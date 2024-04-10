@@ -1,13 +1,12 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Player.h";
-#include "Resource.h"
+#include "Windows.h"
 
 class Game{
 private:
 
     sf::RenderWindow window;
-    isW is_w = isW();//по умолчанию включает меню
     int frames;
 
     void input();
@@ -15,7 +14,6 @@ private:
     void draw();
 
 public:
-    BaseWindow* w;
     Game();
     void start();    
 };
