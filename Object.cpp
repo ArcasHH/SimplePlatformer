@@ -35,13 +35,15 @@ PushButton::PushButton(std::string file, int x, int y, sf::IntRect area, sf::Col
 	
 }
 void PushButton::input(sf::RenderWindow& window) {
-	if (is_pos(window) && (sf::Mouse::isButtonPressed(sf::Mouse::Left))) {
-		
-		sf::Time t = sf::milliseconds(100);
-		while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) 
-			sf::sleep(t);// ожидание пока не отпустишь кнопку	
-		std::invoke(OnClick);
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+		if (is_pos(window))
+			State.CurrState = true;
 	}
+
+	bool IsPressedAndReleased = State.pick();
+	if (is_pos(window) && IsPressedAndReleased)
+		std::invoke(OnClick);
 }
 void PushButton::update(sf::RenderWindow& window) {
 	if (is_pos(window) || is_clicked) 

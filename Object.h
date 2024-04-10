@@ -24,6 +24,35 @@ public:
 
 class PushButton final : Object {
 	
+	struct ButtonClick final {
+		bool PrevState = false;
+		bool CurrState = false;
+
+		bool pick() {
+			// Button is pushed in current frame.
+			if (CurrState) {
+				PrevState = true;
+				CurrState = false;
+				return false;
+			}
+
+			// Here CurrState is false (button released)
+			if (PrevState) {
+				// Prev frame button was pushed
+				PrevState = false;
+				CurrState = false;
+				return true;
+			}
+
+			// Prev frame nothig happens
+			PrevState = false;
+			CurrState = false;
+			return false;
+		}
+
+	} State;
+
+
 	sf::Color base_color;
 	sf::Color clicked_color;
 
