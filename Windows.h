@@ -22,11 +22,4 @@ public:
             Obj->input(window, is_w);
         }
     }
-
-     ~BaseWindow() {
-        //for (auto&& Obj : Objects) // вылетает ошибка
-        //    delete Obj;
-        //for (auto&& Obj : Buttons)
-        //    delete Obj;
-    }
 };

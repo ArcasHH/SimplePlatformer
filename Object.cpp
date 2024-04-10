@@ -1,14 +1,18 @@
 #include "Object.h"
 isW exit_button() {
-	isW w(true, false, false);
+	isW w(true, false);
 	return w;
 }
 isW menu_button() {
-	isW w(false, true, false);
+	isW w;
 	return w;
 }
 isW settings_button() {
 	isW w(false, false, true);
+	return w;
+}
+isW game_button() {
+	isW w(false, false, false, true);
 	return w;
 }
 
@@ -45,23 +49,29 @@ PushButton::PushButton(std::string file, int x, int y, isW ww, sf::IntRect area,
 	
 	base_color = b_color;
 	clicked_color = c_color;
-	is_pointed = false;
 	is_clicked = false;
 	
 }
 void PushButton::input(sf::RenderWindow& window, isW &is_w) {
-	if (is_pos(window)) {
-		is_clicked = true;
+	if (is_pos(window) && !is_clicked) {
 		
+		sf::Time t = sf::milliseconds(100);
+		while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			sf::sleep(t);// ожидание пока не отпустишь кнопку
+		}
+
+		is_clicked = true;
 		if (w.is_exit) {
 			window.close();
 		}
-		else if (w.is_menu) {
+		else if (w.is_settings) {
+			is_clicked = false;
 			is_w.is_menu = false;
 			is_w.is_settings = true;
 			return;
 		}
-		else if (w.is_settings) {
+		else if (w.is_menu) {
+			is_clicked = false;
 			is_w.is_settings = false;
 			is_w.is_menu = true;
 			return;
