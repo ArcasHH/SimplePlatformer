@@ -1,11 +1,9 @@
 #include "Player.h"
 
 Player::Player(){
-    speed = 400;
-
+    speed = 10;
     texture.loadFromFile("images/hero.jpg");
     sprite.setTexture(texture);
-
     position.x = 300;
     position.y = 300;
     leftPressed = false; 
@@ -15,11 +13,9 @@ Player::Player(){
 sf::Sprite Player::getSprite(){
     return sprite;
 }
-
 void Player::moveLeft(){
     leftPressed = true;
 }
-
 void Player::moveRight(){
     rightPressed = true;
 }

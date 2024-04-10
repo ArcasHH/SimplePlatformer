@@ -38,9 +38,7 @@ void Game::input(){
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
         window.close();
     }
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-        (*w).input(window, is_w);
-    }
+    (*w).input(window, is_w);
 }
 
 void Game::update(){
