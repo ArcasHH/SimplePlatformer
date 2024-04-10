@@ -27,10 +27,12 @@ protected:
 	sf::Vector2i size;
 	
 public:
-	virtual sf::Sprite getSprite();
-	Object(std::string file, int x, int y);
 	Object() {};
-	virtual ~Object() {};
+	Object(std::string file, int x, int y);
+	virtual ~Object() = default;
+
+	virtual sf::Sprite getSprite();
+	
 	//input();
 	//update();
 	virtual void draw(sf::RenderWindow& window);
@@ -50,7 +52,7 @@ public:
 
 	PushButton(std::string file, int x, int y, isW ww,
 		sf::IntRect area = sf::IntRect(), sf::Color b_color = sf::Color::White, sf::Color c_color = sf::Color::Red);
-	~PushButton() {};
+	~PushButton() = default;
 
 	void input(sf::RenderWindow& window, isW &is_w);
 	void update(sf::RenderWindow& window);

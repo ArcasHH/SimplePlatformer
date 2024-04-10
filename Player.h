@@ -19,5 +19,8 @@ public:
 	void moveRight();
 	void stopLeft();
 	void stopRight();
-	void update(float elapsedTime);
+	
+	void input();
+	void update();
+	void draw(sf::RenderWindow& window);
 };

@@ -73,7 +73,14 @@ void PushButton::input(sf::RenderWindow& window, isW &is_w) {
 		else if (w.is_menu) {
 			is_clicked = false;
 			is_w.is_settings = false;
+			is_w.is_game = false;
 			is_w.is_menu = true;
+			return;
+		}
+		else if (w.is_game) {
+			is_clicked = false;
+			is_w.is_game = true;
+			is_w.is_menu = false;
 			return;
 		}
 	}

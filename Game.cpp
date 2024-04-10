@@ -14,9 +14,10 @@ void Game::start(){
     
     load_menu_objects();
     load_settings_objects();
+    load_game_objects();
     
     w = &w_menu;
-    sf::Clock clock;
+
     while (window.isOpen()){
 
         sf::Event event;
@@ -25,11 +26,10 @@ void Game::start(){
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-        sf::Time dt = clock.restart();
-        float dtAsSeconds = dt.asSeconds();
+
 
         input();
-        update(dtAsSeconds);
+        update();
         draw();
     }
 }
@@ -43,12 +43,16 @@ void Game::input(){
     }
 }
 
-void Game::update(float dtAsSeconds){
+void Game::update(){
     if (is_w.is_menu) {
         w = &w_menu;
     }
-    if (is_w.is_settings)
+    if (is_w.is_settings) {
         w = &w_settings;
+    }
+    if (is_w.is_game) {
+        w = &w_game;
+    }
 
     (*w).update(window);
 }

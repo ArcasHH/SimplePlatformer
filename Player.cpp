@@ -32,12 +32,35 @@ void Player::stopRight(){
     rightPressed = false;
 }
 
-void Player::update(float elapsedTime){
+
+void Player::input() {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+    {
+        moveLeft();
+    }
+    else
+    {
+        stopLeft();
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    {
+        moveRight();
+    }
+    else
+    {
+        stopRight();
+    }
+}
+void Player::update(){
     if (rightPressed){
-        position.x += speed * elapsedTime;
+        position.x += speed ;
     }
     if (leftPressed){
-        position.x -= speed * elapsedTime;
+        position.x -= speed ;
     }
     sprite.setPosition(position);
+}
+void  Player::draw(sf::RenderWindow& window) {
+    window.draw(getSprite());
 }

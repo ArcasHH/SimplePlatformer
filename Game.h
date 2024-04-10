@@ -11,7 +11,7 @@ private:
     int frames;
 
     void input();
-    void update(float dtAsSeconds);
+    void update();
     void draw();
 
 public:
