@@ -1,7 +1,8 @@
 #pragma once
 #include<vector>
-#include "GlobalState.h"
 #include "Object.h"
+#include "Player.h"
+
 class BaseWindow {
 protected:
     std::vector<Object*> Objects;
@@ -34,20 +35,9 @@ public:
 
 class MenuWindow final : public BaseWindow {
 
-    static void onExit() {
-        auto& Glob = getGlobalState();
-        Glob.setCurrWindow("exit");
-    }
-
-    static void onStartGame() {
-        auto& Glob = getGlobalState();
-        Glob.setCurrWindow("game");
-    }
-
-    static void onSettings() {
-        auto& Glob = getGlobalState();
-        Glob.setCurrWindow("settings");
-    }
+    static void onExit();
+    static void onStartGame();
+    static void onSettings();
 
 public:
     static constexpr auto Name = "menu";
@@ -68,10 +58,7 @@ public:
 };
 
 class GameWindow final : public BaseWindow {
-    static void onMenu() {
-        auto& Glob = getGlobalState();
-        Glob.setCurrWindow("menu");
-    }
+    static void onMenu();
 
 public:
     static constexpr auto Name = "game";
@@ -103,10 +90,7 @@ public:
 };
 class SettingsWindow final : public BaseWindow {
 
-    static void onMenu() {
-        auto& Glob = getGlobalState();
-        Glob.setCurrWindow("menu");
-    }
+    static void onMenu();
 
 public:
     static constexpr auto Name = "settings";

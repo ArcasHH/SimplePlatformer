@@ -40,7 +40,6 @@ void PushButton::input(sf::RenderWindow& window) {
 		sf::Time t = sf::milliseconds(100);
 		while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) 
 			sf::sleep(t);// ожидание пока не отпустишь кнопку	
-		is_clicked = true;
 		std::invoke(OnClick);
 	}
 }
