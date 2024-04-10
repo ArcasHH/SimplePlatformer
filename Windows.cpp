@@ -12,6 +12,10 @@ void MenuWindow::onStartGame() {
     auto& Glob = getGlobalState();
     Glob.setCurrWindow(GameWindow::Name);
 }
+void MenuWindow::onStartGame2() {
+    auto& Glob = getGlobalState();
+    Glob.setCurrWindow("game2");
+}
 
 void MenuWindow::onSettings() {
     auto& Glob = getGlobalState();

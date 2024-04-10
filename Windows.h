@@ -37,6 +37,7 @@ class MenuWindow final : public BaseWindow {
 
     static void onExit();
     static void onStartGame();
+    static void onStartGame2();
     static void onSettings();
 
 public:
@@ -50,6 +51,10 @@ public:
         auto* StartGameBtn = new PushButton{ "images/play256.png", 100, 100 };
         StartGameBtn->registerFunction(onStartGame);
         Buttons.push_back(StartGameBtn);
+
+        auto* StartGame2Btn = new PushButton{ "images/play256.png", 200, 100 };
+        StartGame2Btn->registerFunction(onStartGame2);
+        Buttons.push_back(StartGame2Btn);
 
         auto* SettingsBtn = new PushButton{ "images/settings256.png", 100, 400 };
         SettingsBtn->registerFunction(onSettings);
