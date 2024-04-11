@@ -2,6 +2,14 @@
 #include<vector>
 #include "Object.h"
 #include "Player.h"
+#include "GlobalState.h"
+#include "TmxLevel.h"
+#include "view.h"
+
+void onExit();
+void onStartGame();
+void onSettings();
+void onMenu();
 
 class BaseWindow {
 protected:
@@ -10,10 +18,10 @@ protected:
 public:
     BaseWindow() {};
     virtual ~BaseWindow() {
-        for (auto* O : Objects)
-            delete O;
-        for (auto* O : Buttons)
-            delete O;
+        for (auto* Obj : Objects)
+            delete Obj;
+        for (auto* Obj : Buttons)
+            delete Obj;
     }
 
     virtual void input(sf::RenderWindow& window) {
@@ -34,12 +42,6 @@ public:
 };
 
 class MenuWindow final : public BaseWindow {
-
-    static void onExit();
-    static void onStartGame();
-    static void onStartGame2();
-    static void onSettings();
-
 public:
     static constexpr auto Name = "menu";
 
@@ -52,10 +54,6 @@ public:
         StartGameBtn->registerFunction(onStartGame);
         Buttons.push_back(StartGameBtn);
 
-        auto* StartGame2Btn = new PushButton{ "images/play256.png", 200, 100 };
-        StartGame2Btn->registerFunction(onStartGame2);
-        Buttons.push_back(StartGame2Btn);
-
         auto* SettingsBtn = new PushButton{ "images/settings256.png", 100, 400 };
         SettingsBtn->registerFunction(onSettings);
         Buttons.push_back(SettingsBtn);
@@ -63,16 +61,17 @@ public:
 };
 
 class GameWindow final : public BaseWindow {
-    static void onMenu();
-
 public:
     static constexpr auto Name = "game";
     Player p;
+    //TmxLevel level;
+    //Level lvl;//создали экземпл€р класса уровень
+   
     GameWindow() {
         auto* MenuBtn = new PushButton{ "images/back256.png", 100, 700 };
         MenuBtn->registerFunction(onMenu);
         Buttons.push_back(MenuBtn);
-        Objects.push_back(new Object{ "images/die.jpg", 100, 100 });
+        //lvl.LoadFromFile("map/map.tmx");//загрузили в него карту, внутри класса с помощью методов он ее обработает.
     }
     ~GameWindow() = default;
     void input(sf::RenderWindow& window) override {
@@ -80,23 +79,20 @@ public:
         p.input();
     }
     void update(sf::RenderWindow& window) override {
-        for (auto&& Obj : Buttons)
-            Obj->update(window);
+        BaseWindow::update(window);
         p.update();
-        
     }
      void draw(sf::RenderWindow& window) override {
-        for (auto&& Obj : Objects)
-            Obj->draw(window);
-        for (auto&& Obj : Buttons)
-            Obj->draw(window);
-        p.draw(window);
+         BaseWindow::draw(window);
+        // lvl.Draw(window);
+         //sf::RenderTarget& target = view.window;
+         //level.Draw(target);
+         p.draw(window);
+
+        
     }
 };
 class SettingsWindow final : public BaseWindow {
-
-    static void onMenu();
-
 public:
     static constexpr auto Name = "settings";
 
@@ -106,3 +102,4 @@ public:
         Buttons.push_back(MenuBtn);
     }
 };
+

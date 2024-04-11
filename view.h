@@ -1,25 +1,37 @@
 #pragma once
+
 #include <SFML/Graphics.hpp>
-#include "Constants.h"
+#include <functional>
 
-sf::View view;
+/// Структура, абстрагирующая работу с окном и камерой.
+///  Код ниже намеренно написан в процедурном стиле:
+///  - используются структуры
+///  - используются указатели на функции
+///  - используется явный вызов new и delete.
 
-void getplayercoordinateforview(float x, float y) {
-	float tempX = x; float tempY = y;
-	view.setCenter(tempX, tempY); 
-}
+struct GameView
+{
+    sf::RenderWindow window;
+    sf::View camera;
+    sf::Vector2i windowSize;
+    sf::Clock clock;
+};
 
-void viewmap(float time) { //функция для перемещения камеры по карте. принимает время sfml
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-		view.move(PLAYER_SPEED * time, 0);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-		view.move(0, PLAYER_SPEED * time);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-		view.move(-PLAYER_SPEED * time, 0);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-		view.move(0, -PLAYER_SPEED * time);
-	}
-}
+/// Объявляем типы указателей на функции-колбеки (callback),
+///  вызываемые из основного цикла игры для совершения игровой логики.
+/// Параметр userData - произвольный указатель на внешние данные того,
+///  кто предоставляет колбек.
+using OnUpdate = void (*)(void* pData, GameView& view, float deltaSec);
+using OnDraw = void (*)(void* pData, GameView& view);
+
+/// Создаёт новое окно игры.
+GameView* NewGameView(const sf::Vector2i& windowSize);
+
+/// Входит в основной цикл игры и возвращается, когда цикл завершён.
+void EnterGameLoop(GameView& view, OnUpdate onUpdate, OnDraw onDraw, void* pData);
+
+/// Центрирует камеру в заданной точке
+void SetCameraCenter(GameView& view, const sf::Vector2f& center);
+
+/// Разрушает окно игры и очищает его данные.
+void DestroyGameView(GameView*& pView);

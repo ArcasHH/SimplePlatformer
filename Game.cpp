@@ -18,9 +18,7 @@ void Game::start() {
 
     Glob.addWindow<MenuWindow>(MenuWindow::Name);
     Glob.addWindow<SettingsWindow>(SettingsWindow::Name);
-    Glob.addWindow<GameWindow>(GameWindow::Name);
-    Glob.addWindow<GameWindow>("game2");
-    
+    Glob.addWindow<GameWindow>(GameWindow::Name);    
     Glob.setCurrWindow(MenuWindow::Name);
 
     while (window.isOpen()){
