@@ -21,6 +21,10 @@ void Game::start() {
     Glob.addWindow<GameWindow>(GameWindow::Name);    
     Glob.setCurrWindow(MenuWindow::Name);
 
+    //GameView* pGameView = NewGameView({ 800, 600 });
+    //GameScene* pGameScene = NewGameScene();
+    //EnterGameLoop(*pGameView, UpdateGameScene, DrawGameScene, pGameScene);
+
     while (window.isOpen()){
 
         sf::Event event;
@@ -28,16 +32,30 @@ void Game::start() {
         BaseWindow* CurrWindow = Glob.getCurrWindow();
         if (!CurrWindow) {
             window.close();
-            continue;
+            break;
         }
 
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed) {
                 window.close();
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+                break;
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
                 window.close();
+                break;
+            }
         }
+
+        //const sf::Time elapsedTime = view.clock.getElapsedTime();
+        //view.clock.restart();
+        //onUpdate(pData, view, elapsedTime.asSeconds());
+
+        //view.window.clear();
+        //onDraw(pData, view);
+        //view.window.display();
+
+
 
         CurrWindow->input(window);
         CurrWindow->update(window);

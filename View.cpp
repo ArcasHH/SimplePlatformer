@@ -1,15 +1,10 @@
 #include "view.h"
 
-GameView* NewGameView(const sf::Vector2i& windowSize)
-{
+GameView* NewGameView(const sf::Vector2i& windowSize){
     GameView* pView = new GameView;
     pView->windowSize = windowSize;
 
-    sf::ContextSettings settings;
-    settings.antialiasingLevel = 8;
-    pView->window.create(sf::VideoMode(windowSize.x, windowSize.y),
-        "Tiled Map Parser Demo",
-        sf::Style::Close, settings);
+    pView->window.create(sf::VideoMode(windowSize.x, windowSize.y), "Tiled Map Demo");
     pView->window.setFramerateLimit(60);
 
     pView->camera.reset(sf::FloatRect(0.0f, 0.0f, windowSize.x, windowSize.y));
