@@ -35,8 +35,8 @@ static sf::Vector2f GetPlayerDirection(){
 GameScene* NewGameScene(){
     GameScene* pLogic = new GameScene;
     TmxLevel& level = pLogic->level;
-
-    level.LoadFromFile("map/platformer.tmx");
+    
+    level.LoadFromFile("map/platformer1.tmx");
     pLogic->player = level.GetFirstObject("player");
     pLogic->coins = level.GetAllObjects("coin");
     pLogic->enemies = level.GetAllObjects("enemy");
@@ -65,6 +65,7 @@ void DrawGameScene(void* pData, sf::RenderWindow &window){
     for (const TmxObject& enemy : pLogic->enemies){
         target.draw(enemy.sprite);
     }
+    sf::Texture hero_texture;
     target.draw(pLogic->player.sprite);
 }
 

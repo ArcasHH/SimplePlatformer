@@ -1,0 +1,16 @@
+sudo: required
+dist: trusty
+
+language: cpp
+
+compiler:
+    - gcc
+    - clang
+
+install:
+    # Install all the dependencies
+    - sudo apt-get install libsfml-dev -y
+    - sudo apt-get install libpugixml-dev -y
+    - sudo apt-get install zlib1g-dev -y
+
+script: cmake . && make

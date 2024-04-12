@@ -1,0 +1,7 @@
+[submodule "extlibs/pugixml"]
+    path = extlibs/pugixml
+    url = https://github.com/zeux/pugixml.git
+[submodule "extlibs/zlib"]
+    path = extlibs/zlib
+    url = https://github.com/madler/zlib.git
+    ignore = dirty

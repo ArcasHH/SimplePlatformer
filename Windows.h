@@ -74,17 +74,17 @@ public:
     ~GameWindow() = default;
     void input(sf::RenderWindow& window) override {
         BaseWindow::input(window);
-        p.input();
+        //p.input();
     }
     void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, float deltaSec) override {
         BaseWindow::update(window, view, windowSize, deltaSec);
-        p.update();
+        //p.update();
         UpdateGameScene(gameScene, window, view, windowSize, deltaSec);
     }
      void draw(sf::RenderWindow& window) override {
          BaseWindow::draw(window);
-         p.draw(window);
          DrawGameScene(gameScene, window);
+         //p.draw(window);
     }
 };
 class SettingsWindow final : public BaseWindow {
