@@ -43,8 +43,7 @@ void DestroyGameView(GameView*& pView)
     pView = nullptr;
 }
 
-void SetCameraCenter(GameView& view, const sf::Vector2f& center)
-{
-    view.camera.setCenter(center.x, center.y);
-    view.window.setView(view.camera);
+void SetCameraCenter(sf::RenderWindow& window, sf::View& view, const sf::Vector2f& center){
+    view.setCenter(center.x, center.y);
+    window.setView(view);
 }

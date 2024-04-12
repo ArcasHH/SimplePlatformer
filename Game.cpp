@@ -3,10 +3,10 @@
 #include "GlobalState.h"
 
 Game::Game(){
-    sf::Vector2f resolution;
-    resolution.x = sf::VideoMode::getDesktopMode().width;
-    resolution.y = sf::VideoMode::getDesktopMode().height;
-    window.create(sf::VideoMode(resolution.x, resolution.y), "Simple Game");
+    
+    windowSize.x = sf::VideoMode::getDesktopMode().width;
+    windowSize.y = sf::VideoMode::getDesktopMode().height;
+    window.create(sf::VideoMode(windowSize.x, windowSize.y), "Simple Game");
 
     window.setVerticalSyncEnabled(true);
     window.setFramerateLimit(60);
@@ -24,6 +24,8 @@ void Game::start() {
     //GameView* pGameView = NewGameView({ 800, 600 });
     //GameScene* pGameScene = NewGameScene();
     //EnterGameLoop(*pGameView, UpdateGameScene, DrawGameScene, pGameScene);
+    view.reset(sf::FloatRect(0.0f, 0.0f, windowSize.x, windowSize.y));
+    view.setViewport(sf::FloatRect(0.0f, 0.0f, 2.0f, 2.0f));
 
     while (window.isOpen()){
 
@@ -46,22 +48,20 @@ void Game::start() {
                 break;
             }
         }
-
-        //const sf::Time elapsedTime = view.clock.getElapsedTime();
-        //view.clock.restart();
-        //onUpdate(pData, view, elapsedTime.asSeconds());
-
-        //view.window.clear();
-        //onDraw(pData, view);
-        //view.window.display();
-
+        const sf::Time elapsedTime = clock.getElapsedTime();
+        clock.restart();
 
 
         CurrWindow->input(window);
-        CurrWindow->update(window);
+        CurrWindow->update(window, view, windowSize, elapsedTime.asSeconds());
         window.clear(sf::Color::Black);
         CurrWindow->draw(window);
         window.display();
 
     }
+}
+
+void Game::SetCameraCenter(sf::RenderWindow& window, sf::View& view, const sf::Vector2f& center) {
+    view.setCenter(center.x, center.y);
+    window.setView(view);
 }

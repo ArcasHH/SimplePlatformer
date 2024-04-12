@@ -3,39 +3,34 @@
 #include <float.h> // Константа FLT_EPSILON
 #include <math.h>
 
-// Добавим часто используемые идентификаторы в глобальное пространство имён.
-using sf::Keyboard;
-using sf::Vector2f;
-using sf::Vector2i;
-
 // Абсолютная скорость движения игрока.
 static const float PLAYER_SPEED = 200;
 
-static Vector2f Normalize(const Vector2f& value){
+static sf::Vector2f Normalize(const sf::Vector2f& value){
     const float length = std::hypotf(value.x, value.y);
     if (length < FLT_EPSILON){
-        return Vector2f(0, 0);
+        return sf::Vector2f(0, 0);
     }
     return value / length;
 }
 
-static Vector2f Round(const Vector2f& value){
-    return Vector2f(roundf(value.x), roundf(value.y));
+static sf::Vector2f Round(const sf::Vector2f& value){
+    return sf::Vector2f(roundf(value.x), roundf(value.y));
 }
 
-static Vector2f GetPlayerDirection()
+static sf::Vector2f GetPlayerDirection()
 {
-    Vector2f direction;
-    if (Keyboard::isKeyPressed(Keyboard::W) || Keyboard::isKeyPressed(Keyboard::Up)){
+    sf::Vector2f direction;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
         direction.y = -1;
     }
-    else if (Keyboard::isKeyPressed(Keyboard::S) || Keyboard::isKeyPressed(Keyboard::Down)){
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
         direction.y = +1;
     }
-    if (Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::Left)){
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
         direction.x = -1;
     }
-    else if (Keyboard::isKeyPressed(Keyboard::D) || Keyboard::isKeyPressed(Keyboard::Right)){
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
         direction.x = +1;
     }
     return Normalize(direction);
@@ -53,23 +48,21 @@ GameScene* NewGameScene(){
     return pLogic;
 }
 
-void UpdateGameScene(void* pData, GameView& view, float deltaSec){
-    // Извлекаем указатель на GameLogic, ранее переданный в игровой цикл.
+void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, float deltaSec){
     GameScene* pLogic = reinterpret_cast<GameScene*>(pData);
     (void)deltaSec;
 
     TmxObject& player = pLogic->player;
-    const Vector2f movement = Round(GetPlayerDirection() * PLAYER_SPEED * deltaSec);
+    const sf::Vector2f movement = Round(GetPlayerDirection() * PLAYER_SPEED * deltaSec);
     player.MoveBy(movement);
 
-    const Vector2i windowSize = view.windowSize;
-    SetCameraCenter(view, player.sprite.getPosition() + Vector2f(windowSize.x / 4, windowSize.y / 4));
+    SetCameraCenter( window, view, player.sprite.getPosition() + sf::Vector2f(windowSize.x / 4, windowSize.y / 4));
 }
 
-void DrawGameScene(void* pData, GameView& view){
+void DrawGameScene(void* pData, sf::RenderWindow &window){
     // Извлекаем указатель на GameLogic, ранее переданный в игровой цикл.
     GameScene* pLogic = reinterpret_cast<GameScene*>(pData);
-    sf::RenderTarget& target = view.window;
+    sf::RenderTarget& target = window;
 
     pLogic->level.Draw(target);
     for (const TmxObject& coin : pLogic->coins)

@@ -27,9 +27,6 @@
     <ClCompile Include="Object.cpp">
       <Filter>Файлы ресурсов</Filter>
     </ClCompile>
-    <ClCompile Include="GlobalState.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="Windows.cpp">
       <Filter>Файлы ресурсов</Filter>
     </ClCompile>
@@ -43,6 +40,9 @@
       <Filter>Файлы ресурсов</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
+      <Filter>Файлы ресурсов</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalState.cpp">
       <Filter>Файлы ресурсов</Filter>
     </ClCompile>
   </ItemGroup>

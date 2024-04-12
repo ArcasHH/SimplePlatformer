@@ -1,18 +1,10 @@
 #pragma once
 #include "TmxLevel.h"
 
-/// ѕредварительное объ€вление (pre-declaration) структуры
-///  позволит передавать и хранить указатели и ссылки на неЄ,
-///  но не позволит пользоватьс€ или создавать,
-///  поскольку мы ещЄ не знаем ни размер в байтах, ни свойства структуры.
 struct GameView;
+class Game;
 
-/// —труктура, абстрагирующа€ игровую сцену.
-///   од ниже намеренно написан в процедурном стиле:
-///  - используютс€ структуры
-///  - используетс€ €вный вызов new и delete.
-struct GameScene
-{
+struct GameScene{
     TmxLevel level;
     TmxObject player;
     std::vector<TmxObject> enemies;
@@ -20,6 +12,6 @@ struct GameScene
 };
 
 GameScene* NewGameScene();
-void UpdateGameScene(void* pData, GameView& view, float deltaSec);
-void DrawGameScene(void* pData, GameView& view);
+void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, float deltaSec);
+void DrawGameScene(void* pData, sf::RenderWindow& window);
 void DestroyGameScene(GameScene*& pScene);

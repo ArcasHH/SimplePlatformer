@@ -25,7 +25,7 @@ GameView* NewGameView(const sf::Vector2i& windowSize);
 void EnterGameLoop(GameView& view, OnUpdate onUpdate, OnDraw onDraw, void* pData);
 
 /// ÷ентрирует камеру в заданной точке
-void SetCameraCenter(GameView& view, const sf::Vector2f& center);
+void SetCameraCenter(sf::RenderWindow& window, sf::View& view, const sf::Vector2f& center);
 
 /// –азрушает окно игры и очищает его данные.
 void DestroyGameView(GameView*& pView);
