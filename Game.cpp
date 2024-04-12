@@ -1,5 +1,4 @@
 #include "Game.h"
-
 #include "GlobalState.h"
 
 Game::Game(){
@@ -21,9 +20,6 @@ void Game::start() {
     Glob.addWindow<GameWindow>(GameWindow::Name);    
     Glob.setCurrWindow(MenuWindow::Name);
 
-    //GameView* pGameView = NewGameView({ 800, 600 });
-    //GameScene* pGameScene = NewGameScene();
-    //EnterGameLoop(*pGameView, UpdateGameScene, DrawGameScene, pGameScene);
     view.reset(sf::FloatRect(0.0f, 0.0f, windowSize.x, windowSize.y));
     view.setViewport(sf::FloatRect(0.0f, 0.0f, 2.0f, 2.0f));
 
@@ -57,11 +53,5 @@ void Game::start() {
         window.clear(sf::Color::Black);
         CurrWindow->draw(window);
         window.display();
-
     }
-}
-
-void Game::SetCameraCenter(sf::RenderWindow& window, sf::View& view, const sf::Vector2f& center) {
-    view.setCenter(center.x, center.y);
-    window.setView(view);
 }

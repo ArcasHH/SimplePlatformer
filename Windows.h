@@ -4,7 +4,6 @@
 #include "Player.h"
 #include "GlobalState.h"
 #include "TmxLevel.h"
-//#include "View.h"
 #include "Scene.h"
 
 void onExit();
@@ -79,7 +78,7 @@ public:
     }
     void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, float deltaSec) override {
         BaseWindow::update(window, view, windowSize, deltaSec);
-        //p.update();
+        p.update();
         UpdateGameScene(gameScene, window, view, windowSize, deltaSec);
     }
      void draw(sf::RenderWindow& window) override {

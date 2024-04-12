@@ -1,9 +1,6 @@
 #include "Scene.h"
-#include "View.h"
-#include <float.h> // Константа FLT_EPSILON
 #include <math.h>
 
-// Абсолютная скорость движения игрока.
 static const float PLAYER_SPEED = 200;
 
 static sf::Vector2f Normalize(const sf::Vector2f& value){
@@ -18,8 +15,7 @@ static sf::Vector2f Round(const sf::Vector2f& value){
     return sf::Vector2f(roundf(value.x), roundf(value.y));
 }
 
-static sf::Vector2f GetPlayerDirection()
-{
+static sf::Vector2f GetPlayerDirection(){
     sf::Vector2f direction;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
         direction.y = -1;
@@ -60,17 +56,13 @@ void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, cons
 }
 
 void DrawGameScene(void* pData, sf::RenderWindow &window){
-    // Извлекаем указатель на GameLogic, ранее переданный в игровой цикл.
     GameScene* pLogic = reinterpret_cast<GameScene*>(pData);
     sf::RenderTarget& target = window;
-
     pLogic->level.Draw(target);
-    for (const TmxObject& coin : pLogic->coins)
-    {
+    for (const TmxObject& coin : pLogic->coins){
         target.draw(coin.sprite);
     }
-    for (const TmxObject& enemy : pLogic->enemies)
-    {
+    for (const TmxObject& enemy : pLogic->enemies){
         target.draw(enemy.sprite);
     }
     target.draw(pLogic->player.sprite);
@@ -79,4 +71,9 @@ void DrawGameScene(void* pData, sf::RenderWindow &window){
 void DestroyGameScene(GameScene*& pScene){
     delete pScene;
     pScene = nullptr;
+}
+
+void SetCameraCenter(sf::RenderWindow& window, sf::View& view, const sf::Vector2f& center) {
+    view.setCenter(center.x, center.y);
+    window.setView(view);
 }
