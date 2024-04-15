@@ -65,7 +65,7 @@ void DrawGameScene(void* pData, sf::RenderWindow &window){
     for (const TmxObject& enemy : pLogic->enemies){
         target.draw(enemy.sprite);
     }
-    sf::Texture hero_texture;
+    //sf::Texture hero_texture;
     target.draw(pLogic->player.sprite);
 }
 

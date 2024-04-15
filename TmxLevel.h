@@ -25,6 +25,7 @@ struct TmxObject
     std::map<std::string, std::string> properties;
 
     sf::Sprite sprite;
+
 };
 
 // В картах TMX слой - это набор тайлов (спрайтов),
