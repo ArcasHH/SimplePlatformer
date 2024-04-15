@@ -9,6 +9,7 @@ struct GameScene{
     TmxObject player;
     std::vector<TmxObject> enemies;
     std::vector<TmxObject> coins;
+    std::vector<TmxObject> blocks;//objects with collision
 };
 
 GameScene* NewGameScene();

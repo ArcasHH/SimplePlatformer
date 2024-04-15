@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="50" height="10" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="18">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="left-up" width="50" height="10" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="18">
  <tileset firstgid="1" name="Dungeon Ruins Tileset Night" tilewidth="16" tileheight="16" tilecount="512" columns="32">
   <image source="Dungeon Ruins Tileset Night.png" width="512" height="256"/>
  </tileset>
@@ -520,10 +520,10 @@
   <object id="10" name="block" x="736" y="96" width="48" height="48"/>
   <object id="11" name="coin" gid="473" x="209" y="93" width="16" height="16"/>
   <object id="12" name="coin" gid="473" x="318.5" y="87" width="16" height="16"/>
-  <object id="13" name="coin" gid="473" x="181" y="111" width="16" height="16"/>
-  <object id="14" name="coin" gid="473" x="99" y="46" width="16" height="16"/>
+  <object id="13" name="coin" gid="473" x="112" y="33.5" width="16" height="16"/>
+  <object id="14" name="coin" gid="473" x="129" y="121.5" width="16" height="16"/>
   <object id="15" name="coin" gid="473" x="351" y="104" width="16" height="16"/>
-  <object id="16" name="player" gid="473" x="97" y="95" width="16" height="16"/>
+  <object id="16" name="player" gid="323" x="97" y="95" width="16" height="16"/>
   <object id="17" name="enemy" gid="217" x="513" y="125" width="16" height="16"/>
  </objectgroup>
  <layer id="3" name="Тайлы" width="50" height="10">

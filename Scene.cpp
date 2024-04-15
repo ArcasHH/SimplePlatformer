@@ -40,6 +40,7 @@ GameScene* NewGameScene(){
     pLogic->player = level.GetFirstObject("player");
     pLogic->coins = level.GetAllObjects("coin");
     pLogic->enemies = level.GetAllObjects("enemy");
+    pLogic->blocks = level.GetAllObjects("block");
 
     return pLogic;
 }
@@ -49,8 +50,9 @@ void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, cons
     (void)deltaSec;
 
     TmxObject& player = pLogic->player;
+    std::vector<TmxObject> blocks = pLogic->blocks;
     const sf::Vector2f movement = Round(GetPlayerDirection() * PLAYER_SPEED * deltaSec);
-    player.MoveBy(movement);
+    player.MoveBy(movement, blocks);
 
     SetCameraCenter( window, view, player.sprite.getPosition() + sf::Vector2f(windowSize.x / 4, windowSize.y / 4));
 }
