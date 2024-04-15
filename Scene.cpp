@@ -1,7 +1,7 @@
 #include "Scene.h"
 #include <math.h>
 
-static const float PLAYER_SPEED = 200;
+static const float PLAYER_SPEED = 600;
 
 static sf::Vector2f Normalize(const sf::Vector2f& value){
     const float length = std::hypotf(value.x, value.y);
