@@ -3,7 +3,7 @@
 
 struct GameView;
 class Game;
-
+static sf::Clock g_clock;
 struct GameScene{
     TmxLevel level;
     TmxObject player;

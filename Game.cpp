@@ -22,7 +22,7 @@ void Game::start() {
 
     view.reset(sf::FloatRect(0.0f, 0.0f, windowSize.x, windowSize.y));
     view.setViewport(sf::FloatRect(0.0f, 0.0f, 2.0f, 2.0f));
-
+    g_clock.restart();
     while (window.isOpen()){
 
         sf::Event event;

@@ -16,7 +16,7 @@ struct TmxObject
     float GetPropertyFloat(const std::string &propertyName);
     std::string GetPropertyString(const std::string &propertyName);
 
-    void MoveBy(const sf::Vector2f& movement, std::vector<TmxObject>& blocks);
+    void MoveBy(const sf::Vector2f& movement);
     void MoveTo(const sf::Vector2f &position);
 
     std::string name;

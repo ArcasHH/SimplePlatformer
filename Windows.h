@@ -66,9 +66,9 @@ public:
     Player p;
     GameScene* gameScene ;
     GameWindow() {
-        auto* MenuBtn = new PushButton{ "images/back256.png", 100, 700 };
-        MenuBtn->registerFunction(onMenu);
-        Buttons.push_back(MenuBtn);
+        //auto* MenuBtn = new PushButton{ "images/back256.png", 100, 700 };
+        //MenuBtn->registerFunction(onMenu);
+        //Buttons.push_back(MenuBtn);
         gameScene = NewGameScene();
     }
     ~GameWindow() = default;

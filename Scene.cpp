@@ -1,7 +1,7 @@
 #include "Scene.h"
 #include <math.h>
 
-static const float PLAYER_SPEED = 600;
+static const float PLAYER_SPEED = 200;
 
 static sf::Vector2f Normalize(const sf::Vector2f& value){
     const float length = std::hypotf(value.x, value.y);
@@ -48,11 +48,18 @@ GameScene* NewGameScene(){
 void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, float deltaSec){
     GameScene* pLogic = reinterpret_cast<GameScene*>(pData);
     (void)deltaSec;
-
+    const sf::Time elapsedTime = g_clock.getElapsedTime();
     TmxObject& player = pLogic->player;
     std::vector<TmxObject> blocks = pLogic->blocks;
-    const sf::Vector2f movement = Round(GetPlayerDirection() * PLAYER_SPEED * deltaSec);
-    player.MoveBy(movement, blocks);
+    sf::Vector2f movement = Round(GetPlayerDirection() * PLAYER_SPEED * deltaSec);
+    float gravity = 0;
+    if (player.rect.top >= 100)
+        g_clock.restart();
+    else
+        gravity = 10 * elapsedTime.asSeconds();
+    movement.y += gravity;
+    player.MoveBy(movement);
+    
 
     SetCameraCenter( window, view, player.sprite.getPosition() + sf::Vector2f(windowSize.x / 4, windowSize.y / 4));
 }
@@ -67,7 +74,6 @@ void DrawGameScene(void* pData, sf::RenderWindow &window){
     for (const TmxObject& enemy : pLogic->enemies){
         target.draw(enemy.sprite);
     }
-    //sf::Texture hero_texture;
     target.draw(pLogic->player.sprite);
 }
 

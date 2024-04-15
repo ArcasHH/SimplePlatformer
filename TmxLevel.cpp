@@ -72,54 +72,11 @@ float TmxObject::GetPropertyFloat(const std::string &propertyName){
 std::string TmxObject::GetPropertyString(const std::string &propertyName){
     return properties[propertyName];
 }
-static sf::Vector2f Normalize(const sf::Vector2f& value) {
-    const float length = std::hypotf(value.x, value.y);
-    if (length < FLT_EPSILON) {
-        return sf::Vector2f(0, 0);
-    }
-    return value / length;
-}
-bool between(float x, float a, float b) {
-    return(x >= a && x <= b);
-}
-void TmxObject::MoveBy(const sf::Vector2f &movement, std::vector<TmxObject>& blocks){
-    float p_top = rect.top - rect.height;
-    float p_bottom = rect.top;
-    float p_left = rect.left;
-    float p_right = rect.left + rect.width;
-    sf::Vector2f mov = movement;
-    for (auto&& block : blocks) {
-        float b_bottom = block.rect.top + block.rect.height;
-        float b_top = block.rect.top;
-        float b_left = block.rect.left;
-        float b_right = block.rect.left + block.rect.width;
 
-        if (between(p_left, b_left, b_right) || between(p_right, b_left, b_right) ||
-            (between(b_left, p_left, p_right) && between(b_right, p_left, p_right))) {
-            if (between(p_top, b_top, b_bottom) && movement.y < 0) {
-                mov.y = b_bottom - p_top;
-            }
-            else if (between(p_bottom, b_top, b_bottom) && movement.y > 0) {
-                mov.y = b_top - p_bottom;
-            }
-        }
-
-
-        else if (between(p_top, b_top, b_bottom) || between(p_bottom, b_top, b_bottom)||
-            (between(b_top, p_top, p_bottom) && between(b_bottom, p_top, p_bottom))){
-             if (between(p_left, b_left, b_right) && movement.x < 0) {
-                mov.x = b_right - p_left;
-             }
-             else if (between(p_right, b_left, b_right) && movement.x > 0) {
-                mov.x = b_left - p_right;
-             }
-        }
-    }
-    mov = Normalize(mov); 
-    rect.left += mov.x;
-    rect.top += mov.y;
-    sprite.setPosition(rect.left, rect.top);
-    //sprite.move(mov);
+void TmxObject::MoveBy(const sf::Vector2f &movement){
+    rect.left += movement.x;
+    rect.top += movement.y;
+    sprite.move(movement);
 }
 
 void TmxObject::MoveTo(const sf::Vector2f &position){
