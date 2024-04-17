@@ -51,16 +51,10 @@ void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, cons
     const sf::Time elapsedTime = g_clock.getElapsedTime();
     TmxObject& player = pLogic->player;
     std::vector<TmxObject> blocks = pLogic->blocks;
-    sf::Vector2f movement = Round(GetPlayerDirection() * PLAYER_SPEED * deltaSec);
-    float gravity = 0;
-    if (player.rect.top >= 100)
-        g_clock.restart();
-    else
-        gravity = 10 * elapsedTime.asSeconds();
-    movement.y += gravity;
-    player.MoveBy(movement);
-    
+    //sf::Vector2f movement = Round(GetPlayerDirection() * PLAYER_SPEED * deltaSec);
 
+    //player.MoveBy(movement);
+    
     SetCameraCenter( window, view, player.sprite.getPosition() + sf::Vector2f(windowSize.x / 4, windowSize.y / 4));
 }
 

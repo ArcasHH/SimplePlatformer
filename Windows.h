@@ -63,30 +63,39 @@ public:
 class GameWindow final : public BaseWindow {
 public:
     static constexpr auto Name = "game";
-    Player p;
+    //Player p;
+    DynamicObject* p;
+    DynamicObject pl;
     GameScene* gameScene ;
-    //std::vector<TmxObject*> p_objects;
-    //std::vector<DynamicObject*> d_objects;
+    std::vector<TmxObject*> p_objects;
+    std::vector<DynamicObject*> d_objects;
     GameWindow() {
         //auto* MenuBtn = new PushButton{ "images/back256.png", 100, 700 };
         //MenuBtn->registerFunction(onMenu);
         //Buttons.push_back(MenuBtn);
         gameScene = NewGameScene();
+        for (auto&& obj : gameScene->blocks) {
+            obj.setPhysics();
+        }
+        pl = DynamicObject(gameScene->player);
+        p = &pl;
+        //gameScene->player.setPhysics();
+        
     }
     ~GameWindow() = default;
     void input(sf::RenderWindow& window) override {
         BaseWindow::input(window);
-        //p.input();
+        p->input(window);
     }
     void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, float deltaSec) override {
         BaseWindow::update(window, view, windowSize, deltaSec);
-        //p.update();
+        p->update(window);
         UpdateGameScene(gameScene, window, view, windowSize, deltaSec);
     }
-     void draw(sf::RenderWindow& window) override {
+    void draw(sf::RenderWindow& window) override {
          BaseWindow::draw(window);
          DrawGameScene(gameScene, window);
-         //p.draw(window);
+         p->draw(window);
          //for (auto&& Obj : p_objects)
          //    Obj->draw(window);
          //for (auto&& Obj : d_objects)

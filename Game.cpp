@@ -32,7 +32,6 @@ void Game::start() {
             window.close();
             break;
         }
-
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed) {
@@ -44,12 +43,15 @@ void Game::start() {
                 break;
             }
         }
+        
         const sf::Time elapsedTime = clock.getElapsedTime();
         clock.restart();
         world.Step(timeStep, velocityIterations, positionIterations);
 
         CurrWindow->input(window);
+
         CurrWindow->update(window, view, windowSize, elapsedTime.asSeconds());
+
         window.clear(sf::Color::Black);
         CurrWindow->draw(window);
         window.display();

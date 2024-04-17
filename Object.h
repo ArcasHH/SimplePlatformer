@@ -11,7 +11,7 @@ static const float timeStep = 1.f / 60.f;
 static const int32 velocityIterations = 6;
 static const int32 positionIterations = 2;
 
-static b2Vec2 gravity(0.f, -10.f);
+static b2Vec2 gravity(0.f, 10.f);
 static b2World world(gravity);
 static std::string box_name = "box";
 
@@ -34,11 +34,11 @@ public:
 };
 
 class TmxObject: public Object {
-protected:
+public:
 	b2BodyDef bdef;
 	b2Body* body;
 	b2PolygonShape box;
-public:
+
 	std::string name;
 	std::string type;
 	std::map<std::string, std::string> properties;
@@ -55,18 +55,35 @@ public:
 	//input();
 	virtual void update(sf::RenderWindow& window) ;
 	virtual void draw(sf::RenderWindow& window) override;
+	virtual void setPhysics();
 };
 
-class DynamicObject final: public TmxObject {
+class DynamicObject final: virtual TmxObject {
 	b2FixtureDef fdef;
 	float angle;
+
+	bool leftPressed;
+	bool rightPressed;
+	bool upPressed;
+	bool downPressed;
+	float speed;
+
 public:
-	DynamicObject(sf::FloatRect rect, std::string file, std::string type_name);
+	DynamicObject() {}
+	DynamicObject(TmxObject obj);
 	sf::Sprite getSprite() override;
 	void input(sf::RenderWindow& window);
 	void update(sf::RenderWindow& window) override;
 	void draw(sf::RenderWindow& window) override;
+
+	void moveLeft();
+	void moveRight();
+	void stopLeft();
+	void stopRight();
 };
+
+
+	
 
 class PushButton final : Object {
 	

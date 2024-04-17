@@ -25,7 +25,7 @@ TmxObject::TmxObject(sf::FloatRect rect, std::string file, std::string type_name
 	body = world.CreateBody(&bdef);
 	box.SetAsBox((rect.width / 2) / SCALE, (rect.height / 2) / SCALE);
 	body->CreateFixture(&box, 0.0f);
-	type = type_name;
+	name = type_name;
 }
 sf::Sprite TmxObject::getSprite() {
 	return sprite;
@@ -36,24 +36,46 @@ void TmxObject::update(sf::RenderWindow& window) {
 void TmxObject::draw(sf::RenderWindow& window) {
 	window.draw(getSprite());
 }
+void TmxObject::setPhysics() {
 
-
-DynamicObject::DynamicObject(sf::FloatRect rect,std::string file, std::string type_name) {
-	TmxObject::TmxObject(rect, file, type_name);
-	bdef.type = b2_dynamicBody;
 	bdef.position.Set((rect.left + rect.width / 2) / SCALE, (rect.top + rect.height / 2) / SCALE);
 	body = world.CreateBody(&bdef);
 	box.SetAsBox((rect.width / 2) / SCALE, (rect.height / 2) / SCALE);
+	body->CreateFixture(&box, 0.0f);
+}
 
+
+DynamicObject::DynamicObject(TmxObject obj) {
+	sprite = obj.getSprite();
+	rect = obj.rect;
+
+	//bdef = obj.bdef;
+	bdef.type = b2_dynamicBody;
+	bdef.position.Set(rect.left / SCALE, rect.top / SCALE);
+
+	body = world.CreateBody(&bdef);
+	box.SetAsBox((rect.width / 2) / SCALE, (rect.height / 2) / SCALE);
+	speed = 40.f;
 	fdef.shape = &box;
 	fdef.density = 1.0f;
 	body->CreateFixture(&fdef);
 	angle = 0.f;
 
-	//type = type_name;
+	name = obj.name;
+	type = obj.type;
+	properties = obj.properties;
 }
 sf::Sprite DynamicObject::getSprite() {
 	return sprite;
+}
+void DynamicObject::input(sf::RenderWindow& window) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+		body->ApplyForceToCenter(b2Vec2(-speed, 0.f), false);
+		//body->ApplyLinearImpulseToCenter(b2Vec2(-speed, 0.f), false);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+		body->ApplyForceToCenter(b2Vec2(speed, 0.f), false);
+	}
 }
 void DynamicObject::update(sf::RenderWindow& window) {
 	b2Vec2 p = body->GetPosition();
@@ -64,6 +86,8 @@ void DynamicObject::update(sf::RenderWindow& window) {
 void DynamicObject::draw(sf::RenderWindow& window) {
 	window.draw(getSprite());
 }
+
+
 
 
 // PushButton methods///////////////////////////////////////////////////////////////////////////////////
