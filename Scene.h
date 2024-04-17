@@ -1,5 +1,5 @@
 #pragma once
-#include "TmxLevel.h"
+#include "Object.h"
 
 struct GameView;
 class Game;

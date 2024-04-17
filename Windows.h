@@ -46,15 +46,15 @@ public:
     static constexpr auto Name = "menu";
 
     MenuWindow() {
-        auto* ExitBtn = new PushButton{ "images/exit256.png", 100, 700 };
+        auto* ExitBtn = new PushButton{ "images/exit256.png", sf::FloatRect(sf::Vector2f(100,700),sf::Vector2f()) };
         ExitBtn->registerFunction(onExit);
         Buttons.push_back(ExitBtn);
 
-        auto* StartGameBtn = new PushButton{ "images/play256.png", 100, 100 };
+        auto* StartGameBtn = new PushButton{ "images/play256.png",sf::FloatRect(sf::Vector2f(100,100),sf::Vector2f()) };
         StartGameBtn->registerFunction(onStartGame);
         Buttons.push_back(StartGameBtn);
 
-        auto* SettingsBtn = new PushButton{ "images/settings256.png", 100, 400 };
+        auto* SettingsBtn = new PushButton{ "images/settings256.png", sf::FloatRect(sf::Vector2f(100,400),sf::Vector2f()) };
         SettingsBtn->registerFunction(onSettings);
         Buttons.push_back(SettingsBtn);
     }
@@ -65,6 +65,8 @@ public:
     static constexpr auto Name = "game";
     Player p;
     GameScene* gameScene ;
+    //std::vector<TmxObject*> p_objects;
+    //std::vector<DynamicObject*> d_objects;
     GameWindow() {
         //auto* MenuBtn = new PushButton{ "images/back256.png", 100, 700 };
         //MenuBtn->registerFunction(onMenu);
@@ -85,6 +87,10 @@ public:
          BaseWindow::draw(window);
          DrawGameScene(gameScene, window);
          //p.draw(window);
+         //for (auto&& Obj : p_objects)
+         //    Obj->draw(window);
+         //for (auto&& Obj : d_objects)
+         //    Obj->draw(window);
     }
 };
 class SettingsWindow final : public BaseWindow {
@@ -92,7 +98,7 @@ public:
     static constexpr auto Name = "settings";
 
     SettingsWindow() {
-        auto* MenuBtn = new PushButton{ "images/back256.png", 100, 700 };
+        auto* MenuBtn = new PushButton{ "images/back256.png", sf::FloatRect(sf::Vector2f(100,700),sf::Vector2f() )};
         MenuBtn->registerFunction(onMenu);
         Buttons.push_back(MenuBtn);
     }

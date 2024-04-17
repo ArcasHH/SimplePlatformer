@@ -1,14 +1,16 @@
 #include "Object.h"
 
-
-Object::Object(std::string file, int x, int y) {
-	pos.x = x;
-	pos.y = y;
+// Object methods///////////////////////////////////////////////////////////////////////////////////
+Object::Object(std::string file, float x, float y) {
+	
 	texture.loadFromFile(file);
 	sprite.setTexture(texture);
-	sprite.setPosition(pos.x, pos.y);
+	rect.width = sprite.getTextureRect().width;
+	rect.height = sprite.getTextureRect().height;
+	rect.left = x;
+	rect.top = y;
+	sprite.setPosition(rect.left, rect.top);
 }
-
 void Object::draw(sf::RenderWindow& window) {
 	window.draw(getSprite());
 }
@@ -16,19 +18,64 @@ sf::Sprite Object::getSprite() {
 	return sprite;
 }
 
-PushButton::PushButton(std::string file, int x, int y, sf::IntRect area, sf::Color b_color, sf::Color c_color) {
-	pos.x = x;
-	pos.y = y; 
+
+TmxObject::TmxObject(sf::FloatRect rect, std::string file, std::string type_name) {
+	Object::Object(file, rect.left, rect.top);
+	bdef.position.Set((rect.left + rect.width / 2) / SCALE, (rect.top + rect.height / 2) / SCALE);
+	body = world.CreateBody(&bdef);
+	box.SetAsBox((rect.width / 2) / SCALE, (rect.height / 2) / SCALE);
+	body->CreateFixture(&box, 0.0f);
+	type = type_name;
+}
+sf::Sprite TmxObject::getSprite() {
+	return sprite;
+}
+void TmxObject::update(sf::RenderWindow& window) {
+	
+}
+void TmxObject::draw(sf::RenderWindow& window) {
+	window.draw(getSprite());
+}
+
+
+DynamicObject::DynamicObject(sf::FloatRect rect,std::string file, std::string type_name) {
+	TmxObject::TmxObject(rect, file, type_name);
+	bdef.type = b2_dynamicBody;
+	bdef.position.Set((rect.left + rect.width / 2) / SCALE, (rect.top + rect.height / 2) / SCALE);
+	body = world.CreateBody(&bdef);
+	box.SetAsBox((rect.width / 2) / SCALE, (rect.height / 2) / SCALE);
+
+	fdef.shape = &box;
+	fdef.density = 1.0f;
+	body->CreateFixture(&fdef);
+	angle = 0.f;
+
+	//type = type_name;
+}
+sf::Sprite DynamicObject::getSprite() {
+	return sprite;
+}
+void DynamicObject::update(sf::RenderWindow& window) {
+	b2Vec2 p = body->GetPosition();
+	float angle = body->GetAngle();
+	sprite.setPosition(p.x*SCALE, p.y*SCALE);
+	sprite.setRotation(angle*DEG);
+}
+void DynamicObject::draw(sf::RenderWindow& window) {
+	window.draw(getSprite());
+}
+
+
+// PushButton methods///////////////////////////////////////////////////////////////////////////////////
+PushButton::PushButton(std::string file,sf::FloatRect r, sf::Color b_color, sf::Color c_color) {
+	rect = r;
 
 	texture.loadFromFile(file);
-	size.x = texture.getSize().x;
-	size.y = texture.getSize().y;
-
-	rect = sf::IntRect(pos.x, pos.y, size.x, size.y);
+	rect.width = texture.getSize().x;
+	rect.height = texture.getSize().y;
 
 	sprite.setTexture(texture, &rect);
-	sprite.setPosition(pos.x, pos.y);
-	
+	sprite.setPosition(rect.left, rect.top);
 	base_color = b_color;
 	clicked_color = c_color;
 	is_clicked = false;
@@ -54,13 +101,31 @@ void PushButton::update(sf::RenderWindow& window) {
 void PushButton::draw(sf::RenderWindow& window) {
 	window.draw(getSprite());
 }
-
 bool  PushButton::is_pos(sf::RenderWindow& window) {
-	if (rect.contains(sf::Mouse::getPosition(window))) {
+	sf::IntRect r(rect.left, rect.top, rect.width, rect.height);
+	if (r.contains(sf::Mouse::getPosition(window))) {
 		return true;
 	}
 	return false;
 }
 sf::Sprite PushButton::getSprite() {
 	return sprite;
+}
+bool PushButton::ButtonClick::pick() {
+	// Button is pushed in current frame.
+	if (CurrState) {
+		PrevState = true;
+		CurrState = false;
+		return false;
+	}
+	// Here CurrState is false (button released)
+	if (PrevState) {// Prev frame button was pushed
+		PrevState = false;
+		CurrState = false;
+		return true;
+	}
+	// Prev frame nothig happens
+	PrevState = false;
+	CurrState = false;
+	return false;
 }
