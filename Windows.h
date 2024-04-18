@@ -35,7 +35,7 @@ public:
             Obj->input(window);
         }
     }
-    virtual void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, float deltaSec) {
+    virtual void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) {
         for (auto&& Obj : Buttons)
             Obj->update(window);
     }
@@ -95,15 +95,15 @@ public:
         BaseWindow::input(window);
         InputGameScene(gameScene1, window);
     }
-    void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, float deltaSec) override {
+    void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) override {
         if (menuMusic.getStatus() == sf::Music::Playing) {
             menuMusic.stop();
             gameMusic.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 6.ogg");
             gameMusic.setLoop(true);
             gameMusic.play();
         }
-        BaseWindow::update(window, view, windowSize, deltaSec);
-        UpdateGameScene(gameScene1, window, view, windowSize, deltaSec);
+        BaseWindow::update(window, view, windowSize);
+        UpdateGameScene(gameScene1, window, view, windowSize);
     }
     void draw(sf::RenderWindow& window) override {
         BaseWindow::draw(window);
@@ -130,15 +130,15 @@ public:
         BaseWindow::input(window);
         InputGameScene(gameScene2, window);
     }
-    void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, float deltaSec) override {
+    void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) override {
         if (menuMusic.getStatus() == sf::Music::Playing) {
             menuMusic.stop();
             gameMusic.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 9.ogg");
             gameMusic.setLoop(true);
             gameMusic.play();
         }
-        BaseWindow::update(window, view, windowSize, deltaSec);
-        UpdateGameScene(gameScene2, window, view, windowSize, deltaSec);
+        BaseWindow::update(window, view, windowSize);
+        UpdateGameScene(gameScene2, window, view, windowSize);
     }
     void draw(sf::RenderWindow& window) override {
         BaseWindow::draw(window);

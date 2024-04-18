@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include "GlobalState.h"
 
 struct GameView;
 class Game;
@@ -10,6 +11,7 @@ struct GameScene{
     b2Body* playerBody;
     std::vector<TmxObject> enemies;
     std::vector<TmxObject> coins;
+    std::vector<b2Body*> coinBodies;
     std::vector<TmxObject> blocks;
     float playerSpeed = 1000000.f;
     float playerForce = 1000.f;
@@ -19,7 +21,7 @@ struct GameScene{
 
 GameScene* NewGameScene(std::string file);
 void InputGameScene(void* pData, sf::RenderWindow& window);
-void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, float deltaSec);
+void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize);
 void DrawGameScene(void* pData, sf::RenderWindow& window);
 void DestroyGameScene(GameScene*& pScene);
 static void SetCameraCenter(sf::RenderWindow& window, sf::View& view, const sf::Vector2f& center);

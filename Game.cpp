@@ -47,13 +47,13 @@ void Game::start() {
             }
         }
         
-        const sf::Time elapsedTime = clock.getElapsedTime();
-        clock.restart();
+        //const sf::Time elapsedTime = clock.getElapsedTime();
+        //clock.restart();
         //world.Step(timeStep, velocityIterations, positionIterations);
         
         CurrWindow->input(window);
         
-        CurrWindow->update(window, view, windowSize, elapsedTime.asSeconds());
+        CurrWindow->update(window, view, windowSize);
 
         window.clear(sf::Color::Black);
         CurrWindow->draw(window);
