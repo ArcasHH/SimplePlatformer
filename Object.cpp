@@ -55,9 +55,10 @@ DynamicObject::DynamicObject(TmxObject obj) {
 
 	body = world.CreateBody(&bdef);
 	box.SetAsBox((rect.width / 2) / SCALE, (rect.height / 2) / SCALE);
-	speed = 40.f;
+	speed = 400.f;
 	fdef.shape = &box;
 	fdef.density = 1.0f;
+	
 	body->CreateFixture(&fdef);
 	angle = 0.f;
 
@@ -70,18 +71,21 @@ sf::Sprite DynamicObject::getSprite() {
 }
 void DynamicObject::input(sf::RenderWindow& window) {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-		body->ApplyForceToCenter(b2Vec2(-speed, 0.f), false);
+		body->ApplyForceToCenter(b2Vec2(-speed, 0.f), true);
+		b2Vec2 p = b2Vec2(body->GetPosition().x, body->GetPosition().y);
+		float x = p.x;
 		//body->ApplyLinearImpulseToCenter(b2Vec2(-speed, 0.f), false);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
-		body->ApplyForceToCenter(b2Vec2(speed, 0.f), false);
+		//body->ApplyForceToCenter(b2Vec2(speed, 0.f), false);
+		//body->SetLinearVelocity(b2Vec2(speed, 0.f));
 	}
 }
 void DynamicObject::update(sf::RenderWindow& window) {
-	b2Vec2 p = body->GetPosition();
-	float angle = body->GetAngle();
-	sprite.setPosition(p.x*SCALE, p.y*SCALE);
-	sprite.setRotation(angle*DEG);
+ 	//b2Vec2 p = body->GetPosition();
+	//float angle = body->GetAngle();
+	//sprite.setPosition(p.x*SCALE, p.y*SCALE);
+	//sprite.setRotation(angle*DEG);
 }
 void DynamicObject::draw(sf::RenderWindow& window) {
 	window.draw(getSprite());

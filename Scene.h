@@ -7,12 +7,19 @@ static sf::Clock g_clock;
 struct GameScene{
     TmxLevel level;
     TmxObject player;
+    b2Body* playerBody;
     std::vector<TmxObject> enemies;
     std::vector<TmxObject> coins;
     std::vector<TmxObject> blocks;//objects with collision
+    //std::vector
+    float playerSpeed = 1000000.f;
+    float playerForce = 1000.f;
+    float playerImpulse = 1000000.f;
+    bool playerOnGround = false;
 };
 
 GameScene* NewGameScene();
+void InputGameScene(void* pData, sf::RenderWindow& window);
 void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, float deltaSec);
 void DrawGameScene(void* pData, sf::RenderWindow& window);
 void DestroyGameScene(GameScene*& pScene);

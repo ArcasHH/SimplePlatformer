@@ -135,7 +135,6 @@
     <ClCompile Include="GlobalState.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Object.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="tinyxml2.cpp" />
     <ClCompile Include="TmxLevel.cpp" />
@@ -145,7 +144,6 @@
     <ClInclude Include="GlobalState.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="tinyxml2.h" />
     <ClInclude Include="Windows.h" />

@@ -46,8 +46,8 @@ void Game::start() {
         
         const sf::Time elapsedTime = clock.getElapsedTime();
         clock.restart();
-        world.Step(timeStep, velocityIterations, positionIterations);
-
+        //world.Step(timeStep, velocityIterations, positionIterations);
+        
         CurrWindow->input(window);
 
         CurrWindow->update(window, view, windowSize, elapsedTime.asSeconds());
