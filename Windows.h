@@ -11,6 +11,8 @@ void onStartGame2();
 void onSettings();
 void onMenu();
 void onLevel();
+void downVolume();
+void upVolume();
 //void changeLevel();
 static sf::Music menuMusic;
 static sf::Music gameMusic;
@@ -152,6 +154,12 @@ public:
         auto* MenuBtn = new PushButton{ "images/backBTN.png", sf::FloatRect(sf::Vector2f(100,768),sf::Vector2f() )};
         MenuBtn->registerFunction(onMenu);
         Buttons.push_back(MenuBtn);
+        auto* volume_upBtn = new PushButton{ "images/sound_up.png", sf::FloatRect(sf::Vector2f(100,200),sf::Vector2f()) };
+        volume_upBtn->registerFunction(upVolume);
+        Buttons.push_back(volume_upBtn);
+        auto* volume_downBtn = new PushButton{ "images/sound_down.png", sf::FloatRect(sf::Vector2f(228,200),sf::Vector2f()) };
+        volume_downBtn->registerFunction(downVolume);
+        Buttons.push_back(volume_downBtn);
     }
 };
 
@@ -172,3 +180,16 @@ public:
     }
 };
 
+static void upVolume() {
+    if (menuMusic.getVolume() <= 90) {
+        menuMusic.setVolume(menuMusic.getVolume() + 10.f);
+        gameMusic.setVolume(gameMusic.getVolume() + 10.f);
+    }
+   
+}
+static void downVolume() {
+    if (menuMusic.getVolume() >= 10) {
+        menuMusic.setVolume(menuMusic.getVolume() - 10.f);
+        gameMusic.setVolume(gameMusic.getVolume() - 10.f);
+    }
+}
