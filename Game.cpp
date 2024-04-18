@@ -17,7 +17,10 @@ void Game::start() {
 
     Glob.addWindow<MenuWindow>(MenuWindow::Name);
     Glob.addWindow<SettingsWindow>(SettingsWindow::Name);
-    Glob.addWindow<GameWindow>(GameWindow::Name);    
+    Glob.addWindow<LevelWindow>(LevelWindow::Name);
+    Glob.addWindow<GameWindow1>(GameWindow1::Name);    
+    Glob.addWindow<GameWindow2>(GameWindow2::Name);
+
     Glob.setCurrWindow(MenuWindow::Name);
 
     view.reset(sf::FloatRect(0.0f, 0.0f, windowSize.x, windowSize.y));
@@ -49,7 +52,7 @@ void Game::start() {
         //world.Step(timeStep, velocityIterations, positionIterations);
         
         CurrWindow->input(window);
-
+        
         CurrWindow->update(window, view, windowSize, elapsedTime.asSeconds());
 
         window.clear(sf::Color::Black);

@@ -32,11 +32,11 @@ static sf::Vector2f GetPlayerDirection(){
     return Normalize(direction);
 }*/
 
-GameScene* NewGameScene(){
+GameScene* NewGameScene(std::string file){
     GameScene* pLogic = new GameScene;
     TmxLevel& level = pLogic->level;
     
-    level.LoadFromFile("map/platformer1.tmx");
+    level.LoadFromFile(file);
     pLogic->player = level.GetFirstObject("player");
     pLogic->coins = level.GetAllObjects("coin");
     pLogic->enemies = level.GetAllObjects("enemy");
@@ -102,6 +102,7 @@ void InputGameScene(void* pData, sf::RenderWindow& window) {
            
 }
 void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, float deltaSec){
+    
     GameScene* pLogic = reinterpret_cast<GameScene*>(pData);
     (void)deltaSec;
     const sf::Time elapsedTime = g_clock.getElapsedTime();

@@ -11,9 +11,11 @@ static const float timeStep = 1.f / 60.f;
 static const int32 velocityIterations = 6;
 static const int32 positionIterations = 2;
 
-static b2Vec2 gravity(0.f, 100.f);
+static b2Vec2 gravity(0.f, 500.f);
 static b2World world(gravity);
 static std::string box_name = "box";
+
+static int level;
 
 class Object {
 public:
@@ -75,11 +77,6 @@ public:
 	void input(sf::RenderWindow& window);
 	void update(sf::RenderWindow& window) override;
 	void draw(sf::RenderWindow& window) override;
-
-	void moveLeft();
-	void moveRight();
-	void stopLeft();
-	void stopRight();
 };
 
 
@@ -106,14 +103,17 @@ public:
 	using OnClickFunc = std::function<void()>;
 	OnClickFunc OnClick;
 
-	PushButton(std::string file, sf::FloatRect area = sf::FloatRect(), sf::Color b_color = sf::Color::White, sf::Color c_color = sf::Color::Red);
+	PushButton(std::string file, sf::FloatRect area = sf::FloatRect(), sf::Color b_color = sf::Color(200,157,100), sf::Color c_color = sf::Color(154, 182, 154));
 	~PushButton() = default;
 
 	void input(sf::RenderWindow& window);
 	void update(sf::RenderWindow& window);
 	void draw(sf::RenderWindow& window) override;
 
-	void registerFunction(OnClickFunc F) { OnClick = std::move(F); }
+	void registerFunction(OnClickFunc F, int lvl = 1) {
+		OnClick = std::move(F);
+		level = lvl;
+	}
 };
 
 

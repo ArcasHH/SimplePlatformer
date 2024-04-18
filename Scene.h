@@ -10,15 +10,14 @@ struct GameScene{
     b2Body* playerBody;
     std::vector<TmxObject> enemies;
     std::vector<TmxObject> coins;
-    std::vector<TmxObject> blocks;//objects with collision
-    //std::vector
+    std::vector<TmxObject> blocks;
     float playerSpeed = 1000000.f;
     float playerForce = 1000.f;
     float playerImpulse = 1000000.f;
     bool playerOnGround = false;
 };
 
-GameScene* NewGameScene();
+GameScene* NewGameScene(std::string file);
 void InputGameScene(void* pData, sf::RenderWindow& window);
 void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, float deltaSec);
 void DrawGameScene(void* pData, sf::RenderWindow& window);
