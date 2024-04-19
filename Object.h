@@ -23,23 +23,18 @@ public:
 	sf::Sprite sprite;
 	sf::FloatRect rect;
 	
-
 	Object() {};
 	Object(std::string file, float x, float y);
 	virtual ~Object() = default;
 
 	virtual sf::Sprite getSprite();
-	
 	//input();
 	//update();
 	virtual void draw(sf::RenderWindow& window);
 };
 
-class TmxObject: public Object {
+class TmxObject : public Object {
 public:
-	b2BodyDef bdef;
-	b2Body* body;
-	b2PolygonShape box;
 
 	std::string name;
 	std::string type;
@@ -49,47 +44,19 @@ public:
 	float GetPropertyFloat(const std::string& propertyName);
 	std::string GetPropertyString(const std::string& propertyName);
 
-	void MoveBy(const sf::Vector2f& movement);
 	void MoveTo(const sf::Vector2f& position);
-	TmxObject(){}
-	TmxObject(sf::FloatRect rect, std::string file, std::string type_name);
-	virtual sf::Sprite getSprite() override;
+	TmxObject() {}
 	//input();
-	virtual void update(sf::RenderWindow& window) ;
+	//update();
 	virtual void draw(sf::RenderWindow& window) override;
-	virtual void setPhysics();
 };
-
-class DynamicObject final: virtual TmxObject {
-	b2FixtureDef fdef;
-	float angle;
-
-	bool leftPressed;
-	bool rightPressed;
-	bool upPressed;
-	bool downPressed;
-	float speed;
-
-public:
-	DynamicObject() {}
-	DynamicObject(TmxObject obj);
-	sf::Sprite getSprite() override;
-	void input(sf::RenderWindow& window);
-	void update(sf::RenderWindow& window) override;
-	void draw(sf::RenderWindow& window) override;
-};
-
-
-	
 
 class PushButton final : Object {
 	
 	struct ButtonClick final {
 		bool PrevState = false;
 		bool CurrState = false;
-
 		bool pick();
-
 	} State;
 
 	sf::Color base_color;
@@ -97,7 +64,6 @@ class PushButton final : Object {
 
 public:
 	bool is_clicked;
-	sf::Sprite getSprite() override;
 	bool  is_pos(sf::RenderWindow& window);
 
 	using OnClickFunc = std::function<void()>;

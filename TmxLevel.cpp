@@ -72,12 +72,6 @@ std::string TmxObject::GetPropertyString(const std::string &propertyName){
     return properties[propertyName];
 }
 
-void TmxObject::MoveBy(const sf::Vector2f &movement){
-    rect.left += movement.x;
-    rect.top += movement.y;
-    sprite.move(movement);
-}
-
 void TmxObject::MoveTo(const sf::Vector2f &position){
     rect.left = position.x;
     rect.top = position.y;

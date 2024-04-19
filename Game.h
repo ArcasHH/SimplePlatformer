@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Windows.h"
-#include "Scene.h"
+#include "GlobalState.h"
 
 class Game{
 private:

@@ -22,7 +22,9 @@ class BaseWindow {
 protected:
     std::vector<Object*> Objects;
     std::vector<PushButton*> Buttons;
+    
 public:
+    std::string Name;
     BaseWindow() {};
     virtual ~BaseWindow() {
         for (auto* Obj : Objects)
@@ -44,6 +46,7 @@ public:
             Obj->draw(window);
         for (auto&& Obj : Buttons)
             Obj->draw(window);
+        
     }
 };
 
@@ -79,19 +82,12 @@ public:
 class GameWindow1 final : public BaseWindow {
 public:
     static constexpr auto Name = "game1";
-    DynamicObject p;
     GameScene* gameScene1;
-    std::vector<TmxObject*> p_objects;
     GameWindow1() {
         gameScene1 = NewGameScene("map/platformer1.tmx");
-        for (auto&& obj : gameScene1->blocks) {
-            obj.setPhysics();
-        }
-        p = DynamicObject(gameScene1->player);
     }
     ~GameWindow1() = default;
     void input(sf::RenderWindow& window) override {
-        world.Step(timeStep, velocityIterations, positionIterations);
         BaseWindow::input(window);
         InputGameScene(gameScene1, window);
     }
@@ -102,6 +98,7 @@ public:
             gameMusic.setLoop(true);
             gameMusic.play();
         }
+        world.Step(timeStep, velocityIterations, positionIterations);
         BaseWindow::update(window, view, windowSize);
         UpdateGameScene(gameScene1, window, view, windowSize);
     }
@@ -114,15 +111,9 @@ public:
 class GameWindow2 final : public BaseWindow {
 public:
     static constexpr auto Name = "game2";
-    DynamicObject p;
     GameScene* gameScene2;
-    std::vector<TmxObject*> p_objects;
     GameWindow2() {
         gameScene2 = NewGameScene("map/platformer2.tmx");
-        for (auto&& obj : gameScene2->blocks) {
-            obj.setPhysics();
-        }
-        p = DynamicObject(gameScene2->player);
     }
     ~GameWindow2() = default;
     void input(sf::RenderWindow& window) override {
@@ -147,6 +138,7 @@ public:
 };
 
 class SettingsWindow final : public BaseWindow {
+    std::vector<Object*> volume_set;
 public:
     static constexpr auto Name = "settings";
 
@@ -154,12 +146,26 @@ public:
         auto* MenuBtn = new PushButton{ "images/backBTN.png", sf::FloatRect(sf::Vector2f(100,768),sf::Vector2f() )};
         MenuBtn->registerFunction(onMenu);
         Buttons.push_back(MenuBtn);
-        auto* volume_upBtn = new PushButton{ "images/sound_up.png", sf::FloatRect(sf::Vector2f(100,200),sf::Vector2f()) };
+        auto* volume_upBtn = new PushButton{ "images/sound_up.png", sf::FloatRect(sf::Vector2f(476,200),sf::Vector2f()) };
         volume_upBtn->registerFunction(upVolume);
         Buttons.push_back(volume_upBtn);
-        auto* volume_downBtn = new PushButton{ "images/sound_down.png", sf::FloatRect(sf::Vector2f(228,200),sf::Vector2f()) };
+        auto* volume_downBtn = new PushButton{ "images/sound_down.png", sf::FloatRect(sf::Vector2f(100,200),sf::Vector2f()) };
         volume_downBtn->registerFunction(downVolume);
         Buttons.push_back(volume_downBtn);
+
+        for (float i = 0; i < 10; ++i) {
+            auto* box = new Object{ "images/wbox.png", 220 + 24*i, 228 };
+            Objects.push_back(box);
+            volume_set.push_back(box);
+        }
+    }
+    void draw (sf::RenderWindow& window)override {
+        for (auto&& Obj : Buttons)
+            Obj->draw(window);
+        float vol = menuMusic.getVolume()/10.f;
+        for (int i = 0; i < vol; ++i) {
+            volume_set[i]->draw(window);
+        }
     }
 };
 
@@ -174,7 +180,7 @@ public:
         auto* oneBtn = new PushButton{ "images/1.png", sf::FloatRect(sf::Vector2f(100,100),sf::Vector2f()) };
         oneBtn->registerFunction(onStartGame1);
         Buttons.push_back(oneBtn);
-        auto* twoBtn = new PushButton{ "images/2.png", sf::FloatRect(sf::Vector2f(260,100),sf::Vector2f()) };
+        auto* twoBtn = new PushButton{ "images/2.png", sf::FloatRect(sf::Vector2f(300,100),sf::Vector2f()) };
         twoBtn->registerFunction(onStartGame2);
         Buttons.push_back(twoBtn);
     }

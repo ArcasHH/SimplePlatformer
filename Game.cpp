@@ -1,8 +1,6 @@
 #include "Game.h"
-#include "GlobalState.h"
 
 Game::Game(){
-    
     windowSize.x = sf::VideoMode::getDesktopMode().width;
     windowSize.y = sf::VideoMode::getDesktopMode().height;
     window.create(sf::VideoMode(windowSize.x, windowSize.y), "Simple Game");
@@ -22,6 +20,8 @@ void Game::start() {
     Glob.addWindow<GameWindow2>(GameWindow2::Name);
 
     Glob.setCurrWindow(MenuWindow::Name);
+   
+    
 
     view.reset(sf::FloatRect(0.0f, 0.0f, windowSize.x, windowSize.y));
     view.setViewport(sf::FloatRect(0.0f, 0.0f, 2.0f, 2.0f));
@@ -50,7 +50,7 @@ void Game::start() {
         //const sf::Time elapsedTime = clock.getElapsedTime();
         //clock.restart();
         //world.Step(timeStep, velocityIterations, positionIterations);
-        
+
         CurrWindow->input(window);
         
         CurrWindow->update(window, view, windowSize);
