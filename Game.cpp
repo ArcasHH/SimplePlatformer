@@ -49,7 +49,7 @@ void Game::start() {
         //clock.restart();
         //world.Step(timeStep, velocityIterations, positionIterations);
 
-        CurrWindow->input(window);
+        CurrWindow->input(window, view);
         
         CurrWindow->update(window, view, windowSize);
 

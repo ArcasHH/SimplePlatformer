@@ -5,10 +5,12 @@
 #include "TmxLevel.h"
 #include "Scene.h"
 #include <SFML/Audio.hpp>
+#include <map>
 //buttons functional:
 void onExit();
 void onStartGame1();
 void onStartGame2();
+void onPause();
 void onSettings();
 void onMenu();
 void onLevel();
@@ -34,14 +36,14 @@ public:
         for (auto* Obj : Buttons)
             delete Obj;
     }
-    virtual void input(sf::RenderWindow& window) {
+    virtual void input(sf::RenderWindow& window, sf::View& view) {
         for (auto&& Obj : Buttons) {
-            Obj->input(window);
+            Obj->input(window, view);
         }
     }
     virtual void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) {
         for (auto&& Obj : Buttons)
-            Obj->update(window);
+            Obj->update(window, view);
     }
     virtual void draw(sf::RenderWindow& window) {
         for (auto&& Obj : Objects)
@@ -63,19 +65,19 @@ public:
         auto* background = new Object{ "images/Free Pixel Art Hill/ajys.png",0.f,0.f };
         Objects.push_back(background);
         
-        auto* StartGameBtn = new PushButton{ "images/playBTN.png",sf::FloatRect(sf::Vector2f(96,128),sf::Vector2f()) };
+        auto* StartGameBtn = new PushButton{ "images/playBTN.png",sf::FloatRect(sf::Vector2f(100,200),sf::Vector2f()) };
         StartGameBtn->registerFunction(onStartGame1);
         Buttons.push_back(StartGameBtn);
 
-        auto* LevelBtn = new PushButton{ "images/levelBTN.png", sf::FloatRect(sf::Vector2f(96,320),sf::Vector2f()) };
+        auto* LevelBtn = new PushButton{ "images/levelBTN.png", sf::FloatRect(sf::Vector2f(100,350),sf::Vector2f()) };
         LevelBtn->registerFunction(onLevel);
         Buttons.push_back(LevelBtn);
 
-        auto* SettingsBtn = new PushButton{ "images/settingsBTN.png", sf::FloatRect(sf::Vector2f(96,512),sf::Vector2f()) };
+        auto* SettingsBtn = new PushButton{ "images/settingsBTN.png", sf::FloatRect(sf::Vector2f(100,500),sf::Vector2f()) };
         SettingsBtn->registerFunction(onSettings);
         Buttons.push_back(SettingsBtn);
 
-        auto* ExitBtn = new PushButton{ "images/exitBTN.png", sf::FloatRect(sf::Vector2f(96,708),sf::Vector2f()) };
+        auto* ExitBtn = new PushButton{ "images/exitBTN.png", sf::FloatRect(sf::Vector2f(100,650),sf::Vector2f()) };
         ExitBtn->registerFunction(onExit);
         Buttons.push_back(ExitBtn);
     }
@@ -98,27 +100,50 @@ public:
     GameScene* gameScene1;
     GameWindow1() {
         gameScene1 = NewGameScene("map/platformer1.tmx");
-        auto* SettingsBtn = new PushButton{ "images/settingsBTN.png", sf::FloatRect(sf::Vector2f(50,112),sf::Vector2f()) };
+
+        auto* box = new Object{ "images/line.png", 0, 80 };
+        Objects.push_back(box);
+
+        auto* playBtn = new PushButton{ "images/play96.png", sf::FloatRect(sf::Vector2f(100,128),sf::Vector2f()) };
+        playBtn->registerFunction(onPause);
+        Buttons.push_back(playBtn);
+
+        auto* MenuBtn = new PushButton{ "images/menu96.png", sf::FloatRect(sf::Vector2f(250,128),sf::Vector2f()) };
+        MenuBtn->registerFunction(onMenu);
+        Buttons.push_back(MenuBtn);
+        
+        auto* SettingsBtn = new PushButton{ "images/settings96.png", sf::FloatRect(sf::Vector2f(400,128),sf::Vector2f()) };
         SettingsBtn->registerFunction(onSettings);
         Buttons.push_back(SettingsBtn);
 
-        auto* ExitBtn = new PushButton{ "images/exitBTN.png", sf::FloatRect(sf::Vector2f(50,208),sf::Vector2f()) };
+        auto* ExitBtn = new PushButton{ "images/exit96.png", sf::FloatRect(sf::Vector2f(550,128),sf::Vector2f()) };
         ExitBtn->registerFunction(onExit);
         Buttons.push_back(ExitBtn);
     }
     ~GameWindow1() = default;
-    void input(sf::RenderWindow& window) override {
+    void input(sf::RenderWindow& window, sf::View & view) override {
         if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
             if (!is_pause) is_pause = true;
-            else is_pause = false;
+            //else is_pause = false;
         }
-
-        BaseWindow::input(window);
+        if (is_pause) {
+            BaseWindow::input(window, view);
+        }
+       
         InputGameScene(gameScene1, window);
     }
     void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) override {
-        if (is_pause)
+        if (is_pause) {
+            sf::Vector2f view_center= view.getCenter();
+            for (float i = 0; i < Buttons.size(); ++i) {
+                PushButton* Button = Buttons[i];
+                Objects[0]->sprite.setPosition(view_center.x - window.getSize().x/2, view_center.y - 48);
+                Button->setPosition(view_center.x - 128 * i+ window.getSize().x/16, view_center.y);
+            }
+            BaseWindow::update(window, view, windowSize);
             return;
+        }
+            
         if (gameMusic1.getStatus() != sf::Music::Playing) {
             menuMusic.stop();
             gameMusic2.stop();
@@ -132,6 +157,7 @@ public:
         BaseWindow::update(window, view, windowSize);
         UpdateGameScene(gameScene1, window, view, windowSize);
     }
+
     void draw(sf::RenderWindow& window) override {
         DrawGameScene(gameScene1, window);
         if (is_pause) {
@@ -148,9 +174,9 @@ public:
         gameScene2 = NewGameScene("map/platformer2.tmx");
     }
     ~GameWindow2() = default;
-    void input(sf::RenderWindow& window) override {
+    void input(sf::RenderWindow& window, sf::View& view) override {
         world.Step(timeStep, velocityIterations, positionIterations);
-        BaseWindow::input(window);
+        BaseWindow::input(window, view);
         InputGameScene(gameScene2, window);
     }
     void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) override {
@@ -192,6 +218,7 @@ public:
             volume_set.push_back(box);
         }
     }
+    
     void draw (sf::RenderWindow& window)override {
         for (auto&& Obj : Buttons)
             Obj->draw(window);
@@ -233,3 +260,6 @@ static void downVolume() {
         gameMusic2.setVolume(gameMusic2.getVolume() + 10.f);
     }
 }
+
+
+ 

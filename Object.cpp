@@ -33,17 +33,17 @@ PushButton::PushButton(std::string file,sf::FloatRect r, sf::Color b_color, sf::
 	clicked_color = c_color;
 	is_clicked = false;
 }
-void PushButton::input(sf::RenderWindow& window) {
+void PushButton::input(sf::RenderWindow& window, sf::View& view) {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		if (is_pos(window))
+		if (is_pos(window, view))
 			State.CurrState = true;
 	bool IsPressedAndReleased = State.pick();
-	if (is_pos(window) && IsPressedAndReleased)
+	if (is_pos(window, view) && IsPressedAndReleased)
 		std::invoke(OnClick);
 }
 
-void PushButton::update(sf::RenderWindow& window) {
-	if (is_pos(window) || is_clicked) 
+void PushButton::update(sf::RenderWindow& window, sf::View& view) {
+	if (is_pos(window, view) || is_clicked) 
 		sprite.setColor(clicked_color);
 	else 
 		sprite.setColor(base_color);
@@ -53,11 +53,16 @@ void PushButton::draw(sf::RenderWindow& window) {
 	window.draw(getSprite());
 }
 
-bool  PushButton::is_pos(sf::RenderWindow& window) { // function: bool is mouse is possed at button rect
-	sf::IntRect r(rect.left, rect.top, rect.width, rect.height);
+bool  PushButton::is_pos(sf::RenderWindow& window, sf::View &view) { // function: bool is mouse is possed at button rect
+	float scale = window.getSize().x / view.getSize().x;
+	sf::IntRect r(rect.left * scale + view.getCenter().x/2 - (2-scale) * (window.getSize().x/4) , rect.top * scale + view.getCenter().y/2 - (2 - scale) * ( window.getSize().y/4), rect.width*scale, rect.height*scale);
 	if (r.contains(sf::Mouse::getPosition(window)))
 		return true;
 	return false;
+}
+
+void PushButton::setPosition(float x, float y) {
+	sprite.setPosition(x, y);
 }
 
 bool PushButton::ButtonClick::pick() {
