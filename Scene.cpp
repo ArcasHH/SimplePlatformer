@@ -79,12 +79,20 @@ void InputGameScene(void* pData, sf::RenderWindow& window) {
     }      
 }
 void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize){
+    auto& Glob = getGlobalState();
     GameScene* pLogic = reinterpret_cast<GameScene*>(pData);
     b2Vec2 p = pLogic->playerBody->GetPosition();
+    if (p.x >= 750) {
+        pLogic->playerBody->SetTransform(b2Vec2(104.5, 72.5), 0);
+        pLogic->playerBody->SetLinearVelocity(b2Vec2(0.f, 0.f));
+        Glob.setCurrWindow(GameWindow2::Name);
+        return;
+    }
     float width = pLogic->player.rect.width;
     float height = pLogic->player.rect.height;
-    pLogic->player.MoveTo(sf::Vector2f(p.x-width/2, p.y+height/2));
-    SetCameraCenter( window, view, pLogic->player.sprite.getPosition() + sf::Vector2f(windowSize.x / 4, windowSize.y / 4));
+    pLogic->player.MoveTo(sf::Vector2f(p.x - width / 2, p.y + height / 2));
+    SetCameraCenter(window, view, pLogic->player.sprite.getPosition() + sf::Vector2f(0, 0));
+ 
 }
 
 void DrawGameScene(void* pData, sf::RenderWindow &window){

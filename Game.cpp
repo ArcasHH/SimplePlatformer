@@ -21,13 +21,10 @@ void Game::start() {
 
     Glob.setCurrWindow(MenuWindow::Name);
    
-    
 
-    view.reset(sf::FloatRect(0.0f, 0.0f, windowSize.x, windowSize.y));
-    view.setViewport(sf::FloatRect(0.0f, 0.0f, 2.0f, 2.0f));
+    
     g_clock.restart();
     while (window.isOpen()){
-
         sf::Event event;
 
         BaseWindow* CurrWindow = Glob.getCurrWindow();
@@ -41,12 +38,13 @@ void Game::start() {
                 window.close();
                 break;
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-                window.close();
-                break;
-            }
+            //if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+            //    window.close();
+            //    break;
+            //}
         }
         
+   
         //const sf::Time elapsedTime = clock.getElapsedTime();
         //clock.restart();
         //world.Step(timeStep, velocityIterations, positionIterations);

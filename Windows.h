@@ -5,6 +5,7 @@
 #include "TmxLevel.h"
 #include "Scene.h"
 #include <SFML/Audio.hpp>
+//buttons functional:
 void onExit();
 void onStartGame1();
 void onStartGame2();
@@ -15,7 +16,8 @@ void downVolume();
 void upVolume();
 //void changeLevel();
 static sf::Music menuMusic;
-static sf::Music gameMusic;
+static sf::Music gameMusic1;
+static sf::Music gameMusic2;
 
 
 class BaseWindow {
@@ -57,7 +59,7 @@ public:
     MenuWindow() {     
         menuMusic.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 1.ogg");
         menuMusic.setLoop(true);
-        menuMusic.play();
+
         auto* background = new Object{ "images/Free Pixel Art Hill/ajys.png",0.f,0.f };
         Objects.push_back(background);
         
@@ -77,34 +79,64 @@ public:
         ExitBtn->registerFunction(onExit);
         Buttons.push_back(ExitBtn);
     }
+    void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) override {
+        if (menuMusic.getStatus() != sf::Music::Playing) { //once when window changes
+            gameMusic1.stop();
+            gameMusic2.stop();
+            menuMusic.play();
+            view.reset(sf::FloatRect(0.0f, 0.0f, windowSize.x, windowSize.y));
+            window.setView(view);
+        }
+        BaseWindow::update(window, view, windowSize);
+    }
 };
 
 class GameWindow1 final : public BaseWindow {
 public:
     static constexpr auto Name = "game1";
+    bool is_pause = false;
     GameScene* gameScene1;
     GameWindow1() {
         gameScene1 = NewGameScene("map/platformer1.tmx");
+        auto* SettingsBtn = new PushButton{ "images/settingsBTN.png", sf::FloatRect(sf::Vector2f(50,112),sf::Vector2f()) };
+        SettingsBtn->registerFunction(onSettings);
+        Buttons.push_back(SettingsBtn);
+
+        auto* ExitBtn = new PushButton{ "images/exitBTN.png", sf::FloatRect(sf::Vector2f(50,208),sf::Vector2f()) };
+        ExitBtn->registerFunction(onExit);
+        Buttons.push_back(ExitBtn);
     }
     ~GameWindow1() = default;
     void input(sf::RenderWindow& window) override {
+        if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+            if (!is_pause) is_pause = true;
+            else is_pause = false;
+        }
+
         BaseWindow::input(window);
         InputGameScene(gameScene1, window);
     }
     void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) override {
-        if (menuMusic.getStatus() == sf::Music::Playing) {
+        if (is_pause)
+            return;
+        if (gameMusic1.getStatus() != sf::Music::Playing) {
             menuMusic.stop();
-            gameMusic.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 6.ogg");
-            gameMusic.setLoop(true);
-            gameMusic.play();
+            gameMusic2.stop();
+            gameMusic1.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 6.ogg");
+            gameMusic1.setLoop(true);
+            gameMusic1.play();
+            view.setSize(window.getSize().x / 2, window.getSize().y / 2);
+            window.setView(view);
         }
         world.Step(timeStep, velocityIterations, positionIterations);
         BaseWindow::update(window, view, windowSize);
         UpdateGameScene(gameScene1, window, view, windowSize);
     }
     void draw(sf::RenderWindow& window) override {
-        BaseWindow::draw(window);
         DrawGameScene(gameScene1, window);
+        if (is_pause) {
+            BaseWindow::draw(window);
+        }
     }
 };
 
@@ -122,11 +154,12 @@ public:
         InputGameScene(gameScene2, window);
     }
     void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) override {
-        if (menuMusic.getStatus() == sf::Music::Playing) {
+        if (gameMusic2.getStatus() != sf::Music::Playing) {
             menuMusic.stop();
-            gameMusic.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 9.ogg");
-            gameMusic.setLoop(true);
-            gameMusic.play();
+            gameMusic1.stop();
+            gameMusic2.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 9.ogg");
+            gameMusic2.setLoop(true);
+            gameMusic2.play();
         }
         BaseWindow::update(window, view, windowSize);
         UpdateGameScene(gameScene2, window, view, windowSize);
@@ -189,13 +222,14 @@ public:
 static void upVolume() {
     if (menuMusic.getVolume() <= 90) {
         menuMusic.setVolume(menuMusic.getVolume() + 10.f);
-        gameMusic.setVolume(gameMusic.getVolume() + 10.f);
+        gameMusic1.setVolume(gameMusic1.getVolume() + 10.f);
+        gameMusic2.setVolume(gameMusic2.getVolume() + 10.f);
     }
-   
 }
 static void downVolume() {
     if (menuMusic.getVolume() >= 10) {
         menuMusic.setVolume(menuMusic.getVolume() - 10.f);
-        gameMusic.setVolume(gameMusic.getVolume() - 10.f);
+        gameMusic1.setVolume(gameMusic1.getVolume() - 10.f);
+        gameMusic2.setVolume(gameMusic2.getVolume() + 10.f);
     }
 }
