@@ -67,9 +67,11 @@ void InputGameScene(void* pData, sf::RenderWindow& window) {
     world.Step(1.0f / 60.0f, 8, 3);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         pLogic->playerBody->ApplyForceToCenter(b2Vec2((pLogic->playerSpeed), 0), true);
+        pLogic->state.right = true;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
         pLogic->playerBody->ApplyForceToCenter(b2Vec2(-(pLogic->playerSpeed), 0), true);
+        pLogic->state.left = true;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         pLogic->playerBody->ApplyForceToCenter(b2Vec2(0.f, -(pLogic->playerSpeed)), true);
@@ -79,8 +81,24 @@ void InputGameScene(void* pData, sf::RenderWindow& window) {
     }      
 }
 void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize){
+    
     auto& Glob = getGlobalState();
     GameScene* pLogic = reinterpret_cast<GameScene*>(pData);
+    if (pLogic->state.left) {
+       // sf::Texture t;
+        //pLogic->player.texture.loadFromFile("images/left.png");
+        //pLogic->player.texture = t;
+        //pLogic->player.sprite.setTexture(t);
+       // pLogic->state.left = false;
+    }
+    if (pLogic->state.right) {
+       // sf::Texture t;
+        //t.loadFromFile("images/right.png");
+        //pLogic->player.texture.loadFromFile("images/right.png");
+       // pLogic->player.sprite.setTexture(t);
+       // pLogic->state.right = false;
+    }
+    //pLogic->player.sprite.setTexture(pLogic->player.texture);
     b2Vec2 p = pLogic->playerBody->GetPosition();
     if (p.x >= 980 && p.y < 150) {
         pLogic->playerBody->SetTransform(b2Vec2(104.5, 72.5), 0);

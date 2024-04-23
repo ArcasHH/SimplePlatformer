@@ -100,7 +100,7 @@ public:
     GameScene* gameScene1;
     GameWindow1() {
         gameScene1 = NewGameScene("map/lvl1.tmx");
-
+        
         auto* box = new Object{ "images/line.png", 0, 80 };
         Objects.push_back(box);
 

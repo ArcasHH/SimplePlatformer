@@ -8,6 +8,7 @@ static sf::Clock g_clock;
 struct GameScene{
     TmxLevel level;
     TmxObject player;
+    PlayerStates state;
     b2Body* playerBody;
     std::vector<TmxObject> enemies;
     std::vector<TmxObject> coins;

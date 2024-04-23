@@ -16,7 +16,13 @@ static b2World world(gravity);
 static std::string box_name = "box";
 
 static int level;
-
+class PlayerStates {
+public:
+	bool onGround=true;
+	bool left=false;
+	bool right=false;
+	bool up=false;
+};
 class Object {
 public:
 	sf::Texture texture;
