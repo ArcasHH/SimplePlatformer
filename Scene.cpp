@@ -82,7 +82,7 @@ void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, cons
     auto& Glob = getGlobalState();
     GameScene* pLogic = reinterpret_cast<GameScene*>(pData);
     b2Vec2 p = pLogic->playerBody->GetPosition();
-    if (p.x >= 750) {
+    if (p.x >= 980 && p.y < 150) {
         pLogic->playerBody->SetTransform(b2Vec2(104.5, 72.5), 0);
         pLogic->playerBody->SetLinearVelocity(b2Vec2(0.f, 0.f));
         Glob.setCurrWindow(GameWindow2::Name);

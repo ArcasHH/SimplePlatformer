@@ -99,7 +99,7 @@ public:
     
     GameScene* gameScene1;
     GameWindow1() {
-        gameScene1 = NewGameScene("map/platformer1.tmx");
+        gameScene1 = NewGameScene("map/lvl1.tmx");
 
         auto* box = new Object{ "images/line.png", 0, 80 };
         Objects.push_back(box);
@@ -142,7 +142,7 @@ public:
         if (gameMusic1.getStatus() != sf::Music::Playing || gameMusic1.getStatus() == sf::Music::Stopped) {
             menuMusic.stop();
             gameMusic2.stop();
-            gameMusic1.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 6.ogg");
+            gameMusic1.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 9.ogg");
             gameMusic1.setLoop(true);
             gameMusic1.play();
             view.setSize(window.getSize().x / 2, window.getSize().y / 2);
@@ -168,7 +168,7 @@ public:
 
     GameScene* gameScene2;
     GameWindow2() {
-        gameScene2 = NewGameScene("map/platformer2.tmx");
+        gameScene2 = NewGameScene("map/lvl2.tmx");
 
         auto* box = new Object{ "images/line.png", 0, 80 };
         Objects.push_back(box);
@@ -210,7 +210,7 @@ public:
         if (gameMusic2.getStatus() != sf::Music::Playing || gameMusic2.getStatus() == sf::Music::Stopped) {
             menuMusic.stop();
             gameMusic1.stop();
-            gameMusic2.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 9.ogg");
+            gameMusic2.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 6.ogg");
             gameMusic2.setLoop(true);
             gameMusic2.play();
             view.setSize(window.getSize().x / 2, window.getSize().y / 2);
