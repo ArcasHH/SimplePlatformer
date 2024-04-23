@@ -27,7 +27,5 @@ void onMenu() {
     auto& Glob = getGlobalState();
     Glob.setCurrWindow(MenuWindow::Name);
 }
-void onPause() {
-    return;
-}
+
 

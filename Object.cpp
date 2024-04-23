@@ -54,8 +54,14 @@ void PushButton::draw(sf::RenderWindow& window) {
 }
 
 bool  PushButton::is_pos(sf::RenderWindow& window, sf::View &view) { // function: bool is mouse is possed at button rect
+	
 	float scale = window.getSize().x / view.getSize().x;
-	sf::IntRect r(rect.left * scale + view.getCenter().x/2 - (2-scale) * (window.getSize().x/4) , rect.top * scale + view.getCenter().y/2 - (2 - scale) * ( window.getSize().y/4), rect.width*scale, rect.height*scale);
+	sf::IntRect r(rect.left - (scale - 1) * (view.getCenter().x - view.getSize().x / 2),
+		          rect.top - (scale - 1) * (view.getCenter().y - view.getSize().y / 2),
+		          rect.width * scale, rect.height * scale);
+	r.left *= scale;
+	r.top *= scale;
+
 	if (r.contains(sf::Mouse::getPosition(window)))
 		return true;
 	return false;
@@ -63,6 +69,8 @@ bool  PushButton::is_pos(sf::RenderWindow& window, sf::View &view) { // function
 
 void PushButton::setPosition(float x, float y) {
 	sprite.setPosition(x, y);
+	rect.left = x;
+	rect.top = y;
 }
 
 bool PushButton::ButtonClick::pick() {

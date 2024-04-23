@@ -38,10 +38,6 @@ void Game::start() {
                 window.close();
                 break;
             }
-            //if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-            //    window.close();
-            //    break;
-            //}
         }
         
    

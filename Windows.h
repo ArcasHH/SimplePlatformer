@@ -20,7 +20,7 @@ void upVolume();
 static sf::Music menuMusic;
 static sf::Music gameMusic1;
 static sf::Music gameMusic2;
-
+static bool is_pause = false;
 
 class BaseWindow {
 protected:
@@ -50,7 +50,6 @@ public:
             Obj->draw(window);
         for (auto&& Obj : Buttons)
             Obj->draw(window);
-        
     }
 };
 
@@ -88,6 +87,7 @@ public:
             menuMusic.play();
             view.reset(sf::FloatRect(0.0f, 0.0f, windowSize.x, windowSize.y));
             window.setView(view);
+            is_pause = false;
         }
         BaseWindow::update(window, view, windowSize);
     }
@@ -96,7 +96,7 @@ public:
 class GameWindow1 final : public BaseWindow {
 public:
     static constexpr auto Name = "game1";
-    bool is_pause = false;
+    
     GameScene* gameScene1;
     GameWindow1() {
         gameScene1 = NewGameScene("map/platformer1.tmx");
@@ -111,10 +111,6 @@ public:
         auto* MenuBtn = new PushButton{ "images/menu96.png", sf::FloatRect(sf::Vector2f(250,128),sf::Vector2f()) };
         MenuBtn->registerFunction(onMenu);
         Buttons.push_back(MenuBtn);
-        
-        auto* SettingsBtn = new PushButton{ "images/settings96.png", sf::FloatRect(sf::Vector2f(400,128),sf::Vector2f()) };
-        SettingsBtn->registerFunction(onSettings);
-        Buttons.push_back(SettingsBtn);
 
         auto* ExitBtn = new PushButton{ "images/exit96.png", sf::FloatRect(sf::Vector2f(550,128),sf::Vector2f()) };
         ExitBtn->registerFunction(onExit);
@@ -124,7 +120,6 @@ public:
     void input(sf::RenderWindow& window, sf::View & view) override {
         if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
             if (!is_pause) is_pause = true;
-            //else is_pause = false;
         }
         if (is_pause) {
             BaseWindow::input(window, view);
@@ -137,14 +132,14 @@ public:
             sf::Vector2f view_center= view.getCenter();
             for (float i = 0; i < Buttons.size(); ++i) {
                 PushButton* Button = Buttons[i];
-                Objects[0]->sprite.setPosition(view_center.x - window.getSize().x/2, view_center.y - 48);
-                Button->setPosition(view_center.x - 128 * i+ window.getSize().x/16, view_center.y);
+                Objects[0]->sprite.setPosition(view_center.x - view.getSize().x/2, view_center.y - view.getSize().y / 2);
+                Button->setPosition(view_center.x + 128 * i - view.getSize().x/4, view_center.y);
             }
             BaseWindow::update(window, view, windowSize);
             return;
         }
             
-        if (gameMusic1.getStatus() != sf::Music::Playing) {
+        if (gameMusic1.getStatus() != sf::Music::Playing || gameMusic1.getStatus() == sf::Music::Stopped) {
             menuMusic.stop();
             gameMusic2.stop();
             gameMusic1.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 6.ogg");
@@ -152,6 +147,7 @@ public:
             gameMusic1.play();
             view.setSize(window.getSize().x / 2, window.getSize().y / 2);
             window.setView(view);
+            gameScene1->playerBody->SetTransform(b2Vec2(35, 135), 0.f);
         }
         world.Step(timeStep, velocityIterations, positionIterations);
         BaseWindow::update(window, view, windowSize);
@@ -169,30 +165,68 @@ public:
 class GameWindow2 final : public BaseWindow {
 public:
     static constexpr auto Name = "game2";
+
     GameScene* gameScene2;
     GameWindow2() {
         gameScene2 = NewGameScene("map/platformer2.tmx");
+
+        auto* box = new Object{ "images/line.png", 0, 80 };
+        Objects.push_back(box);
+
+        auto* playBtn = new PushButton{ "images/play96.png", sf::FloatRect(sf::Vector2f(100,128),sf::Vector2f()) };
+        playBtn->registerFunction(onPause);
+        Buttons.push_back(playBtn);
+
+        auto* MenuBtn = new PushButton{ "images/menu96.png", sf::FloatRect(sf::Vector2f(250,128),sf::Vector2f()) };
+        MenuBtn->registerFunction(onMenu);
+        Buttons.push_back(MenuBtn);
+
+        auto* ExitBtn = new PushButton{ "images/exit96.png", sf::FloatRect(sf::Vector2f(550,128),sf::Vector2f()) };
+        ExitBtn->registerFunction(onExit);
+        Buttons.push_back(ExitBtn);
     }
     ~GameWindow2() = default;
     void input(sf::RenderWindow& window, sf::View& view) override {
-        world.Step(timeStep, velocityIterations, positionIterations);
-        BaseWindow::input(window, view);
-        InputGameScene(gameScene2, window);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+            if (!is_pause) is_pause = true;
+        }
+        if (is_pause) {
+            BaseWindow::input(window, view);
+        }
+        else 
+            InputGameScene(gameScene2, window);
     }
     void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) override {
-        if (gameMusic2.getStatus() != sf::Music::Playing) {
+        if (is_pause) {
+            sf::Vector2f view_center = view.getCenter();
+            for (float i = 0; i < Buttons.size(); ++i) {
+                PushButton* Button = Buttons[i];
+                Objects[0]->sprite.setPosition(view_center.x - view.getSize().x / 2, view_center.y - 48);
+                Button->setPosition(view_center.x + 128 * i - view.getSize().x / 4, view_center.y);
+            }
+            BaseWindow::update(window, view, windowSize);
+        }
+
+        if (gameMusic2.getStatus() != sf::Music::Playing || gameMusic2.getStatus() == sf::Music::Stopped) {
             menuMusic.stop();
             gameMusic1.stop();
             gameMusic2.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 9.ogg");
             gameMusic2.setLoop(true);
             gameMusic2.play();
+            view.setSize(window.getSize().x / 2, window.getSize().y / 2);
+            window.setView(view);
+            gameScene2->playerBody->SetTransform(b2Vec2(35, 135), 0.f);
         }
+        world.Step(timeStep, velocityIterations, positionIterations);
         BaseWindow::update(window, view, windowSize);
         UpdateGameScene(gameScene2, window, view, windowSize);
     }
+
     void draw(sf::RenderWindow& window) override {
-        BaseWindow::draw(window);
         DrawGameScene(gameScene2, window);
+        if (is_pause) {
+            BaseWindow::draw(window);
+        }
     }
 };
 
@@ -218,7 +252,19 @@ public:
             volume_set.push_back(box);
         }
     }
-    
+    void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) override {
+        
+        if (menuMusic.getStatus() != sf::Music::Playing) { //once when window changes
+            Buttons[0]->registerFunction(onPause);
+            gameMusic1.stop();
+            gameMusic2.stop();
+            menuMusic.play();
+            view.reset(sf::FloatRect(0.0f, 0.0f, windowSize.x, windowSize.y));
+            window.setView(view);
+            //is_pause = false;
+        }
+        BaseWindow::update(window, view, windowSize);
+    }
     void draw (sf::RenderWindow& window)override {
         for (auto&& Obj : Buttons)
             Obj->draw(window);
@@ -227,6 +273,7 @@ public:
             volume_set[i]->draw(window);
         }
     }
+
 };
 
 class LevelWindow final : public BaseWindow {
@@ -260,6 +307,8 @@ static void downVolume() {
         gameMusic2.setVolume(gameMusic2.getVolume() + 10.f);
     }
 }
-
+static void onPause() {
+    is_pause = false;
+}
 
  
