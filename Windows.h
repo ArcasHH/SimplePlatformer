@@ -14,8 +14,8 @@ void onPause(bool &is_pause);
 void onSettings();
 void onMenu();
 void onLevel();
-void downVolume();
-void upVolume();
+void downVolume(std::vector<sf::Music*> mvec);
+void upVolume(std::vector<sf::Music*> mvec);
 
 void updatePauseScreen(sf::View& view, std::vector<PushButton*>& Buttons, std::vector<Object*>& Objects);
 
@@ -214,10 +214,10 @@ public:
         MenuBtn->registerFunction(onMenu);
         Buttons.push_back(MenuBtn);
         auto* volume_upBtn = new PushButton{ "images/sound_up.png", sf::FloatRect(sf::Vector2f(476,200),sf::Vector2f()) };
-        volume_upBtn->registerFunction(upVolume);
+        volume_upBtn->registerFunction(upVolume, std::ref(MusicVector));
         Buttons.push_back(volume_upBtn);
         auto* volume_downBtn = new PushButton{ "images/sound_down.png", sf::FloatRect(sf::Vector2f(100,200),sf::Vector2f()) };
-        volume_downBtn->registerFunction(downVolume);
+        volume_downBtn->registerFunction(downVolume, std::ref(MusicVector));
         Buttons.push_back(volume_downBtn);
         for (float i = 0; i < 10; ++i) {
             auto* box = new Object{ "images/wbox.png", 220 + 24*i, 228 };
@@ -247,21 +247,6 @@ public:
         Buttons.push_back(twoBtn);
     }
 };
-
-static void upVolume() {
-    for (auto&& m : MusicVector) {
-        float vol = m->getVolume();
-        if (vol <= 90)
-            m->setVolume(vol + 10.f);
-    }
-}
-static void downVolume() {
-    for (auto&& m : MusicVector) {
-        float vol = m->getVolume();
-        if ( vol >= 10)
-            m->setVolume(vol - 10.f);
-    }
-}
 
 
  

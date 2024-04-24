@@ -38,7 +38,7 @@ void updatePauseScreen(sf::View& view, std::vector<PushButton*>& Buttons, std::v
     Objects[0]->sprite.setPosition(view_center.x - view.getSize().x / 2, view_center.y - view.getSize().y / 2);
     for (float i = 0; i < Buttons.size(); ++i) {
         PushButton* Button = Buttons[i];
-        Button->setPosition(view_center.x + 128 * i - view.getSize().x / 4, view_center.y);
+        Button->setPosition(view_center.x + 128 * i - view.getSize().x / 4, view_center.y); // 128-96 = 32 - distance between buttons in pause screen
     }
 }
 void playMusic(sf::Music& music, std::vector<sf::Music*> musicvec) {
@@ -46,5 +46,20 @@ void playMusic(sf::Music& music, std::vector<sf::Music*> musicvec) {
         for (auto&& m : musicvec)
             m->stop();
         music.play();
+    }
+}
+
+void upVolume(std::vector<sf::Music*> mvec) {
+    for (auto&& m : mvec) {
+        float vol = m->getVolume();
+        if (vol <= 90)
+            m->setVolume(vol + 10.f);
+    }
+}
+void downVolume(std::vector<sf::Music*> mvec) {
+    for (auto&& m : mvec) {
+        float vol = m->getVolume();
+        if (vol >= 10)
+            m->setVolume(vol - 10.f);
     }
 }
