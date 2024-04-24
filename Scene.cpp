@@ -81,9 +81,9 @@ void InputGameScene(void* pData, sf::RenderWindow& window) {
         pLogic->playerBody->ApplyForceToCenter(b2Vec2(0.f, PLAYER_SPEED), true);
     }      
 }
-void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize){
+void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, int& lvl){
     
-    auto& Glob = getGlobalState();
+    //auto& Glob = getGlobalState();
     GameScene* pLogic = reinterpret_cast<GameScene*>(pData);
     if (pLogic->state.left) {
        // sf::Texture t;
@@ -101,10 +101,11 @@ void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, cons
     }
     //pLogic->player.sprite.setTexture(pLogic->player.texture);
     b2Vec2 p = pLogic->playerBody->GetPosition();
-    if (p.x >= 980 && p.y < 150) { // condition for passing the level
+    if (p.x >= 500 && p.y < 150) { // condition for passing the level
         pLogic->playerBody->SetTransform(b2Vec2(104.5, 72.5), 0);
         pLogic->playerBody->SetLinearVelocity(b2Vec2(0.f, 0.f));
-        Glob.setCurrWindow(GameWindow2::Name);
+        lvl++;
+        //Glob.setCurrWindow(GameWindow2::Name);
         return;
     }
     float width = pLogic->player.rect.width;

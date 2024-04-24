@@ -9,7 +9,7 @@
 //buttons functional:
 void onExit();
 void onStartGame1();
-void onStartGame2();
+//void onStartGame2();
 void onPause(bool &is_pause);
 void onSettings();
 void onMenu();
@@ -23,7 +23,7 @@ void updatePauseScreen(sf::View& view, std::vector<PushButton*>& Buttons, std::v
 static sf::Music menuMusic;
 static sf::Music gameMusic1;
 static sf::Music gameMusic2;
-static std::vector<sf::Music*> MusicVector = { &menuMusic, &gameMusic1 , &gameMusic2 };
+static std::vector<sf::Music*> MusicVector = { &menuMusic, &gameMusic1, &gameMusic2 };
 void playMusic(sf::Music& music, std::vector<sf::Music*> musicvec);
 
 static bool is_pause = false;
@@ -98,12 +98,15 @@ public:
 class GameWindow1 final : public BaseWindow {
 public:
     static constexpr auto Name = "game1";
-    
+    int lvl;
     GameScene* gameScene1;
     GameWindow1() {
+        lvl = 1;
         gameScene1 = NewGameScene("map/lvl1.tmx");
         gameMusic1.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 9.ogg");
+        gameMusic2.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 6.ogg");
         gameMusic1.setLoop(true);
+        gameMusic2.setLoop(true);
         auto* box = new Object{ "images/line.png", 0, 80 };
         Objects.push_back(box);
 
@@ -129,18 +132,24 @@ public:
         InputGameScene(gameScene1, window);
     }
     void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) override {
+        
         if (is_pause) {
             updatePauseScreen(view, Buttons, Objects);
             BaseWindow::update(window, view, windowSize);
             return;
         }   
-        if (gameMusic1.getStatus() != sf::Music::Playing) {
-            playMusic(gameMusic1, MusicVector);
+        if (lvl ==1 && gameMusic1.getStatus() != sf::Music::Playing) {
+            playMusic(std::ref(gameMusic1), MusicVector);
             view.setSize(window.getSize().x / 2, window.getSize().y / 2);
             gameScene1->playerBody->SetTransform(b2Vec2(35, 135), 0.f);//initial position of the player
         }
         world.Step(timeStep, velocityIterations, positionIterations);
-        UpdateGameScene(gameScene1, window, view, windowSize);
+        UpdateGameScene(gameScene1, window, view, windowSize, lvl);
+
+        if (lvl == 2 && (gameMusic2.getStatus() != sf::Music::Playing)) {
+            gameScene1 = NewGameScene("map/lvl2.tmx");
+            playMusic(std::ref(gameMusic2), MusicVector);
+        }
     }
     void draw(sf::RenderWindow& window) override {
         DrawGameScene(gameScene1, window);
@@ -148,11 +157,11 @@ public:
             BaseWindow::draw(window);
     }
 };
-
+#if 0
 class GameWindow2 final : public BaseWindow {
 public:
     static constexpr auto Name = "game2";
-
+    int lvl;
     GameScene* gameScene2;
     GameWindow2() {
         gameScene2 = NewGameScene("map/lvl2.tmx");
@@ -196,7 +205,7 @@ public:
             gameScene2->playerBody->SetTransform(b2Vec2(35, 135), 0.f);
         }
         world.Step(timeStep, velocityIterations, positionIterations);
-        UpdateGameScene(gameScene2, window, view, windowSize);
+        UpdateGameScene(gameScene2, window, view, windowSize, lvl);
     }
     void draw(sf::RenderWindow& window) override {
         DrawGameScene(gameScene2, window);
@@ -204,7 +213,7 @@ public:
             BaseWindow::draw(window);
     }
 };
-
+#endif
 class SettingsWindow final : public BaseWindow {
     std::vector<Object*> volume_set;
 public:
@@ -243,7 +252,7 @@ public:
         oneBtn->registerFunction(onStartGame1);
         Buttons.push_back(oneBtn);
         auto* twoBtn = new PushButton{ "images/2.png", sf::FloatRect(sf::Vector2f(300,100),sf::Vector2f()) };
-        twoBtn->registerFunction(onStartGame2);
+        twoBtn->registerFunction(onStartGame1);
         Buttons.push_back(twoBtn);
     }
 };

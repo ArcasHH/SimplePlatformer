@@ -9,10 +9,10 @@ void onStartGame1() {
     auto& Glob = getGlobalState();
     Glob.setCurrWindow(GameWindow1::Name);
 }
-void onStartGame2() {
-    auto& Glob = getGlobalState();
-    Glob.setCurrWindow(GameWindow2::Name);
-}
+//void onStartGame2() {
+//    auto& Glob = getGlobalState();
+//    Glob.setCurrWindow(GameWindow2::Name);
+//}
 
 void onSettings() {
     auto& Glob = getGlobalState();

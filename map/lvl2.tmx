@@ -14371,15 +14371,15 @@
   <object id="1" name="player" gid="385" x="30.5" y="76" width="16" height="16"/>
   <object id="2" name="block" x="-0.5" y="-2" width="978.5" height="16"/>
   <object id="4" name="block" x="672.5" y="11.5" width="30" height="82.5"/>
-  <object id="5" name="block" x="767.5" y="3.5" width="32" height="236"/>
+  <object id="5" name="block" x="767.5" y="3.5" width="32" height="187"/>
   <object id="6" name="block" x="879.5" y="65" width="15.5" height="173"/>
   <object id="7" name="block" x="832.5" y="64.5" width="47" height="2"/>
   <object id="8" name="block" x="833" y="177" width="49" height="13.5"/>
-  <object id="9" name="block" x="787.5" y="224.5" width="29" height="14.5"/>
+  <object id="9" name="block" x="768.5" y="224.5" width="48" height="14.5"/>
   <object id="10" name="block" x="768.5" y="240" width="14" height="79.5"/>
   <object id="11" name="block" x="657.5" y="241.5" width="61.5" height="14"/>
-  <object id="12" name="block" x="657.5" y="144.5" width="30" height="107"/>
-  <object id="14" name="block" x="449" y="146" width="209.5" height="45"/>
+  <object id="12" name="block" x="657.5" y="147.5" width="30" height="104"/>
+  <object id="14" name="block" x="449" y="146" width="237.833" height="45"/>
   <object id="15" name="block" x="353" y="113" width="45.5" height="31.5"/>
   <object id="16" name="block" x="416.5" y="80" width="46" height="14"/>
   <object id="17" name="block" x="541.5" y="49" width="21.5" height="101"/>
