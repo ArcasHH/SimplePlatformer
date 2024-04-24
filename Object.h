@@ -19,11 +19,18 @@ static int level;
 
 class PlayerStates {
 public:
-	bool onGround=true;
-	bool left=false;
-	bool right=false;
-	bool up=false;
-	bool space = false;
+	bool onGround;
+	bool left;
+	bool right;
+	bool up;
+	bool space ;
+	PlayerStates() {
+		onGround = true;
+		 left = false;
+		 right = false;
+		 up = false;
+		 space = false;
+	}
 };
 class Object {
 public:

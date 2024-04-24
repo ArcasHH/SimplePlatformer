@@ -61,3 +61,11 @@ void downVolume(std::vector<sf::Music*> mvec) {
             m->setVolume(vol - 10.f);
     }
 }
+//for the level with the value l, set the music from mvec and upload it to the scene
+void SetLevel(int& level,int l, sf::Music& music, std::vector<sf::Music*> mvec, GameScene*&gameScene) {
+    if (level == l && music.getStatus() != sf::Music::Playing) {
+        gameScene = NewGameScene("map/lvl" + std::to_string(level) + ".tmx");
+        playMusic(std::ref(music), mvec);
+        gameScene->playerBody->SetTransform(b2Vec2(35, 135), 0.f);//initial position of the player
+    }
+}

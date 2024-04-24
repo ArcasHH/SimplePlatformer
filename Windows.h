@@ -9,22 +9,22 @@
 //buttons functional:
 void onExit();
 void onStartGame(int &level, int l);
-//void onStartGame2();
 void onPause(bool &is_pause);
 void onSettings();
 void onMenu();
 void onLevel();
+
 void downVolume(std::vector<sf::Music*> mvec);
 void upVolume(std::vector<sf::Music*> mvec);
 
 void updatePauseScreen(sf::View& view, std::vector<PushButton*>& Buttons, std::vector<Object*>& Objects);
-
+void SetLevel(int& level, int l, sf::Music& music, std::vector<sf::Music*> mvec, GameScene* &gameScene);
 // music
 static sf::Music menuMusic;
 static sf::Music gameMusic1;
 static sf::Music gameMusic2;
 static std::vector<sf::Music*> MusicVector = { &menuMusic, &gameMusic1, &gameMusic2 };
-void playMusic(sf::Music& music, std::vector<sf::Music*> musicvec);
+void playMusic(sf::Music& music, std::vector<sf::Music*> mvec);
 
 static bool is_pause = false;
 static int lvl = 1;
@@ -102,9 +102,10 @@ public:
     GameScene* gameScene;
     GameWindow() {
         gameMusic1.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 9.ogg");
-        gameMusic2.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 6.ogg");
         gameMusic1.setLoop(true);
+        gameMusic2.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 6.ogg");   
         gameMusic2.setLoop(true);
+
         auto* box = new Object{ "images/line.png", 0, 80 };
         Objects.push_back(box);
 
@@ -136,18 +137,10 @@ public:
             BaseWindow::update(window, view, windowSize);
             return;
         }   
-        if (lvl == 1 && gameMusic1.getStatus() != sf::Music::Playing) {
-            gameScene = NewGameScene("map/lvl1.tmx");
-            playMusic(std::ref(gameMusic1), MusicVector);
+        SetLevel(std::ref(lvl), 1, std::ref(gameMusic1), std::ref(MusicVector), std::ref(gameScene));
+        SetLevel(std::ref(lvl), 2, std::ref(gameMusic2), std::ref(MusicVector), std::ref(gameScene));
+        if(view.getSize().x != window.getSize().x / 2)
             view.setSize(window.getSize().x / 2, window.getSize().y / 2);
-            gameScene->playerBody->SetTransform(b2Vec2(35, 135), 0.f);//initial position of the player
-        }
-        else if (lvl == 2 && (gameMusic2.getStatus() != sf::Music::Playing)) {
-            gameScene = NewGameScene("map/lvl2.tmx");
-            playMusic(std::ref(gameMusic2), MusicVector);
-            view.setSize(window.getSize().x / 2, window.getSize().y / 2);
-            gameScene->playerBody->SetTransform(b2Vec2(35, 135), 0.f);//initial position of the player
-        }
         world.Step(timeStep, velocityIterations, positionIterations);
         UpdateGameScene(gameScene, window, view, windowSize, lvl);
     }
@@ -162,15 +155,19 @@ class SettingsWindow final : public BaseWindow {
 public:
     static constexpr auto Name = "settings";
     SettingsWindow() {
+
         auto* MenuBtn = new PushButton{ "images/backBTN.png", sf::FloatRect(sf::Vector2f(100,768),sf::Vector2f() )};
         MenuBtn->registerFunction(onMenu);
         Buttons.push_back(MenuBtn);
+
         auto* volume_upBtn = new PushButton{ "images/sound_up.png", sf::FloatRect(sf::Vector2f(476,200),sf::Vector2f()) };
         volume_upBtn->registerFunction(upVolume, std::ref(MusicVector));
         Buttons.push_back(volume_upBtn);
+
         auto* volume_downBtn = new PushButton{ "images/sound_down.png", sf::FloatRect(sf::Vector2f(100,200),sf::Vector2f()) };
         volume_downBtn->registerFunction(downVolume, std::ref(MusicVector));
         Buttons.push_back(volume_downBtn);
+
         for (float i = 0; i < 10; ++i) {
             auto* box = new Object{ "images/wbox.png", 220 + 24*i, 228 };
             volume_set.push_back(box);
@@ -199,6 +196,3 @@ public:
         Buttons.push_back(twoBtn);
     }
 };
-
-
- 

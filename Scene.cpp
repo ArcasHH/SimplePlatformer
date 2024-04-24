@@ -85,20 +85,7 @@ void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, cons
     
     //auto& Glob = getGlobalState();
     GameScene* pLogic = reinterpret_cast<GameScene*>(pData);
-    if (pLogic->state.left) {
-       // sf::Texture t;
-        //pLogic->player.texture.loadFromFile("images/left.png");
-        //pLogic->player.texture = t;
-        //pLogic->player.sprite.setTexture(t);
-       // pLogic->state.left = false;
-    }
-    if (pLogic->state.right) {
-       // sf::Texture t;
-        //t.loadFromFile("images/right.png");
-        //pLogic->player.texture.loadFromFile("images/right.png");
-       // pLogic->player.sprite.setTexture(t);
-       // pLogic->state.right = false;
-    }
+
     //pLogic->player.sprite.setTexture(pLogic->player.texture);
     b2Vec2 p = pLogic->playerBody->GetPosition();
     if (p.x >= 500 && p.y < 150) { // condition for passing the level
