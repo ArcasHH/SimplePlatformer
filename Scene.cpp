@@ -66,21 +66,19 @@ void InputGameScene(void* pData, sf::RenderWindow& window) {
     GameScene* pLogic = reinterpret_cast<GameScene*>(pData);
     world.Step(timeStep, velocityIterations, positionIterations);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        pLogic->playerBody->ApplyForceToCenter(b2Vec2(PLAYER_SPEED, 0), false);
-        //pLogic->playerBody->ApplyForceToCenter(gravity, true);
+        pLogic->playerBody->ApplyForceToCenter(b2Vec2(PLAYER_SPEED, 0), true);
         pLogic->state.right = true;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-        pLogic->playerBody->ApplyForceToCenter(b2Vec2(-PLAYER_SPEED, 0), false);
-        //pLogic->playerBody->ApplyForceToCenter(gravity, true);
+        pLogic->playerBody->ApplyForceToCenter(b2Vec2(-PLAYER_SPEED, 0), true);
         pLogic->state.left = true;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         b2Vec2 linV = pLogic->playerBody->GetLinearVelocity();
-        pLogic->playerBody->ApplyForceToCenter(b2Vec2(linV.x, linV.y-PLAYER_SPEED*100), false);
+        pLogic->playerBody->ApplyForceToCenter(b2Vec2(linV.x, linV.y-PLAYER_SPEED*100), true);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-        pLogic->playerBody->ApplyForceToCenter(b2Vec2(0.f, PLAYER_SPEED), false);
+        pLogic->playerBody->ApplyForceToCenter(b2Vec2(0.f, PLAYER_SPEED), true);
     }      
 }
 void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize){

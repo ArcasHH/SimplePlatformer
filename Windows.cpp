@@ -28,6 +28,10 @@ void onMenu() {
     Glob.setCurrWindow(MenuWindow::Name);
 }
 
+void onPause(bool &is_pause) {
+    is_pause = false;
+}
+
 
 void updatePauseScreen(sf::View& view, std::vector<PushButton*>& Buttons, std::vector<Object*>& Objects) {
     sf::Vector2f view_center = view.getCenter();

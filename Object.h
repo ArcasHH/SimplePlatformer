@@ -73,7 +73,6 @@ class PushButton final : Object {
 public:
 	bool is_clicked;
 	bool  is_pos(sf::RenderWindow& window, sf::View& view);
-
 	using OnClickFunc = std::function<void()>;
 	OnClickFunc OnClick;
 
@@ -84,8 +83,10 @@ public:
 	void update(sf::RenderWindow& window, sf::View& view);
 	void draw(sf::RenderWindow& window) override;
 	void setPosition(float x, float y);
-	void registerFunction(OnClickFunc F) {
-		OnClick = std::move(F);
+	template <typename FuncTy, typename ...Args>
+	void registerFunction(FuncTy &&F, Args &&...args) {
+		auto&& Call = std::bind(std::forward<FuncTy>(F), std::forward<Args>(args)...);
+		OnClick = std::move(Call);
 	}
 };
 

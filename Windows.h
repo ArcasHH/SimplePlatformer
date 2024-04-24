@@ -10,7 +10,7 @@
 void onExit();
 void onStartGame1();
 void onStartGame2();
-void onPause();
+void onPause(bool &is_pause);
 void onSettings();
 void onMenu();
 void onLevel();
@@ -108,7 +108,7 @@ public:
         Objects.push_back(box);
 
         auto* playBtn = new PushButton{ "images/play96.png", sf::FloatRect(sf::Vector2f(100,128),sf::Vector2f()) };
-        playBtn->registerFunction(onPause);
+        playBtn->registerFunction(onPause, std::ref(is_pause));
         Buttons.push_back(playBtn);
 
         auto* MenuBtn = new PushButton{ "images/menu96.png", sf::FloatRect(sf::Vector2f(250,128),sf::Vector2f()) };
@@ -162,7 +162,7 @@ public:
         Objects.push_back(box);
 
         auto* playBtn = new PushButton{ "images/play96.png", sf::FloatRect(sf::Vector2f(100,128),sf::Vector2f()) };
-        playBtn->registerFunction(onPause);
+        playBtn->registerFunction(onPause, std::ref(is_pause));
         Buttons.push_back(playBtn);
 
         auto* MenuBtn = new PushButton{ "images/menu96.png", sf::FloatRect(sf::Vector2f(250,128),sf::Vector2f()) };
@@ -262,8 +262,6 @@ static void downVolume() {
             m->setVolume(vol - 10.f);
     }
 }
-static void onPause() {
-    is_pause = false;
-}
+
 
  
