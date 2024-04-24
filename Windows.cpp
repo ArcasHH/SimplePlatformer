@@ -5,14 +5,12 @@ void onExit() {
     Glob.setCurrWindow("exit");
 }
 
-void onStartGame1() {
+void onStartGame(int& level, int l) {
+    level = l;
     auto& Glob = getGlobalState();
-    Glob.setCurrWindow(GameWindow1::Name);
+    Glob.setCurrWindow(GameWindow::Name);
 }
-//void onStartGame2() {
-//    auto& Glob = getGlobalState();
-//    Glob.setCurrWindow(GameWindow2::Name);
-//}
+
 
 void onSettings() {
     auto& Glob = getGlobalState();

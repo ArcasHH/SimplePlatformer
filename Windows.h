@@ -8,7 +8,7 @@
 #include <map>
 //buttons functional:
 void onExit();
-void onStartGame1();
+void onStartGame(int &level, int l);
 //void onStartGame2();
 void onPause(bool &is_pause);
 void onSettings();
@@ -27,6 +27,7 @@ static std::vector<sf::Music*> MusicVector = { &menuMusic, &gameMusic1, &gameMus
 void playMusic(sf::Music& music, std::vector<sf::Music*> musicvec);
 
 static bool is_pause = false;
+static int lvl = 1;
 
 class BaseWindow {
 protected:
@@ -70,7 +71,7 @@ public:
         Objects.push_back(background);
         
         auto* StartGameBtn = new PushButton{ "images/playBTN.png",sf::FloatRect(sf::Vector2f(100,200),sf::Vector2f()) };
-        StartGameBtn->registerFunction(onStartGame1);
+        StartGameBtn->registerFunction(onStartGame, std::ref(lvl), 1);
         Buttons.push_back(StartGameBtn);
 
         auto* LevelBtn = new PushButton{ "images/levelBTN.png", sf::FloatRect(sf::Vector2f(100,350),sf::Vector2f()) };
@@ -95,14 +96,11 @@ public:
     }
 };
 
-class GameWindow1 final : public BaseWindow {
+class GameWindow final : public BaseWindow {
 public:
     static constexpr auto Name = "game1";
-    int lvl;
-    GameScene* gameScene1;
-    GameWindow1() {
-        lvl = 1;
-        gameScene1 = NewGameScene("map/lvl1.tmx");
+    GameScene* gameScene;
+    GameWindow() {
         gameMusic1.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 9.ogg");
         gameMusic2.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 6.ogg");
         gameMusic1.setLoop(true);
@@ -122,14 +120,14 @@ public:
         ExitBtn->registerFunction(onExit);
         Buttons.push_back(ExitBtn);
     }
-    ~GameWindow1() = default;
+    ~GameWindow() = default;
 
     void input(sf::RenderWindow& window, sf::View & view) override {
         if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             if (!is_pause) is_pause = true;
         if (is_pause) 
             BaseWindow::input(window, view);
-        InputGameScene(gameScene1, window);
+        InputGameScene(gameScene, window);
     }
     void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) override {
         
@@ -138,82 +136,27 @@ public:
             BaseWindow::update(window, view, windowSize);
             return;
         }   
-        if (lvl ==1 && gameMusic1.getStatus() != sf::Music::Playing) {
+        if (lvl == 1 && gameMusic1.getStatus() != sf::Music::Playing) {
+            gameScene = NewGameScene("map/lvl1.tmx");
             playMusic(std::ref(gameMusic1), MusicVector);
             view.setSize(window.getSize().x / 2, window.getSize().y / 2);
-            gameScene1->playerBody->SetTransform(b2Vec2(35, 135), 0.f);//initial position of the player
+            gameScene->playerBody->SetTransform(b2Vec2(35, 135), 0.f);//initial position of the player
         }
-        world.Step(timeStep, velocityIterations, positionIterations);
-        UpdateGameScene(gameScene1, window, view, windowSize, lvl);
-
-        if (lvl == 2 && (gameMusic2.getStatus() != sf::Music::Playing)) {
-            gameScene1 = NewGameScene("map/lvl2.tmx");
+        else if (lvl == 2 && (gameMusic2.getStatus() != sf::Music::Playing)) {
+            gameScene = NewGameScene("map/lvl2.tmx");
             playMusic(std::ref(gameMusic2), MusicVector);
-        }
-    }
-    void draw(sf::RenderWindow& window) override {
-        DrawGameScene(gameScene1, window);
-        if (is_pause)
-            BaseWindow::draw(window);
-    }
-};
-#if 0
-class GameWindow2 final : public BaseWindow {
-public:
-    static constexpr auto Name = "game2";
-    int lvl;
-    GameScene* gameScene2;
-    GameWindow2() {
-        gameScene2 = NewGameScene("map/lvl2.tmx");
-        gameMusic2.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 6.ogg");
-        gameMusic2.setLoop(true);
-        auto* box = new Object{ "images/line.png", 0, 80 };
-        Objects.push_back(box);
-
-        auto* playBtn = new PushButton{ "images/play96.png", sf::FloatRect(sf::Vector2f(100,128),sf::Vector2f()) };
-        playBtn->registerFunction(onPause, std::ref(is_pause));
-        Buttons.push_back(playBtn);
-
-        auto* MenuBtn = new PushButton{ "images/menu96.png", sf::FloatRect(sf::Vector2f(250,128),sf::Vector2f()) };
-        MenuBtn->registerFunction(onMenu);
-        Buttons.push_back(MenuBtn);
-
-        auto* ExitBtn = new PushButton{ "images/exit96.png", sf::FloatRect(sf::Vector2f(550,128),sf::Vector2f()) };
-        ExitBtn->registerFunction(onExit);
-        Buttons.push_back(ExitBtn);
-    }
-    ~GameWindow2() = default;
-
-    void input(sf::RenderWindow& window, sf::View& view) override {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-            if (!is_pause) is_pause = true;
-        }
-        if (is_pause)
-            BaseWindow::input(window, view);
-        else 
-            InputGameScene(gameScene2, window);
-    }
-    void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) override {
-        if (is_pause) {
-            updatePauseScreen(view, Buttons, Objects);
-            BaseWindow::update(window, view, windowSize);
-            return;
-        }
-        if (gameMusic2.getStatus() != sf::Music::Playing) {
-            playMusic(gameMusic2, MusicVector);
             view.setSize(window.getSize().x / 2, window.getSize().y / 2);
-            gameScene2->playerBody->SetTransform(b2Vec2(35, 135), 0.f);
+            gameScene->playerBody->SetTransform(b2Vec2(35, 135), 0.f);//initial position of the player
         }
         world.Step(timeStep, velocityIterations, positionIterations);
-        UpdateGameScene(gameScene2, window, view, windowSize, lvl);
+        UpdateGameScene(gameScene, window, view, windowSize, lvl);
     }
     void draw(sf::RenderWindow& window) override {
-        DrawGameScene(gameScene2, window);
+        DrawGameScene(gameScene, window);
         if (is_pause)
             BaseWindow::draw(window);
     }
 };
-#endif
 class SettingsWindow final : public BaseWindow {
     std::vector<Object*> volume_set;
 public:
@@ -249,10 +192,10 @@ public:
         MenuBtn->registerFunction(onMenu);
         Buttons.push_back(MenuBtn);
         auto* oneBtn = new PushButton{ "images/1.png", sf::FloatRect(sf::Vector2f(100,100),sf::Vector2f()) };
-        oneBtn->registerFunction(onStartGame1);
+        oneBtn->registerFunction(onStartGame, std::ref(lvl), 1);
         Buttons.push_back(oneBtn);
         auto* twoBtn = new PushButton{ "images/2.png", sf::FloatRect(sf::Vector2f(300,100),sf::Vector2f()) };
-        twoBtn->registerFunction(onStartGame1);
+        twoBtn->registerFunction(onStartGame, std::ref(lvl), 2);
         Buttons.push_back(twoBtn);
     }
 };
