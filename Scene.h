@@ -14,10 +14,6 @@ struct GameScene{
     std::vector<TmxObject> coins;
     std::vector<b2Body*> coinBodies;
     std::vector<TmxObject> blocks;
-    float playerSpeed = 1000000.f;
-    float playerForce = 1000.f;
-    float playerImpulse = 1000000.f;
-    bool playerOnGround = false;
 };
 
 GameScene* NewGameScene(std::string file);

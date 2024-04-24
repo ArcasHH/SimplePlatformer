@@ -5,7 +5,7 @@ Game::Game(){
     windowSize.y = sf::VideoMode::getDesktopMode().height;
     window.create(sf::VideoMode(windowSize.x, windowSize.y), "Simple Game");
 
-    window.setVerticalSyncEnabled(true);
+    window.setVerticalSyncEnabled(false);
     window.setFramerateLimit(60);
 }
 
@@ -20,8 +20,6 @@ void Game::start() {
     Glob.addWindow<GameWindow2>(GameWindow2::Name);
 
     Glob.setCurrWindow(MenuWindow::Name);
-   
-
     
     g_clock.restart();
     while (window.isOpen()){
@@ -39,15 +37,11 @@ void Game::start() {
                 break;
             }
         }
-        
-   
-        //const sf::Time elapsedTime = clock.getElapsedTime();
-        //clock.restart();
-        //world.Step(timeStep, velocityIterations, positionIterations);
 
         CurrWindow->input(window, view);
-        
+       
         CurrWindow->update(window, view, windowSize);
+        window.setView(view);
 
         window.clear(sf::Color::Black);
         CurrWindow->draw(window);

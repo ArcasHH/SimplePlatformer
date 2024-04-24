@@ -2,7 +2,7 @@
 #include "Windows.h"
 #include <math.h>
 
-static const float PLAYER_SPEED = 400;
+static const float PLAYER_SPEED = 100000;
 void CreateStaticObjects(std::vector<TmxObject> vec, bool is_block = false) {
     for (int i = 0; i < vec.size(); ++i) {
         b2BodyDef bodyDef;
@@ -30,7 +30,7 @@ void CreatePlayerBody(GameScene* pLogic) {
     b2PolygonShape shape; shape.SetAsBox(pLogic->player.rect.width / 2, pLogic->player.rect.height / 2);
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &shape;
-    fixtureDef.density = 1.0f;
+    fixtureDef.density = 1.f;
     fixtureDef.friction = 1.0f;
     pLogic->playerBody->CreateFixture(&fixtureDef);
 }
@@ -64,20 +64,23 @@ GameScene* NewGameScene(std::string file){
 
 void InputGameScene(void* pData, sf::RenderWindow& window) {
     GameScene* pLogic = reinterpret_cast<GameScene*>(pData);
-    world.Step(1.0f / 60.0f, 8, 3);
+    world.Step(timeStep, velocityIterations, positionIterations);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        pLogic->playerBody->ApplyForceToCenter(b2Vec2((pLogic->playerSpeed), 0), true);
+        pLogic->playerBody->ApplyForceToCenter(b2Vec2(PLAYER_SPEED, 0), false);
+        //pLogic->playerBody->ApplyForceToCenter(gravity, true);
         pLogic->state.right = true;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-        pLogic->playerBody->ApplyForceToCenter(b2Vec2(-(pLogic->playerSpeed), 0), true);
+        pLogic->playerBody->ApplyForceToCenter(b2Vec2(-PLAYER_SPEED, 0), false);
+        //pLogic->playerBody->ApplyForceToCenter(gravity, true);
         pLogic->state.left = true;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-        pLogic->playerBody->ApplyForceToCenter(b2Vec2(0.f, -(pLogic->playerSpeed)), true);
+        b2Vec2 linV = pLogic->playerBody->GetLinearVelocity();
+        pLogic->playerBody->ApplyForceToCenter(b2Vec2(linV.x, linV.y-PLAYER_SPEED*100), false);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-        pLogic->playerBody->ApplyForceToCenter(b2Vec2(0.f, (pLogic->playerSpeed)), true);
+        pLogic->playerBody->ApplyForceToCenter(b2Vec2(0.f, PLAYER_SPEED), false);
     }      
 }
 void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize){
@@ -100,7 +103,7 @@ void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, cons
     }
     //pLogic->player.sprite.setTexture(pLogic->player.texture);
     b2Vec2 p = pLogic->playerBody->GetPosition();
-    if (p.x >= 980 && p.y < 150) {
+    if (p.x >= 980 && p.y < 150) { // condition for passing the level
         pLogic->playerBody->SetTransform(b2Vec2(104.5, 72.5), 0);
         pLogic->playerBody->SetLinearVelocity(b2Vec2(0.f, 0.f));
         Glob.setCurrWindow(GameWindow2::Name);
@@ -109,20 +112,17 @@ void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, cons
     float width = pLogic->player.rect.width;
     float height = pLogic->player.rect.height;
     pLogic->player.MoveTo(sf::Vector2f(p.x - width / 2, p.y + height / 2));
-    SetCameraCenter(window, view, pLogic->player.sprite.getPosition() + sf::Vector2f(0, 0));
- 
+    view.setCenter(pLogic->player.sprite.getPosition().x, pLogic->player.sprite.getPosition().y);
 }
 
 void DrawGameScene(void* pData, sf::RenderWindow &window){
     GameScene* pLogic = reinterpret_cast<GameScene*>(pData);
     sf::RenderTarget& target = window;
     pLogic->level.Draw(target);
-    for (const TmxObject& coin : pLogic->coins){
+    for (const TmxObject& coin : pLogic->coins)
         target.draw(coin.sprite);
-    }
-    for (const TmxObject& enemy : pLogic->enemies){
+    for (const TmxObject& enemy : pLogic->enemies)
         target.draw(enemy.sprite);
-    }
     target.draw(pLogic->player.sprite);
 }
 
@@ -130,9 +130,3 @@ void DestroyGameScene(GameScene*& pScene){
     delete pScene;
     pScene = nullptr;
 }
-
-void SetCameraCenter(sf::RenderWindow& window, sf::View& view, const sf::Vector2f& center) {
-    view.setCenter(center.x, center.y);
-    window.setView(view);
-}
-
