@@ -17,21 +17,6 @@ static std::string box_name = "box";
 
 static int level;
 
-class PlayerStates {
-public:
-	bool onGround;
-	bool left;
-	bool right;
-	bool up;
-	bool space ;
-	PlayerStates() {
-		onGround = true;
-		 left = false;
-		 right = false;
-		 up = false;
-		 space = false;
-	}
-};
 class Object {
 public:
 	sf::Texture texture;

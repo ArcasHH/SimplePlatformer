@@ -100,6 +100,7 @@ class GameWindow final : public BaseWindow {
 public:
     static constexpr auto Name = "game1";
     GameScene* gameScene;
+    //PlayerStates states;
     GameWindow() {
         gameMusic1.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 9.ogg");
         gameMusic1.setLoop(true);
