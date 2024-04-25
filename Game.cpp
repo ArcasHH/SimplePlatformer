@@ -1,5 +1,4 @@
 #include "Game.h"
-const int32 MS_PER_UPDATE = 16;
 Game::Game(){
     windowSize.x = sf::VideoMode::getDesktopMode().width;
     windowSize.y = sf::VideoMode::getDesktopMode().height;
@@ -20,8 +19,6 @@ void Game::start() {
 
     Glob.setCurrWindow(MenuWindow::Name);
     
-    int32 previous = clock.getElapsedTime().asMilliseconds();
-    int32 lag = 0;
     while (window.isOpen()){
         sf::Event event;
 
@@ -38,21 +35,14 @@ void Game::start() {
             }
         }
 
-        int32 current = clock.getElapsedTime().asMilliseconds();
-        int32 elapsed = current - previous;
-        previous = current;
-        lag += elapsed;
-
         CurrWindow->input(window, view);
 
-        while (lag >= MS_PER_UPDATE) {
-            CurrWindow->update(window, view, windowSize);
-            window.setView(view);
-            lag -= MS_PER_UPDATE;
-        }
+        CurrWindow->update(window, view, windowSize);
+        window.setView(view);
 
         window.clear(sf::Color::Black);
         CurrWindow->draw(window);
         window.display();
+
     }
 }

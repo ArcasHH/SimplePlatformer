@@ -120,7 +120,7 @@ void GameScene::ChangeTexture() {
     float dx = player.sprite.getPosition().x - prev_x;
     float dy = player.sprite.getPosition().y - prev_y;
 
-    if (dy < 0 && dx >0) {
+    if (dy < 0 && dx >=0) {
         SetSpriteTexture("images/hero/jump1.png");
         return;
     }
@@ -128,7 +128,7 @@ void GameScene::ChangeTexture() {
         SetSpriteTexture("images/hero/jump2.png");
         return;
     }
-    if (dy > 0 && dx > 0) {
+    if (dy > 0 && dx >= 0) {
         SetSpriteTexture("images/hero/fall1.png");
         return;
         
