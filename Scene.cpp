@@ -85,7 +85,7 @@ void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, cons
     pLogic->prev_x = pLogic->player.sprite.getPosition().x;
     pLogic->prev_y = pLogic->player.sprite.getPosition().y;
     b2Vec2 p = pLogic->playerBody->GetPosition();
-    if (p.x >= 500 && p.y < 150) { // condition for passing the level
+    if (p.x >= 980 && p.y < 150) { // condition for passing the level
         pLogic->playerBody->SetTransform(b2Vec2(104.5, 72.5), 0);
         pLogic->playerBody->SetLinearVelocity(b2Vec2(0.f, 0.f));
         lvl++;
@@ -93,8 +93,6 @@ void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, cons
     }
     pLogic->player.MoveTo(sf::Vector2f(p.x - pLogic->player.rect.width / 2, p.y + pLogic->player.rect.height / 2));
     pLogic->ChangeTexture();
-    
-    
     view.setCenter(pLogic->player.sprite.getPosition().x, pLogic->player.sprite.getPosition().y);
 }
 
@@ -122,22 +120,30 @@ void GameScene::ChangeTexture() {
     float dx = player.sprite.getPosition().x - prev_x;
     float dy = player.sprite.getPosition().y - prev_y;
 
-    if (dy < 0 && dx >=0) {
+    if (dy < 0 && dx >0) {
         SetSpriteTexture("images/hero/jump1.png");
+        return;
     }
     if (dy < 0 && dx < 0) {
         SetSpriteTexture("images/hero/jump2.png");
+        return;
     }
-    if (dy > 0 && dx >= 0) {
+    if (dy > 0 && dx > 0) {
         SetSpriteTexture("images/hero/fall1.png");
+        return;
+        
     }
     if (dy > 0 && dx < 0) {
         SetSpriteTexture("images/hero/fall2.png");
+        return;
     }
-    if (dx > 0 && dy == 0) {
-        SetSpriteTexture("images/hero/right.png");
-    }
-    if (dx < 0 && dy == 0) {
+    
+    if (dy == 0 && dx < 0) {
         SetSpriteTexture("images/hero/left.png");
+        return;
+    }
+    if (dy == 0 && dx >= 0) {
+        SetSpriteTexture("images/hero/right.png");
+        return;
     }
 }
