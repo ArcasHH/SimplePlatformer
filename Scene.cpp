@@ -2,7 +2,9 @@
 #include "Windows.h"
 #include <math.h>
 
-static const float PLAYER_SPEED = 100000;
+static const float PLAYER_SPEED = 10000000;
+static float PLAYER_SPEED_FOR_FRAME = PLAYER_SPEED;
+
 void CreateStaticObjects(std::vector<TmxObject> vec, bool is_block = false) {
     for (int i = 0; i < vec.size(); ++i) {
         b2BodyDef bodyDef;
@@ -67,20 +69,22 @@ void InputGameScene(void* pData, sf::RenderWindow& window) {
     world.Step(timeStep, velocityIterations, positionIterations);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        pLogic->playerBody->ApplyForceToCenter(b2Vec2(PLAYER_SPEED, 0), true);
+        pLogic->playerBody->ApplyForceToCenter(b2Vec2(PLAYER_SPEED_FOR_FRAME, 0), true);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-        pLogic->playerBody->ApplyForceToCenter(b2Vec2(-PLAYER_SPEED, 0), true);
+         pLogic->playerBody->ApplyForceToCenter(b2Vec2(-PLAYER_SPEED_FOR_FRAME, 0), true);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         b2Vec2 linV = pLogic->playerBody->GetLinearVelocity();
-        pLogic->playerBody->ApplyForceToCenter(b2Vec2(linV.x, linV.y-PLAYER_SPEED*100), true);
+        pLogic->playerBody->ApplyForceToCenter(b2Vec2(linV.x, linV.y - PLAYER_SPEED_FOR_FRAME*10), true);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-        pLogic->playerBody->ApplyForceToCenter(b2Vec2(0.f, PLAYER_SPEED), true);
+        pLogic->playerBody->ApplyForceToCenter(b2Vec2(0.f, PLAYER_SPEED_FOR_FRAME), true);
     }      
 }
-void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, int& lvl){
+void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, int& lvl, int32 loopTime){
+    PLAYER_SPEED_FOR_FRAME = PLAYER_SPEED * ( static_cast<float>(loopTime) + 1.f/frames);
+    //world.SetGravity(b2Vec2(0.f, world.GetGravity().y * (static_cast<float>(loopTime))));
     GameScene* pLogic = reinterpret_cast<GameScene*>(pData);
     pLogic->prev_x = pLogic->player.sprite.getPosition().x;
     pLogic->prev_y = pLogic->player.sprite.getPosition().y;

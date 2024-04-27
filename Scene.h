@@ -1,6 +1,14 @@
 #pragma once
 #include "Object.h"
 #include "GlobalState.h"
+static const float SCALE = 32.f;
+static const float DEG = 57.29578f;
+static int frames = 120;
+static const float timeStep = 1.f / frames;
+static const int32 velocityIterations = 8;
+static const int32 positionIterations = 3;
+static b2Vec2 gravity(0.f, 1.f*frames);
+static b2World world(gravity);
 
 struct GameView;
 class Game;
@@ -19,7 +27,7 @@ struct GameScene{
 
 GameScene* NewGameScene(std::string file);
 void InputGameScene(void* pData, sf::RenderWindow& window);
-void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, int &lvl);
+void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, int &lvl, int32 loopTime);
 void DrawGameScene(void* pData, sf::RenderWindow& window);
 void DestroyGameScene(GameScene*& pScene);
 static void SetCameraCenter(sf::RenderWindow& window, sf::View& view, const sf::Vector2f& center);

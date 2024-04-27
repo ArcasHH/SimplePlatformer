@@ -10,8 +10,6 @@ private:
     sf::View view;
     sf::Vector2f windowSize;
     sf::Clock clock;
-    int frames;
-
 public:
     Game();
     void start();  

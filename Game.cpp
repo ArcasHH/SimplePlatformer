@@ -3,9 +3,8 @@ Game::Game(){
     windowSize.x = sf::VideoMode::getDesktopMode().width;
     windowSize.y = sf::VideoMode::getDesktopMode().height;
     window.create(sf::VideoMode(windowSize.x, windowSize.y), "Simple Game");
-
     window.setVerticalSyncEnabled(false);
-    window.setFramerateLimit(120);
+    window.setFramerateLimit(frames);
 }
 
 void Game::start() {
@@ -18,10 +17,12 @@ void Game::start() {
     Glob.addWindow<GameWindow>(GameWindow::Name);
 
     Glob.setCurrWindow(MenuWindow::Name);
-    
+    clock.restart();
+    float loopTime = static_cast<float>(clock.getElapsedTime().asMilliseconds()+1)/frames;
     while (window.isOpen()){
+        //clock.restart();
         sf::Event event;
-
+        
         BaseWindow* CurrWindow = Glob.getCurrWindow();
         if (!CurrWindow) {
             window.close();
@@ -36,13 +37,16 @@ void Game::start() {
         }
 
         CurrWindow->input(window, view);
-
-        CurrWindow->update(window, view, windowSize);
+        
+        
+        CurrWindow->update(window, view, windowSize, loopTime);
         window.setView(view);
 
         window.clear(sf::Color::Black);
         CurrWindow->draw(window);
         window.display();
+        clock.restart();
+        loopTime = static_cast<float>(clock.getElapsedTime().asMilliseconds()+1)/frames;
 
     }
 }

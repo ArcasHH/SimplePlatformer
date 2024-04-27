@@ -29,6 +29,8 @@ void playMusic(sf::Music& music, std::vector<sf::Music*> mvec);
 static bool is_pause = false;
 static int lvl = 1;
 
+
+
 class BaseWindow {
 protected:
     std::vector<Object*> Objects;
@@ -47,7 +49,7 @@ public:
         for (auto&& Obj : Buttons) 
             Obj->input(window, view);
     }
-    virtual void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) {
+    virtual void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, float loopTime) {
         for (auto&& Obj : Buttons)
             Obj->update(window, view);
     }
@@ -86,13 +88,13 @@ public:
         ExitBtn->registerFunction(onExit);
         Buttons.push_back(ExitBtn);
     }
-    void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) override {
+    void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, float loopTime) override {
         if (menuMusic.getStatus() != sf::Music::Playing) { //once when window changes
             playMusic(menuMusic, MusicVector);
             view.reset(sf::FloatRect(0.0f, 0.0f, windowSize.x, windowSize.y));
             is_pause = false;
         }
-        BaseWindow::update(window, view, windowSize);
+        BaseWindow::update(window, view, windowSize, loopTime);
     }
 };
 
@@ -131,11 +133,11 @@ public:
             BaseWindow::input(window, view);
         InputGameScene(gameScene, window);
     }
-    void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) override {
+    void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, float loopTime) override {
         
         if (is_pause) {
             updatePauseScreen(view, Buttons, Objects);
-            BaseWindow::update(window, view, windowSize);
+            BaseWindow::update(window, view, windowSize, loopTime);
             return;
         }   
         SetLevel(std::ref(lvl), 1, std::ref(gameMusic1), std::ref(MusicVector), std::ref(gameScene));
@@ -143,7 +145,7 @@ public:
         if(view.getSize().x != window.getSize().x / 2)
             view.setSize(window.getSize().x / 2, window.getSize().y / 2);
         world.Step(timeStep, velocityIterations, positionIterations);
-        UpdateGameScene(gameScene, window, view, windowSize, lvl);
+        UpdateGameScene(gameScene, window, view, windowSize, lvl, loopTime);
     }
     void draw(sf::RenderWindow& window) override {
         DrawGameScene(gameScene, window);

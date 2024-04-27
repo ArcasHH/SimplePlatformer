@@ -5,14 +5,9 @@
 #include <vector>
 #include <map>
 
-static const float SCALE = 32.f;
-static const float DEG = 57.29578f;
-static const float timeStep = 1.f / 60.f;
-static const int32 velocityIterations = 6;
-static const int32 positionIterations = 2;
 
-static b2Vec2 gravity(0.f, 100.f);
-static b2World world(gravity);
+
+
 static std::string box_name = "box";
 
 static int level;
