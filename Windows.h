@@ -109,6 +109,10 @@ public:
         gameMusic2.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 6.ogg");   
         gameMusic2.setLoop(true);
 
+        auto* light = new Object{ "images/light.png", 0, 80 };
+        Objects.push_back(light);
+
+
         auto* box = new Object{ "images/line.png", 0, 80 };
         Objects.push_back(box);
 
@@ -134,7 +138,8 @@ public:
         InputGameScene(gameScene, window);
     }
     void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, float loopTime) override {
-        
+        sf::Vector2f view_center = view.getCenter();
+        Objects[0]->sprite.setPosition(view_center.x - view.getSize().x+8 , view_center.y - view.getSize().y -4);
         if (is_pause) {
             updatePauseScreen(view, Buttons, Objects);
             BaseWindow::update(window, view, windowSize, loopTime);
@@ -149,10 +154,12 @@ public:
     }
     void draw(sf::RenderWindow& window) override {
         DrawGameScene(gameScene, window);
+        Objects[0]->draw(window);
         if (is_pause)
-            BaseWindow::draw(window);
+           BaseWindow::draw(window);
     }
 };
+
 class SettingsWindow final : public BaseWindow {
     std::vector<Object*> volume_set;
 public:

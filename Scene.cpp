@@ -76,7 +76,7 @@ void InputGameScene(void* pData, sf::RenderWindow& window) {
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         b2Vec2 linV = pLogic->playerBody->GetLinearVelocity();
-        pLogic->playerBody->ApplyForceToCenter(b2Vec2(linV.x, linV.y - PLAYER_SPEED_FOR_FRAME*10), true);
+        pLogic->playerBody->ApplyForceToCenter(b2Vec2(linV.x, linV.y - PLAYER_SPEED_FOR_FRAME*5), true);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
         pLogic->playerBody->ApplyForceToCenter(b2Vec2(0.f, PLAYER_SPEED_FOR_FRAME), true);

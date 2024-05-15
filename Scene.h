@@ -30,4 +30,4 @@ void InputGameScene(void* pData, sf::RenderWindow& window);
 void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, int &lvl, int32 loopTime);
 void DrawGameScene(void* pData, sf::RenderWindow& window);
 void DestroyGameScene(GameScene*& pScene);
-static void SetCameraCenter(sf::RenderWindow& window, sf::View& view, const sf::Vector2f& center);
+void SetCameraCenter(sf::RenderWindow& window, sf::View& view, const sf::Vector2f& center);
