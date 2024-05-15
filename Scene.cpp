@@ -111,7 +111,10 @@ void UpdateGameScene(GameScene* pLogic, sf::RenderWindow& window, sf::View& view
             for (int j = 0; j < pLogic->coinBodies.size(); ++j) {
                 pLogic->coinBodies[j]->SetTransform(b2Vec2(pLogic->coins[j].start_pos.x, pLogic->coins[j].start_pos.y), 0);
             }
-            lvl++;
+            if (lvl == num_levels)
+                lvl = 1;
+            else
+                ++lvl;
             return;
         }
     }
