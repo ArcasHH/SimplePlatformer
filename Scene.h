@@ -10,6 +10,8 @@ static const float timeStep = 1.f / frames;
 struct GameView;
 class Game;
 struct GameScene{
+    GameScene(const std::string& file);
+
     TmxLevel level;
     TmxObject player;
     float prev_x, prev_y;
@@ -34,7 +36,6 @@ struct GameScene{
     void ChangeTexture();
 };
 
-std::unique_ptr<GameScene> NewGameScene(std::string file);
 void InputGameScene(GameScene* pData, sf::RenderWindow& window);
 void UpdateGameScene(GameScene* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, int &lvl, int32 loopTime);
 void DrawGameScene(GameScene* pData, sf::RenderWindow& window);

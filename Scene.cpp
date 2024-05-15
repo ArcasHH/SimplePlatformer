@@ -62,20 +62,16 @@ static sf::Vector2f Round(const sf::Vector2f& value){
     return sf::Vector2f(roundf(value.x), roundf(value.y));
 }
 
-std::unique_ptr<GameScene> NewGameScene(std::string file){
-    std::unique_ptr<GameScene> pLogic = std::make_unique<GameScene>();
-    TmxLevel& level = pLogic->level;
-    
+GameScene::GameScene(const std::string & file){
     level.LoadFromFile(file);
-    pLogic->player = level.GetFirstObject("player");
-    pLogic->player.start_pos = pLogic->player.sprite.getPosition();
-    pLogic->CreatePlayerBody();
-    pLogic->coins = level.GetAllObjects("coin");
-    pLogic->CreateCoinsObjects();
+    player = level.GetFirstObject("player");
+    player.start_pos = player.sprite.getPosition();
+    CreatePlayerBody();
+    coins = level.GetAllObjects("coin");
+    CreateCoinsObjects();
     //pLogic->enemies = level.GetAllObjects("enemy");
-    pLogic->blocks = level.GetAllObjects("block");
-    pLogic->CreateStaticObjects();
-    return pLogic;
+    blocks = level.GetAllObjects("block");
+    CreateStaticObjects();
 }
 
 
