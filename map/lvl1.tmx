@@ -14368,7 +14368,7 @@
   </data>
  </layer>
  <objectgroup id="8" name="объекты">
-  <object id="1" name="player" gid="385" x="30.5" y="76" width="16" height="16"/>
+  <object id="1" name="player" gid="385" x="39" y="129" width="16" height="16"/>
   <object id="2" name="block" x="-0.5" y="-2" width="978.5" height="16"/>
   <object id="4" name="block" x="672.5" y="11.5" width="30" height="82.5"/>
   <object id="5" name="block" x="767.5" y="48" width="32" height="143"/>

@@ -80,8 +80,7 @@ GameScene* NewGameScene(std::string file){
 
 
 
-void InputGameScene(void* pData, sf::RenderWindow& window) {
-    GameScene* pLogic = reinterpret_cast<GameScene*>(pData);
+void InputGameScene(GameScene* pLogic, sf::RenderWindow& window) {
     pLogic->world.Step(timeStep, pLogic->velocityIterations, pLogic->positionIterations);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
@@ -98,10 +97,9 @@ void InputGameScene(void* pData, sf::RenderWindow& window) {
         pLogic->playerBody->ApplyForceToCenter(b2Vec2(0.f, PLAYER_SPEED_FOR_FRAME * 5), true);
     }      
 }
-void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, int& lvl, int32 loopTime){
+void UpdateGameScene(GameScene* pLogic, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, int& lvl, int32 loopTime){
     PLAYER_SPEED_FOR_FRAME = PLAYER_SPEED * ( static_cast<float>(loopTime) + 1.f/frames);
     //world.SetGravity(b2Vec2(0.f, world.GetGravity().y * (static_cast<float>(loopTime))));
-    GameScene* pLogic = reinterpret_cast<GameScene*>(pData);
     pLogic->prev_x = pLogic->player.sprite.getPosition().x;
     pLogic->prev_y = pLogic->player.sprite.getPosition().y;
     b2Vec2 p = pLogic->playerBody->GetPosition();
@@ -125,8 +123,7 @@ void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, cons
     view.setCenter(pLogic->player.sprite.getPosition().x, pLogic->player.sprite.getPosition().y);
 }
 
-void DrawGameScene(void* pData, sf::RenderWindow &window){
-    GameScene* pLogic = reinterpret_cast<GameScene*>(pData);
+void DrawGameScene(GameScene* pLogic, sf::RenderWindow &window){
     sf::RenderTarget& target = window;
     pLogic->level.Draw(target);
     for (const TmxObject& coin : pLogic->coins)

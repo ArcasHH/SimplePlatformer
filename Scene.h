@@ -35,8 +35,8 @@ struct GameScene{
 };
 
 GameScene* NewGameScene(std::string file);
-void InputGameScene(void* pData, sf::RenderWindow& window);
-void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, int &lvl, int32 loopTime);
-void DrawGameScene(void* pData, sf::RenderWindow& window);
+void InputGameScene(GameScene* pData, sf::RenderWindow& window);
+void UpdateGameScene(GameScene* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, int &lvl, int32 loopTime);
+void DrawGameScene(GameScene* pData, sf::RenderWindow& window);
 void DestroyGameScene(GameScene*& pScene);
 void SetCameraCenter(sf::RenderWindow& window, sf::View& view, const sf::Vector2f& center);
