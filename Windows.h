@@ -18,7 +18,7 @@ void downVolume(std::vector<sf::Music*> mvec);
 void upVolume(std::vector<sf::Music*> mvec);
 
 void updatePauseScreen(sf::View& view, std::vector<PushButton*>& Buttons, std::vector<Object*>& Objects);
-void SetLevel(int& level, int l, sf::Music& music, std::vector<sf::Music*> mvec, GameScene* &gameScene);
+void SetLevel(int level, int l, sf::Music& music, std::vector<sf::Music*> mvec, std::unique_ptr<GameScene> &gameScene);
 // music
 static sf::Music menuMusic;
 static sf::Music gameMusic1;
@@ -102,7 +102,7 @@ public:
 class GameWindow final : public BaseWindow {
 public:
     static constexpr auto Name = "game1";
-    GameScene* gameScene;
+    std::unique_ptr<GameScene> gameScene;
     std::vector <sf::Music> gameMusic{num_levels+1};
     //PlayerStates states;
     GameWindow() {
@@ -112,7 +112,7 @@ public:
             gameMusic[i].setLoop(true);
             MusicVector.push_back(&gameMusic[i]);
         }
-        SetLevel(std::ref(lvl), 1, std::ref(gameMusic[1]), std::ref(MusicVector), std::ref(gameScene));
+        SetLevel(lvl, 1, gameMusic[1], MusicVector, gameScene);
 
         auto* light = new Object{ "images/light.png", 0, 80 };
         Objects.push_back(light);
@@ -140,7 +140,7 @@ public:
             if (!is_pause) is_pause = true;
         if (is_pause) 
             BaseWindow::input(window, view);
-        InputGameScene(gameScene, window);
+        InputGameScene(gameScene.get(), window);
     }
     void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, float loopTime) override {
         sf::Vector2f view_center = view.getCenter();
@@ -151,16 +151,16 @@ public:
             return;
         } 
         for (int i = 1; i <= num_levels; ++i) {
-            SetLevel(std::ref(lvl), i, std::ref(gameMusic[i]), std::ref(MusicVector), std::ref(gameScene));
+            SetLevel(lvl, i, gameMusic[i], MusicVector, gameScene);
         }
 
         if(view.getSize().x != window.getSize().x / 2)
             view.setSize(window.getSize().x / 2, window.getSize().y / 2);
         gameScene->world.Step(timeStep, gameScene->velocityIterations, gameScene->positionIterations);
-        UpdateGameScene(gameScene, window, view, windowSize, lvl, loopTime);
+        UpdateGameScene(gameScene.get(), window, view, windowSize, lvl, loopTime);
     }
     void draw(sf::RenderWindow& window) override {
-        DrawGameScene(gameScene, window);
+        DrawGameScene(gameScene.get(), window);
         Objects[0]->draw(window);
         if (is_pause)
            BaseWindow::draw(window);

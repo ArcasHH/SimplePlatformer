@@ -34,7 +34,7 @@ struct GameScene{
     void ChangeTexture();
 };
 
-GameScene* NewGameScene(std::string file);
+std::unique_ptr<GameScene> NewGameScene(std::string file);
 void InputGameScene(GameScene* pData, sf::RenderWindow& window);
 void UpdateGameScene(GameScene* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, int &lvl, int32 loopTime);
 void DrawGameScene(GameScene* pData, sf::RenderWindow& window);

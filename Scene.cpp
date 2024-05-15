@@ -62,8 +62,8 @@ static sf::Vector2f Round(const sf::Vector2f& value){
     return sf::Vector2f(roundf(value.x), roundf(value.y));
 }
 
-GameScene* NewGameScene(std::string file){
-    GameScene* pLogic = new GameScene;
+std::unique_ptr<GameScene> NewGameScene(std::string file){
+    std::unique_ptr<GameScene> pLogic = std::make_unique<GameScene>();
     TmxLevel& level = pLogic->level;
     
     level.LoadFromFile(file);
