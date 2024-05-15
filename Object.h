@@ -64,6 +64,8 @@ public:
 	OnClickFunc OnClick;
 
 	PushButton(std::string file, sf::FloatRect area = sf::FloatRect(), sf::Color b_color = sf::Color(200,157,100), sf::Color c_color = sf::Color(154, 182, 154));
+	PushButton() {};
+	void setButton(PushButton *btn, std::string file, sf::FloatRect r, sf::Color b_color = sf::Color(200, 157, 100), sf::Color c_color = sf::Color(154, 182, 154));
 	~PushButton() = default;
 
 	void input(sf::RenderWindow& window, sf::View& view);

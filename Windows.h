@@ -23,12 +23,13 @@ void SetLevel(int& level, int l, sf::Music& music, std::vector<sf::Music*> mvec,
 static sf::Music menuMusic;
 static sf::Music gameMusic1;
 static sf::Music gameMusic2;
-static std::vector<sf::Music*> MusicVector = { &menuMusic, &gameMusic1, &gameMusic2 };
+
+static std::vector<sf::Music*> MusicVector = { &menuMusic};
 void playMusic(sf::Music& music, std::vector<sf::Music*> mvec);
 
 static bool is_pause = false;
-static int lvl = 1;
-
+static int lvl = 1;// уровень по умолчанию
+static int num_levels = 3;// кол-во уровней. изменить при добавлении нового уровня на +1. Также в levelWindow можно добавить соответствующую кнопку
 
 
 class BaseWindow {
@@ -102,12 +103,14 @@ class GameWindow final : public BaseWindow {
 public:
     static constexpr auto Name = "game1";
     GameScene* gameScene;
+    std::vector <sf::Music> gameMusic{num_levels+1};
     //PlayerStates states;
     GameWindow() {
-        gameMusic1.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 9.ogg");
-        gameMusic1.setLoop(true);
-        gameMusic2.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 6.ogg");   
-        gameMusic2.setLoop(true);
+        for (int i = 0; i <= num_levels ; ++i) {
+            gameMusic[i].openFromFile("audio/Pixel Music Pack/Ogg/Pixel " + std::to_string(i%12 + 1) +".ogg");
+            gameMusic[i].setLoop(true);
+            MusicVector.push_back(&gameMusic[i]);
+        }
 
         auto* light = new Object{ "images/light.png", 0, 80 };
         Objects.push_back(light);
@@ -144,9 +147,11 @@ public:
             updatePauseScreen(view, Buttons, Objects);
             BaseWindow::update(window, view, windowSize, loopTime);
             return;
-        }   
-        SetLevel(std::ref(lvl), 1, std::ref(gameMusic1), std::ref(MusicVector), std::ref(gameScene));
-        SetLevel(std::ref(lvl), 2, std::ref(gameMusic2), std::ref(MusicVector), std::ref(gameScene));
+        } 
+        for (int i = 1; i <= num_levels; ++i) {
+            SetLevel(std::ref(lvl), i, std::ref(gameMusic[i]), std::ref(MusicVector), std::ref(gameScene));
+        }
+
         if(view.getSize().x != window.getSize().x / 2)
             view.setSize(window.getSize().x / 2, window.getSize().y / 2);
         world.Step(timeStep, velocityIterations, positionIterations);
@@ -194,15 +199,15 @@ public:
 class LevelWindow final : public BaseWindow {
 public:
     static constexpr auto Name = "level";
+    std::vector<PushButton> pButtons{num_levels};
     LevelWindow() {
         auto* MenuBtn = new PushButton{ "images/backBTN.png", sf::FloatRect(sf::Vector2f(100,768),sf::Vector2f()) };
         MenuBtn->registerFunction(onMenu);
         Buttons.push_back(MenuBtn);
-        auto* oneBtn = new PushButton{ "images/1.png", sf::FloatRect(sf::Vector2f(100,100),sf::Vector2f()) };
-        oneBtn->registerFunction(onStartGame, std::ref(lvl), 1);
-        Buttons.push_back(oneBtn);
-        auto* twoBtn = new PushButton{ "images/2.png", sf::FloatRect(sf::Vector2f(300,100),sf::Vector2f()) };
-        twoBtn->registerFunction(onStartGame, std::ref(lvl), 2);
-        Buttons.push_back(twoBtn);
+        for (int i = 1; i <= num_levels; ++i) {
+            pButtons[i - 1].setButton(&pButtons[i - 1], "images/" + std::to_string(i) + ".png", sf::FloatRect(sf::Vector2f(100 + 200 * (i - 1), 100), sf::Vector2f()));
+            pButtons[i - 1].registerFunction(onStartGame, std::ref(lvl), i);
+            Buttons.push_back(&pButtons[i-1]);
+        }
     }
 };

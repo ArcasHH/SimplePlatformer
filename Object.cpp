@@ -33,6 +33,18 @@ PushButton::PushButton(std::string file,sf::FloatRect r, sf::Color b_color, sf::
 	clicked_color = c_color;
 	is_clicked = false;
 }
+void PushButton::setButton(PushButton *btn, std::string file, sf::FloatRect r, sf::Color b_color, sf::Color c_color) {
+	
+	btn->rect = r;
+	btn->texture.loadFromFile(file);
+	btn->rect.width = btn->texture.getSize().x;
+	btn->rect.height = btn->texture.getSize().y;
+	btn->sprite.setTexture(btn->texture, &btn->rect);
+	btn->sprite.setPosition(btn->rect.left, btn->rect.top);
+	btn->base_color = b_color;
+	btn->clicked_color = c_color;
+	btn->is_clicked = false;
+}
 void PushButton::input(sf::RenderWindow& window, sf::View& view) {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		if (is_pos(window, view))
