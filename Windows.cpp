@@ -66,6 +66,6 @@ void SetLevel(int& level,int l, sf::Music& music, std::vector<sf::Music*> mvec, 
     if (level == l && music.getStatus() != sf::Music::Playing) {
         gameScene = NewGameScene("map/lvl" + std::to_string(level) + ".tmx");
         playMusic(std::ref(music), mvec);
-        gameScene->playerBody->SetTransform(b2Vec2(35, 135), 0.f);//initial position of the player
+        gameScene->playerBody->SetTransform(b2Vec2(gameScene->player.start_pos.x, gameScene->player.start_pos.y), 0.f);//initial position of the player
     }
 }

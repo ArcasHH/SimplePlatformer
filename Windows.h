@@ -106,11 +106,13 @@ public:
     std::vector <sf::Music> gameMusic{num_levels+1};
     //PlayerStates states;
     GameWindow() {
+        //GameScene = NewGameScene();
         for (int i = 0; i <= num_levels ; ++i) {
             gameMusic[i].openFromFile("audio/Pixel Music Pack/Ogg/Pixel " + std::to_string(i%12 + 1) +".ogg");
             gameMusic[i].setLoop(true);
             MusicVector.push_back(&gameMusic[i]);
         }
+        SetLevel(std::ref(lvl), 1, std::ref(gameMusic[1]), std::ref(MusicVector), std::ref(gameScene));
 
         auto* light = new Object{ "images/light.png", 0, 80 };
         Objects.push_back(light);
@@ -154,7 +156,7 @@ public:
 
         if(view.getSize().x != window.getSize().x / 2)
             view.setSize(window.getSize().x / 2, window.getSize().y / 2);
-        world.Step(timeStep, velocityIterations, positionIterations);
+        gameScene->world.Step(timeStep, gameScene->velocityIterations, gameScene->positionIterations);
         UpdateGameScene(gameScene, window, view, windowSize, lvl, loopTime);
     }
     void draw(sf::RenderWindow& window) override {

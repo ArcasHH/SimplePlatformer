@@ -5,7 +5,8 @@
 static const float PLAYER_SPEED = 10000000;
 static float PLAYER_SPEED_FOR_FRAME = PLAYER_SPEED;
 
-void CreateStaticObjects(std::vector<TmxObject> vec) {
+void GameScene::CreateStaticObjects() {
+    auto& vec = blocks;
     for (int i = 0; i < vec.size(); ++i) {
         b2BodyDef bodyDef;
         
@@ -19,35 +20,36 @@ void CreateStaticObjects(std::vector<TmxObject> vec) {
         body->CreateFixture(&shape, 0.0f);
     }
 }
-void CreateCoinsObjects(GameScene* pLogic, std::vector<TmxObject> vec) {
-    for (int i = 0; i < vec.size(); ++i) {
+void GameScene::CreateCoinsObjects() {
+    for (int i = 0; i < coins.size(); ++i) {
         b2BodyDef bodyDef;
 
         bodyDef.type = b2_dynamicBody;
-        bodyDef.position.Set((vec[i].rect.left + (vec[i].rect.width) / 2),
-            (vec[i].rect.top - (vec[i].rect.height) / 2));
+        bodyDef.position.Set((coins[i].rect.left + (coins[i].rect.width) / 2),
+            (coins[i].rect.top - (coins[i].rect.height) / 2));
         //b2Body* body = world.CreateBody(&bodyDef);
-        pLogic->coinBodies.push_back(world.CreateBody(&bodyDef));
+        coinBodies.push_back(world.CreateBody(&bodyDef));
         b2PolygonShape shape;
-        shape.SetAsBox(vec[i].rect.width / 2, vec[i].rect.height / 2);
-        pLogic->coinBodies[i]->CreateFixture(&shape, 1.0f);
+        shape.SetAsBox(coins[i].rect.width / 2, coins[i].rect.height / 2);
+        coinBodies[i]->CreateFixture(&shape, 0.0f);
+        coins[i].start_pos = sf::Vector2f(coinBodies[i]->GetPosition().x, coinBodies[i]->GetPosition().y);
     }
 }
-void CreatePlayerBody(GameScene* pLogic) {
+void GameScene::CreatePlayerBody() {
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set((pLogic->player.rect.left + (pLogic->player.rect.width) / 2),
-        (pLogic->player.rect.top - (pLogic->player.rect.height) / 2));
+    bodyDef.position.Set((player.rect.left + (player.rect.width) / 2),
+        (player.rect.top - (player.rect.height) / 2));
     bodyDef.fixedRotation = true;
 
-    pLogic->playerBody = world.CreateBody(&bodyDef);
+    playerBody = world.CreateBody(&bodyDef);
     b2PolygonShape shape; 
-    shape.SetAsBox(pLogic->player.rect.width / 2, pLogic->player.rect.height / 2);
+    shape.SetAsBox(player.rect.width / 2, player.rect.height / 2);
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &shape;
     fixtureDef.density = 1.f;
     fixtureDef.friction = 1.0f;
-    pLogic->playerBody->CreateFixture(&fixtureDef);
+    playerBody->CreateFixture(&fixtureDef);
 }
 static sf::Vector2f Normalize(const sf::Vector2f& value){
     const float length = std::hypotf(value.x, value.y);
@@ -66,12 +68,13 @@ GameScene* NewGameScene(std::string file){
     
     level.LoadFromFile(file);
     pLogic->player = level.GetFirstObject("player");
-    CreatePlayerBody(pLogic);
+    pLogic->player.start_pos = pLogic->player.sprite.getPosition();
+    pLogic->CreatePlayerBody();
     pLogic->coins = level.GetAllObjects("coin");
-    CreateCoinsObjects(pLogic, pLogic->coins);
+    pLogic->CreateCoinsObjects();
     //pLogic->enemies = level.GetAllObjects("enemy");
     pLogic->blocks = level.GetAllObjects("block");
-    CreateStaticObjects(pLogic->blocks);
+    pLogic->CreateStaticObjects();
     return pLogic;
 }
 
@@ -79,7 +82,7 @@ GameScene* NewGameScene(std::string file){
 
 void InputGameScene(void* pData, sf::RenderWindow& window) {
     GameScene* pLogic = reinterpret_cast<GameScene*>(pData);
-    world.Step(timeStep, velocityIterations, positionIterations);
+    pLogic->world.Step(timeStep, pLogic->velocityIterations, pLogic->positionIterations);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         pLogic->playerBody->ApplyForceToCenter(b2Vec2(PLAYER_SPEED_FOR_FRAME, 0), true);
@@ -102,16 +105,18 @@ void UpdateGameScene(void* pData, sf::RenderWindow& window, sf::View& view, cons
     pLogic->prev_x = pLogic->player.sprite.getPosition().x;
     pLogic->prev_y = pLogic->player.sprite.getPosition().y;
     b2Vec2 p = pLogic->playerBody->GetPosition();
+    pLogic->player.MoveTo(sf::Vector2f(p.x - 8, p.y + 8));
 
-    
-    pLogic->player.MoveTo(sf::Vector2f(p.x - pLogic->player.rect.width / 2, p.y + pLogic->player.rect.height / 2));
     for (int i = 0; i < pLogic->coinBodies.size(); ++i) {
         b2Vec2 c = pLogic->coinBodies[i]->GetPosition();
-        pLogic->coins[i].MoveTo(sf::Vector2f(c.x - pLogic->coins[i].rect.width / 2, c.y + pLogic->coins[i].rect.height / 2));
-        
+        pLogic->coins[i].MoveTo(sf::Vector2f(c.x - 8 , c.y + 8));
+
         if (pLogic->coins[i].rect.intersects(pLogic->player.rect)) { // condition for passing the level
-            pLogic->playerBody->SetTransform(b2Vec2(104.5, 72.5), 0);
+            pLogic->playerBody->SetTransform(b2Vec2(pLogic->player.start_pos.x, pLogic->player.start_pos.y), 0);
             pLogic->playerBody->SetLinearVelocity(b2Vec2(0.f, 0.f));
+            for (int j = 0; j < pLogic->coinBodies.size(); ++j) {
+                pLogic->coinBodies[j]->SetTransform(b2Vec2(pLogic->coins[j].start_pos.x, pLogic->coins[j].start_pos.y), 0);
+            }
             lvl++;
             return;
         }

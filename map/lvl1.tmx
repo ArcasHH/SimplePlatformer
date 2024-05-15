@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="left-up" width="64" height="32" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="67">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="left-up" width="64" height="32" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="80">
  <tileset firstgid="1" name="Day" tilewidth="16" tileheight="16" tilecount="512" columns="32">
   <image source="Day.png" width="512" height="256"/>
  </tileset>
@@ -14420,5 +14420,12 @@
   <object id="64" name="coin" gid="289" x="975.5" y="145.5" width="16" height="16"/>
   <object id="65" name="block" x="177" y="305" width="95" height="45"/>
   <object id="66" name="coin" gid="289" x="36" y="42" width="16" height="16"/>
+  <object id="67" name="coin" gid="289" x="207" y="51" width="16" height="16"/>
+  <object id="74" name="coin" gid="289" x="204.5" y="70" width="16" height="16"/>
+  <object id="75" name="coin" gid="289" x="222.5" y="103" width="16" height="16"/>
+  <object id="76" name="coin" gid="289" x="278" y="65" width="16" height="16"/>
+  <object id="77" name="coin" gid="289" x="237.5" y="49" width="16" height="16"/>
+  <object id="78" name="coin" gid="289" x="252.5" y="87" width="16" height="16"/>
+  <object id="79" name="coin" gid="289" x="246" y="117" width="16" height="16"/>
  </objectgroup>
 </map>

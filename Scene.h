@@ -5,10 +5,7 @@ static const float SCALE = 32.f;
 static const float DEG = 57.29578f;
 static int frames = 120;
 static const float timeStep = 1.f / frames;
-static const int32 velocityIterations = 8;
-static const int32 positionIterations = 3;
-static b2Vec2 gravity(0.f, 1.f*frames);
-static b2World world(gravity);
+
 
 struct GameView;
 class Game;
@@ -21,6 +18,18 @@ struct GameScene{
     std::vector<TmxObject> coins;
     std::vector<b2Body*> coinBodies;
     std::vector<TmxObject> blocks;
+
+    const int32 velocityIterations = 8;
+    const int32 positionIterations = 3;
+    b2Vec2 gravity{ 0.f, 1.f * frames };
+    b2World world{ gravity };
+
+    void CreateStaticObjects();
+    void CreateCoinsObjects();
+    void CreatePlayerBody();
+
+
+
     void SetSpriteTexture(std::string file);
     void ChangeTexture();
 };

@@ -30,7 +30,7 @@ public:
 
 class TmxObject : public Object {
 public:
-
+	sf::Vector2f start_pos;
 	std::string name;
 	std::string type;
 	std::map<std::string, std::string> properties;
