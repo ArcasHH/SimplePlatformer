@@ -1,7 +1,9 @@
 #include "Game.h"
 Game::Game(){
-    windowSize.x = sf::VideoMode::getDesktopMode().width;
-    windowSize.y = sf::VideoMode::getDesktopMode().height;
+    //windowSize.x = sf::VideoMode::getDesktopMode().width;
+    //windowSize.y = sf::VideoMode::getDesktopMode().height;
+    windowSize.x = 1920;
+    windowSize.y = 1080;
     window.create(sf::VideoMode(windowSize.x, windowSize.y), "Simple Game");
     window.setVerticalSyncEnabled(false);
     window.setFramerateLimit(frames);

@@ -29,7 +29,7 @@ void playMusic(sf::Music& music, std::vector<sf::Music*> mvec);
 
 static bool is_pause = false;
 static int lvl = 1;// уровень по умолчанию
-static int num_levels = 3;// кол-во уровней. изменить при добавлении нового уровня на +1. Также в levelWindow можно добавить соответствующую кнопку
+static int num_levels = 4;// кол-во уровней. изменить при добавлении нового уровня на +1. Также в levelWindow можно добавить соответствующую кнопку
 
 
 class BaseWindow {
@@ -142,7 +142,7 @@ public:
     }
     void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, float loopTime) override {
         sf::Vector2f view_center = view.getCenter();
-        Objects[0]->sprite.setPosition(view_center.x - view.getSize().x+8 , view_center.y - view.getSize().y -4);
+        Objects[0]->sprite.setPosition(view_center.x -  windowSize.x/2 +8, view_center.y - windowSize.y/2-8);
         if (is_pause) {
             updatePauseScreen(view, Buttons, Objects);
             BaseWindow::update(window, view, windowSize, loopTime);

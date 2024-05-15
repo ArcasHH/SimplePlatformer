@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="left-up" width="64" height="32" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="64">
- <tileset firstgid="1" name="Night" tilewidth="16" tileheight="16" tilecount="512" columns="32">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="left-up" width="64" height="32" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="66">
+ <tileset firstgid="1" name="Day" tilewidth="16" tileheight="16" tilecount="512" columns="32">
   <image source="Night.png" width="512" height="256"/>
  </tileset>
  <layer id="1" name="Слой тайлов 1" width="64" height="32">
@@ -2444,7 +2444,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="289"/>
+   <tile/>
    <tile gid="290"/>
    <tile gid="291"/>
    <tile gid="292"/>
@@ -2456,7 +2456,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="289"/>
+   <tile/>
    <tile gid="290"/>
    <tile gid="291"/>
    <tile gid="292"/>
@@ -2468,7 +2468,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="289"/>
+   <tile/>
    <tile gid="290"/>
    <tile gid="291"/>
    <tile gid="292"/>
@@ -10377,8 +10377,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="33"/>
-   <tile/>
+   <tile gid="1"/>
+   <tile gid="3"/>
    <tile/>
    <tile/>
    <tile/>
@@ -10441,8 +10441,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="33"/>
-   <tile/>
+   <tile gid="65"/>
+   <tile gid="67"/>
    <tile/>
    <tile/>
    <tile/>
@@ -11498,8 +11498,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="1"/>
+   <tile gid="3"/>
    <tile/>
    <tile/>
    <tile/>
@@ -11562,8 +11562,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="33"/>
+   <tile gid="35"/>
    <tile/>
    <tile/>
    <tile/>
@@ -11626,8 +11626,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="65"/>
+   <tile gid="67"/>
    <tile/>
    <tile/>
    <tile/>
@@ -14371,15 +14371,15 @@
   <object id="1" name="player" gid="385" x="30.5" y="76" width="16" height="16"/>
   <object id="2" name="block" x="-0.5" y="-2" width="978.5" height="16"/>
   <object id="4" name="block" x="672.5" y="11.5" width="30" height="82.5"/>
-  <object id="5" name="block" x="767.5" y="3.5" width="32" height="187"/>
+  <object id="5" name="block" x="767.5" y="48" width="32" height="143"/>
   <object id="6" name="block" x="879.5" y="65" width="15.5" height="173"/>
   <object id="7" name="block" x="832.5" y="64.5" width="47" height="2"/>
   <object id="8" name="block" x="833" y="177" width="49" height="13.5"/>
-  <object id="9" name="block" x="768.5" y="224.5" width="48" height="14.5"/>
-  <object id="10" name="block" x="768.5" y="240" width="14" height="79.5"/>
+  <object id="9" name="block" x="776" y="224.5" width="40.5" height="14.5"/>
+  <object id="10" name="block" x="768.5" y="225.5" width="14" height="94"/>
   <object id="11" name="block" x="657.5" y="241.5" width="61.5" height="14"/>
   <object id="12" name="block" x="657.5" y="147.5" width="30" height="104"/>
-  <object id="14" name="block" x="449" y="146" width="237.833" height="45"/>
+  <object id="14" name="block" x="449" y="146" width="238" height="45"/>
   <object id="15" name="block" x="353" y="113" width="45.5" height="31.5"/>
   <object id="16" name="block" x="416.5" y="80" width="46" height="14"/>
   <object id="17" name="block" x="541.5" y="49" width="21.5" height="101"/>
@@ -14402,7 +14402,7 @@
   <object id="34" name="block" x="289" y="256.5" width="350" height="3"/>
   <object id="35" name="block" x="766.5" y="320" width="160.5" height="47.5"/>
   <object id="36" name="block" x="545.5" y="321" width="317.5" height="61.5"/>
-  <object id="37" name="block" x="179.5" y="305" width="595.5" height="47"/>
+  <object id="37" name="block" x="304" y="305" width="471" height="47"/>
   <object id="38" name="block" x="306" y="258.5" width="18" height="49.5"/>
   <object id="39" name="block" x="625" y="257.5" width="14.5" height="48.5"/>
   <object id="40" name="block" x="97" y="336.5" width="83" height="6.5"/>
@@ -14417,6 +14417,7 @@
   <object id="50" name="block" x="913" y="417.5" width="45.5" height="14.5"/>
   <object id="51" name="block" x="930" y="146" width="44.5" height="11"/>
   <object id="52" name="block" x="966" y="12" width="16" height="19"/>
-  <object id="63" name="coin" gid="81" x="976" y="141" width="16" height="16"/>
+  <object id="64" name="coin" gid="289" x="975.5" y="145.5" width="16" height="16"/>
+  <object id="65" name="block" x="177" y="305" width="95" height="45"/>
  </objectgroup>
 </map>
