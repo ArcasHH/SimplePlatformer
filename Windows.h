@@ -6,6 +6,7 @@
 #include "Scene.h"
 #include <SFML/Audio.hpp>
 #include <map>
+
 //buttons functional:
 void onExit();
 void onStartGame(int &level, int l);
@@ -18,13 +19,11 @@ void downVolume(std::vector<sf::Music*> mvec);
 void upVolume(std::vector<sf::Music*> mvec);
 
 void updatePauseScreen(sf::View& view, std::vector<PushButton*>& Buttons, std::vector<Object*>& Objects);
-void SetLevel(int level, int l, sf::Music& music, std::vector<sf::Music*> mvec, std::unique_ptr<GameScene> &gameScene);
-// music
-static sf::Music menuMusic;
-static std::vector<sf::Music*> MusicVector = { &menuMusic};
+void SetLevel(int level, int l, sf::Music* music, std::vector<sf::Music*> mvec, std::unique_ptr<GameScene> &gameScene);
 
-void playMusic(sf::Music& music, std::vector<sf::Music*> mvec);
+void playMusic(sf::Music* music, std::vector<sf::Music*> mvec);
 
+static std::vector<sf::Music*> MusicVector = {};
 inline bool is_pause = false;
 inline int lvl = 1;// уровень по умолчанию
 inline constexpr int num_levels = 4;// кол-во уровней. изменить при добавлении нового уровня на +1. Также в levelWindow можно добавить соответствующую кнопку
@@ -63,10 +62,12 @@ public:
 class MenuWindow final : public BaseWindow {
 public:
     static constexpr auto Name = "menu";
-
+    sf::Music menuMusic;
     MenuWindow() {     
+       
         menuMusic.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 1.ogg");
         menuMusic.setLoop(true);
+        MusicVector.push_back(&menuMusic);
 
         auto* background = new Object{ "images/Free Pixel Art Hill/ajys.png",0.f,0.f };
         Objects.push_back(background);
@@ -88,8 +89,8 @@ public:
         Buttons.push_back(ExitBtn);
     }
     void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, float loopTime) override {
-        if (menuMusic.getStatus() != sf::Music::Playing) { //once when window changes
-            playMusic(menuMusic, MusicVector);
+        if (MusicVector[0]->getStatus() != sf::Music::Playing) { //once when window changes
+            playMusic(MusicVector[0], MusicVector);
             view.reset(sf::FloatRect(0.0f, 0.0f, windowSize.x, windowSize.y));
             is_pause = false;
         }
@@ -102,15 +103,13 @@ public:
     static constexpr auto Name = "game1";
     std::unique_ptr<GameScene> gameScene;
     std::vector <sf::Music> gameMusic{num_levels+1};
-    //PlayerStates states;
     GameWindow() {
-        //GameScene = NewGameScene();
         for (int i = 0; i <= num_levels ; ++i) {
             gameMusic[i].openFromFile("audio/Pixel Music Pack/Ogg/Pixel " + std::to_string(i%12 + 1) +".ogg");
             gameMusic[i].setLoop(true);
             MusicVector.push_back(&gameMusic[i]);
         }
-        SetLevel(lvl, 1, gameMusic[1], MusicVector, gameScene);
+        SetLevel(lvl, 1, MusicVector[1], MusicVector, gameScene);
 
         auto* light = new Object{ "images/light.png", 0, 80 };
         Objects.push_back(light);
@@ -138,7 +137,7 @@ public:
             if (!is_pause) is_pause = true;
         if (is_pause) 
             BaseWindow::input(window, view);
-        InputGameScene(gameScene.get(), window);
+        gameScene.get()->InputGameScene(window);
     }
     void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, float loopTime) override {
         sf::Vector2f view_center = view.getCenter();
@@ -149,16 +148,16 @@ public:
             return;
         } 
         for (int i = 1; i <= num_levels; ++i) {
-            SetLevel(lvl, i, gameMusic[i], MusicVector, gameScene);
+            SetLevel(lvl, i, &gameMusic[i], MusicVector, gameScene);
         }
 
         if(view.getSize().x != window.getSize().x / 2)
             view.setSize(window.getSize().x / 2, window.getSize().y / 2);
         gameScene->world.Step(timeStep, gameScene->velocityIterations, gameScene->positionIterations);
-        UpdateGameScene(gameScene.get(), window, view, windowSize, lvl, loopTime);
+        gameScene.get()->UpdateGameScene(window, view, windowSize, lvl, loopTime);
     }
     void draw(sf::RenderWindow& window) override {
-        DrawGameScene(gameScene.get(), window);
+        gameScene.get()->DrawGameScene(window);
         Objects[0]->draw(window);
         if (is_pause)
            BaseWindow::draw(window);
@@ -190,7 +189,8 @@ public:
     }
     void draw (sf::RenderWindow& window)override {
         BaseWindow::draw(window);
-        float vol = menuMusic.getVolume()/10.f;
+        
+        float vol = MusicVector[0]->getVolume()/10.f;
         for (int i = 0; i < vol; ++i)
             volume_set[i]->draw(window);
     }

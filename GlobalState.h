@@ -25,7 +25,8 @@ public:
 	void setCurrWindow(std::string Name) {
 		CurrWindow = getWindow(std::move(Name));
 	}
-
+	
+	
 	BaseWindow* getCurrWindow() const {
 		return CurrWindow;
 	}

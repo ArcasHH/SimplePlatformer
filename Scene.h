@@ -1,6 +1,7 @@
 #pragma once
 #include "Object.h"
 #include "GlobalState.h"
+
 static const float SCALE = 32.f;
 static const float DEG = 57.29578f;
 static int frames = 120;
@@ -21,25 +22,23 @@ struct GameScene{
     std::vector<TmxObject> coins;
     std::vector<b2Body*> coinBodies;
     std::vector<TmxObject> blocks;
-
+    
     const int32 velocityIterations = 8;
     const int32 positionIterations = 3;
     b2Vec2 gravity{ 0.f, 1.f * frames };
     b2World world{ gravity };
 
     void CreateStaticObjects();
-    void CreateCoinsObjects();
-    void CreateEnemiesObjects();
+    void CreateDynamicObjects(std::vector<TmxObject> &vec, std::vector<b2Body*> &bodyvec, float fixture);
     void CreatePlayerBody();
-
-
 
     void SetSpriteTexture(std::string file);
     void ChangeTexture();
+
+    void InputGameScene(sf::RenderWindow& window);
+    void UpdateGameScene( sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, int& lvl, int32 loopTime);
+    void DrawGameScene( sf::RenderWindow& window);
+    //void DestroyGameScene(GameScene*& pScene);
+    void SetCameraCenter(sf::RenderWindow& window, sf::View& view, const sf::Vector2f& center);
 };
 
-void InputGameScene(GameScene* pData, sf::RenderWindow& window);
-void UpdateGameScene(GameScene* pData, sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, int &lvl, int32 loopTime);
-void DrawGameScene(GameScene* pData, sf::RenderWindow& window);
-void DestroyGameScene(GameScene*& pScene);
-void SetCameraCenter(sf::RenderWindow& window, sf::View& view, const sf::Vector2f& center);

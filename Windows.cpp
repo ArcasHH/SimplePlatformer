@@ -39,11 +39,11 @@ void updatePauseScreen(sf::View& view, std::vector<PushButton*>& Buttons, std::v
         Button->setPosition(view_center.x + 128 * i - view.getSize().x / 4, view_center.y); // 128-96 = 32 - distance between buttons in pause screen
     }
 }
-void playMusic(sf::Music& music, std::vector<sf::Music*> musicvec) {
-    if (music.getStatus() != sf::Music::Playing) {
+void playMusic(sf::Music* music, std::vector<sf::Music*> musicvec) {
+    if (music->getStatus() != sf::Music::Playing) {
         for (auto&& m : musicvec)
             m->stop();
-        music.play();
+        music->play();
     }
 }
 
@@ -62,10 +62,10 @@ void downVolume(std::vector<sf::Music*> mvec) {
     }
 }
 //for the level with the value l, set the music from mvec and upload it to the scene
-void SetLevel(int level,int l, sf::Music& music, std::vector<sf::Music*> mvec, std::unique_ptr<GameScene> &gameScene) {
-    if (level == l && music.getStatus() != sf::Music::Playing) {
+void SetLevel(int level,int l, sf::Music* music, std::vector<sf::Music*> mvec, std::unique_ptr<GameScene> &gameScene) {
+    if (level == l && music->getStatus() != sf::Music::Playing) {
         gameScene = std::make_unique<GameScene>("map/lvl" + std::to_string(level) + ".tmx");
-        playMusic(std::ref(music), mvec);
+        playMusic(music, mvec);
         gameScene->playerBody->SetTransform(b2Vec2(gameScene->player.start_pos.x, gameScene->player.start_pos.y), 0.f);//initial position of the player
     }
 }
