@@ -17,6 +17,7 @@ struct GameScene{
     float prev_x, prev_y;
     b2Body* playerBody;
     std::vector<TmxObject> enemies;
+    std::vector<b2Body*> enemyBodies;
     std::vector<TmxObject> coins;
     std::vector<b2Body*> coinBodies;
     std::vector<TmxObject> blocks;
@@ -28,6 +29,7 @@ struct GameScene{
 
     void CreateStaticObjects();
     void CreateCoinsObjects();
+    void CreateEnemiesObjects();
     void CreatePlayerBody();
 
 

@@ -21,15 +21,13 @@ void updatePauseScreen(sf::View& view, std::vector<PushButton*>& Buttons, std::v
 void SetLevel(int level, int l, sf::Music& music, std::vector<sf::Music*> mvec, std::unique_ptr<GameScene> &gameScene);
 // music
 static sf::Music menuMusic;
-static sf::Music gameMusic1;
-static sf::Music gameMusic2;
-
 static std::vector<sf::Music*> MusicVector = { &menuMusic};
+
 void playMusic(sf::Music& music, std::vector<sf::Music*> mvec);
 
-static bool is_pause = false;
-static int lvl = 1;// уровень по умолчанию
-static int num_levels = 4;// кол-во уровней. изменить при добавлении нового уровня на +1. Также в levelWindow можно добавить соответствующую кнопку
+inline bool is_pause = false;
+inline int lvl = 1;// уровень по умолчанию
+inline constexpr int num_levels = 4;// кол-во уровней. изменить при добавлении нового уровня на +1. Также в levelWindow можно добавить соответствующую кнопку
 
 
 class BaseWindow {

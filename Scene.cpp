@@ -27,12 +27,25 @@ void GameScene::CreateCoinsObjects() {
         bodyDef.type = b2_dynamicBody;
         bodyDef.position.Set((coins[i].rect.left + (coins[i].rect.width) / 2),
             (coins[i].rect.top - (coins[i].rect.height) / 2));
-        //b2Body* body = world.CreateBody(&bodyDef);
         coinBodies.push_back(world.CreateBody(&bodyDef));
         b2PolygonShape shape;
         shape.SetAsBox(coins[i].rect.width / 2, coins[i].rect.height / 2);
-        coinBodies[i]->CreateFixture(&shape, 0.0f);
+        coinBodies[i]->CreateFixture(&shape,0.0f);
         coins[i].start_pos = sf::Vector2f(coinBodies[i]->GetPosition().x, coinBodies[i]->GetPosition().y);
+    }
+}
+void GameScene::CreateEnemiesObjects() {
+    for (int i = 0; i < enemies.size(); ++i) {
+        b2BodyDef bodyDef;
+
+        bodyDef.type = b2_dynamicBody;
+        bodyDef.position.Set((enemies[i].rect.left + (enemies[i].rect.width) / 2),
+            (enemies[i].rect.top - (enemies[i].rect.height) / 2));
+        enemyBodies.push_back(world.CreateBody(&bodyDef));
+        b2PolygonShape shape;
+        shape.SetAsBox(enemies[i].rect.width / 2, enemies[i].rect.height / 2);
+        enemyBodies[i]->CreateFixture(&shape, 1.0f);
+        enemies[i].start_pos = sf::Vector2f(enemyBodies[i]->GetPosition().x, enemyBodies[i]->GetPosition().y);
     }
 }
 void GameScene::CreatePlayerBody() {
@@ -69,7 +82,8 @@ GameScene::GameScene(const std::string & file){
     CreatePlayerBody();
     coins = level.GetAllObjects("coin");
     CreateCoinsObjects();
-    //pLogic->enemies = level.GetAllObjects("enemy");
+    enemies = level.GetAllObjects("enemy");
+    CreateEnemiesObjects();
     blocks = level.GetAllObjects("block");
     CreateStaticObjects();
 }
@@ -100,7 +114,10 @@ void UpdateGameScene(GameScene* pLogic, sf::RenderWindow& window, sf::View& view
     pLogic->prev_y = pLogic->player.sprite.getPosition().y;
     b2Vec2 p = pLogic->playerBody->GetPosition();
     pLogic->player.MoveTo(sf::Vector2f(p.x - 8, p.y + 8));
-
+    for (int i = 0; i < pLogic->enemyBodies.size(); ++i) {
+        b2Vec2 c = pLogic->enemyBodies[i]->GetPosition();
+        pLogic->enemies[i].MoveTo(sf::Vector2f(c.x - 8, c.y + 8));
+    }
     for (int i = 0; i < pLogic->coinBodies.size(); ++i) {
         b2Vec2 c = pLogic->coinBodies[i]->GetPosition();
         pLogic->coins[i].MoveTo(sf::Vector2f(c.x - 8 , c.y + 8));
