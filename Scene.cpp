@@ -78,14 +78,14 @@ void GameScene::InputGameScene(sf::RenderWindow& window) {
     world.Step(timeStep, velocityIterations, positionIterations);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        playerBody->ApplyForceToCenter(b2Vec2(PLAYER_SPEED_FOR_FRAME, 0), true);
+        playerBody->ApplyForceToCenter(b2Vec2(PLAYER_SPEED_FOR_FRAME/2, 0), true);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-         playerBody->ApplyForceToCenter(b2Vec2(-PLAYER_SPEED_FOR_FRAME, 0), true);
+         playerBody->ApplyForceToCenter(b2Vec2(-PLAYER_SPEED_FOR_FRAME/2, 0), true);
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && on_ground) {
         b2Vec2 linV = playerBody->GetLinearVelocity();
-        playerBody->ApplyForceToCenter(b2Vec2(linV.x, linV.y - PLAYER_SPEED_FOR_FRAME*5), true);
+        playerBody->ApplyLinearImpulseToCenter(b2Vec2(linV.x, linV.y - PLAYER_SPEED_FOR_FRAME/5), true);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
         playerBody->ApplyForceToCenter(b2Vec2(0.f, PLAYER_SPEED_FOR_FRAME * 5), true);
@@ -120,6 +120,10 @@ void GameScene::UpdateGameScene( sf::RenderWindow& window, sf::View& view, const
     }
     ChangeTexture();
     view.setCenter(player.sprite.getPosition().x, player.sprite.getPosition().y);
+    if (playerBody->GetContactList())
+        on_ground = playerBody->GetContactList()->contact->IsTouching();
+    else
+        on_ground = false;
 }
 
 void GameScene::DrawGameScene( sf::RenderWindow &window){
@@ -155,7 +159,6 @@ void GameScene::ChangeTexture() {
     if (dy > 0 && dx >= 0) {
         SetSpriteTexture("images/hero/fall1.png");
         return;
-        
     }
     if (dy > 0 && dx < 0) {
         SetSpriteTexture("images/hero/fall2.png");

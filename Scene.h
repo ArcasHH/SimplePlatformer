@@ -14,13 +14,18 @@ struct GameScene{
     GameScene(const std::string& file);
 
     TmxLevel level;
+
     TmxObject player;
     float prev_x, prev_y;
     b2Body* playerBody;
+    bool on_ground = false;
+
     std::vector<TmxObject> enemies;
     std::vector<b2Body*> enemyBodies;
+
     std::vector<TmxObject> coins;
     std::vector<b2Body*> coinBodies;
+
     std::vector<TmxObject> blocks;
     
     const int32 velocityIterations = 8;
@@ -38,7 +43,5 @@ struct GameScene{
     void InputGameScene(sf::RenderWindow& window);
     void UpdateGameScene( sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, int& lvl, int32 loopTime);
     void DrawGameScene( sf::RenderWindow& window);
-    //void DestroyGameScene(GameScene*& pScene);
-    void SetCameraCenter(sf::RenderWindow& window, sf::View& view, const sf::Vector2f& center);
 };
 
