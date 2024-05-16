@@ -74,8 +74,6 @@ GameScene::GameScene(const std::string & file){
     CreateStaticObjects();
 }
 
-
-
 void GameScene::InputGameScene(sf::RenderWindow& window) {
     world.Step(timeStep, velocityIterations, positionIterations);
 
@@ -95,7 +93,6 @@ void GameScene::InputGameScene(sf::RenderWindow& window) {
 }
 void GameScene::UpdateGameScene( sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, int& lvl, int32 loopTime){
     PLAYER_SPEED_FOR_FRAME = PLAYER_SPEED * ( static_cast<float>(loopTime) + 1.f/frames);
-    //world.SetGravity(b2Vec2(0.f, world.GetGravity().y * (static_cast<float>(loopTime))));
     prev_x = player.sprite.getPosition().x;
     prev_y = player.sprite.getPosition().y;
     b2Vec2 p = playerBody->GetPosition();
@@ -126,7 +123,6 @@ void GameScene::UpdateGameScene( sf::RenderWindow& window, sf::View& view, const
 }
 
 void GameScene::DrawGameScene( sf::RenderWindow &window){
-   //sf::RenderTarget& target = window;
    level.Draw(window);
     for (const TmxObject& coin : coins)
         window.draw(coin.sprite);
@@ -165,7 +161,6 @@ void GameScene::ChangeTexture() {
         SetSpriteTexture("images/hero/fall2.png");
         return;
     }
-    
     if (dy == 0 && dx < 0) {
         SetSpriteTexture("images/hero/left.png");
         return;

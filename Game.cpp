@@ -1,9 +1,7 @@
 #include "Game.h"
 Game::Game(){
-    //windowSize.x = sf::VideoMode::getDesktopMode().width;
-    //windowSize.y = sf::VideoMode::getDesktopMode().height;
-    windowSize.x = 1920;
-    windowSize.y = 1080;
+    windowSize.x = sf::VideoMode::getDesktopMode().width;
+    windowSize.y = sf::VideoMode::getDesktopMode().height;
     window.create(sf::VideoMode(windowSize.x, windowSize.y), "Simple Game");
     window.setVerticalSyncEnabled(false);
     window.setFramerateLimit(frames);
@@ -40,13 +38,13 @@ void Game::start() {
 
         CurrWindow->input(window, view);
         
-        
         CurrWindow->update(window, view, windowSize, loopTime);
         window.setView(view);
 
         window.clear(sf::Color::Black);
         CurrWindow->draw(window);
         window.display();
+
         clock.restart();
         loopTime = static_cast<float>(clock.getElapsedTime().asMilliseconds()+1)/frames;
 
