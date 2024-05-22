@@ -68,7 +68,7 @@ GameScene::GameScene(const std::string & file){
     CreateDynamicObjects(coins, coinBodies, 0.f);
 
     enemies = level.GetAllObjects("enemy");
-    CreateDynamicObjects(enemies, enemyBodies, 1.f);
+    CreateDynamicObjects(enemies, enemyBodies, 0.5f);
 
     blocks = level.GetAllObjects("block");
     CreateStaticObjects();
@@ -120,8 +120,13 @@ void GameScene::UpdateGameScene( sf::RenderWindow& window, sf::View& view, const
     }
     ChangeTexture();
     view.setCenter(player.sprite.getPosition().x, player.sprite.getPosition().y);
-    if (playerBody->GetContactList())
-        on_ground = playerBody->GetContactList()->contact->IsTouching();
+    //if (playerBody->GetContactList() && playerBody->GetContactList()->contact->GetManifold()->localNormal.y > 0)
+        //on_ground = true; 
+    if (playerBody->GetContactList()) {
+        if (playerBody->GetContactList()->contact->GetManifold()->localNormal.y>0)
+            on_ground = true;
+    }
+
     else
         on_ground = false;
 }
