@@ -189,7 +189,7 @@ void SettingsWindow::draw(sf::RenderWindow& window) {
     for (int i = 0; i < vol; ++i)
         volume_set[i]->draw(window);
 }
-LevelWindow::LevelWindow() {
+LevelWindow::LevelWindow(GameWindow& GW) : GW{ GW } {
     auto& MenuBtn = Buttons.emplace_back(std::make_unique<PushButton>("images/backBTN.png", sf::FloatRect(sf::Vector2f(100, 768), sf::Vector2f())));
     MenuBtn->registerFunction(onMenu);
 

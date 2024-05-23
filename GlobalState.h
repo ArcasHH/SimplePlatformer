@@ -25,9 +25,11 @@ class GlobalState
 	Musics MusicVector;
 
 public:
-	template <typename WinTy>
-	void addWindow(std::string Name) {
-		AllWindows.emplace(std::move(Name), new WinTy{});
+	template <typename WinTy, typename ...Args>
+	WinTy* addWindow(std::string Name, Args &&...args) {
+		WinTy* Window = new WinTy{ std::forward<Args>(args)... };
+		AllWindows.emplace(std::move(Name), Window);
+		return Window;
 	}
 
 	void setCurrWindow(std::string Name) {

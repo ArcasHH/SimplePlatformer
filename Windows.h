@@ -36,7 +36,8 @@ public:
 
 class GameWindow final : public BaseWindow {
     std::unique_ptr<GameScene> gameScene;
-    std::vector <sf::Music> gameMusic{ num_levels + 1 };
+    std::vector <sf::Music> gameMusic{ num_levels };
+    int CurrLvl = 1;
 public:
     static constexpr auto Name = "game1";
 
@@ -56,7 +57,8 @@ public:
 };
 
 class LevelWindow final : public BaseWindow {
+    GameWindow& GW;
 public:
     static constexpr auto Name = "level";
-    LevelWindow();
+    LevelWindow(GameWindow &GW);
 };
