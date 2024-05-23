@@ -207,7 +207,8 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy /E /Y /I $(ProjectDir)images  $(OutDir)images
-xcopy /E /Y /I $(ProjectDir)audio $(OutDir)audio</Command>
+xcopy /E /Y /I $(ProjectDir)audio $(OutDir)audio
+xcopy /E /Y /I $(ProjectDir)map $(OutDir)map</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
