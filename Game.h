@@ -3,9 +3,7 @@
 #include "Windows.h"
 #include "GlobalState.h"
 
-class Game{
-private:
-
+class Game final {
     sf::RenderWindow window;
     sf::View view;
     sf::Vector2f windowSize;

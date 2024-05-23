@@ -46,16 +46,7 @@ void GameScene::CreatePlayerBody() {
     fixtureDef.friction = 1.0f;
     playerBody->CreateFixture(&fixtureDef);
 }
-static sf::Vector2f Normalize(const sf::Vector2f& value){
-    const float length = std::hypotf(value.x, value.y);
-    if (length < FLT_EPSILON){
-        return sf::Vector2f(0, 0);
-    }
-    return value / length;
-}
-static sf::Vector2f Round(const sf::Vector2f& value){
-    return sf::Vector2f(roundf(value.x), roundf(value.y));
-}
+
 
 GameScene::GameScene(const std::string & file){
     level.LoadFromFile(file);
@@ -91,8 +82,8 @@ void GameScene::InputGameScene(sf::RenderWindow& window) {
         playerBody->ApplyForceToCenter(b2Vec2(0.f, PLAYER_SPEED_FOR_FRAME * 5), true);
     }      
 }
-void GameScene::UpdateGameScene( sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, int& lvl, int32 loopTime){
-    PLAYER_SPEED_FOR_FRAME = PLAYER_SPEED * ( static_cast<float>(loopTime) + 1.f/frames);
+void GameScene::UpdateGameScene( sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, int& lvl){
+    PLAYER_SPEED_FOR_FRAME = PLAYER_SPEED * ( 1.f/frames);
     prev_x = player.sprite.getPosition().x;
     prev_y = player.sprite.getPosition().y;
     b2Vec2 p = playerBody->GetPosition();
@@ -120,8 +111,6 @@ void GameScene::UpdateGameScene( sf::RenderWindow& window, sf::View& view, const
     }
     ChangeTexture();
     view.setCenter(player.sprite.getPosition().x, player.sprite.getPosition().y);
-    //if (playerBody->GetContactList() && playerBody->GetContactList()->contact->GetManifold()->localNormal.y > 0)
-        //on_ground = true; 
     if (playerBody->GetContactList()) {
         if (playerBody->GetContactList()->contact->GetManifold()->localNormal.y>0)
             on_ground = true;

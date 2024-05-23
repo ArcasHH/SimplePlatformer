@@ -1,5 +1,5 @@
 #include "Game.h"
-Game::Game(){
+Game::Game() {
     windowSize.x = sf::VideoMode::getDesktopMode().width;
     windowSize.y = sf::VideoMode::getDesktopMode().height;
     window.create(sf::VideoMode(windowSize.x, windowSize.y), "Simple Game");
@@ -17,36 +17,29 @@ void Game::start() {
     Glob.addWindow<GameWindow>(GameWindow::Name);
 
     Glob.setCurrWindow(MenuWindow::Name);
-    clock.restart();
-    float loopTime = static_cast<float>(clock.getElapsedTime().asMilliseconds()+1)/frames;
-    while (window.isOpen()){
-        //clock.restart();
-        sf::Event event;
-        
+
+    while (window.isOpen()) {
         BaseWindow* CurrWindow = Glob.getCurrWindow();
         if (!CurrWindow) {
             window.close();
-            break;
+            return;
         }
-        while (window.pollEvent(event))
-        {
+        sf::Event event;
+        while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 window.close();
-                break;
+                return;
             }
         }
 
         CurrWindow->input(window, view);
         
-        CurrWindow->update(window, view, windowSize, loopTime);
+        CurrWindow->update(window, view, windowSize);
         window.setView(view);
 
         window.clear(sf::Color::Black);
         CurrWindow->draw(window);
         window.display();
-
-        clock.restart();
-        loopTime = static_cast<float>(clock.getElapsedTime().asMilliseconds()+1)/frames;
 
     }
 }

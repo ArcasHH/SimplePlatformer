@@ -41,7 +41,7 @@ struct GameScene{
     void ChangeTexture();
 
     void InputGameScene(sf::RenderWindow& window);
-    void UpdateGameScene( sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, int& lvl, int32 loopTime);
+    void UpdateGameScene( sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, int& lvl);
     void DrawGameScene( sf::RenderWindow& window);
 };
 
