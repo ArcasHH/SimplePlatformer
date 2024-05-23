@@ -7,7 +7,6 @@
 #include <SFML/Audio.hpp>
 #include <map>
 
-static std::vector<sf::Music*> MusicVector = {};
 inline bool is_pause = false;
 inline int lvl = 1;// уровень по умолчанию
 inline constexpr int num_levels = 4;// кол-во уровней. изменить при добавлении нового уровня на +1. Также в levelWindow можно добавить соответствующую кнопку

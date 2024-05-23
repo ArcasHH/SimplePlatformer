@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <string>
 #include <stdexcept>
+#include <memory>
 
 
 class BaseWindow;
@@ -10,11 +11,18 @@ class GlobalState;
 
 GlobalState& getGlobalState();
 
+namespace sf {
+	class Music;
+};
+
+using Musics = std::vector<sf::Music*>;
 class GlobalState
 {
 	std::unordered_map<std::string, BaseWindow*> AllWindows{ std::make_pair<std::string, BaseWindow*>("exit", nullptr) };
 
 	BaseWindow* CurrWindow = nullptr;
+
+	Musics MusicVector;
 
 public:
 	template <typename WinTy>
@@ -26,6 +34,8 @@ public:
 		CurrWindow = getWindow(std::move(Name));
 	}
 	
+	void recordMusic(sf::Music* Music);
+	const Musics& getMusics() const;
 	
 	BaseWindow* getCurrWindow() const {
 		return CurrWindow;

@@ -29,29 +29,30 @@ static void onPause(bool &is_pause) {
     is_pause = false;
 }
 
-
-
 static void updatePauseScreen(sf::View& view, std::vector<std::unique_ptr<PushButton>>& Buttons, std::vector<std::unique_ptr<Object>>& Objects) {
     sf::Vector2f view_center = view.getCenter();
     Objects[1]->sprite.setPosition(view_center.x - view.getSize().x / 2, view_center.y - view.getSize().y / 2);
     for (float i = 0; i < Buttons.size(); ++i)
         Buttons[i]->setPosition(view_center.x + 128 * i - view.getSize().x / 4, view_center.y);
 }
-static void playMusic(sf::Music* music, std::vector<sf::Music*> musicvec) {
-    if (music->getStatus() != sf::Music::Playing) {
-        for (auto&& m : musicvec)
+static void playMusic(sf::Music& music) {
+    if (music.getStatus() != sf::Music::Playing) {
+        auto& mvec = getGlobalState().getMusics();
+        for (auto&& m : mvec)
             m->stop();
-        music->play();
+        music.play();
     }
 }
-static void upVolume(std::vector<sf::Music*> mvec) {
+static void upVolume() {
+    auto& mvec = getGlobalState().getMusics();
     for (auto&& m : mvec) {
         float vol = m->getVolume();
         if (vol <= 90)
             m->setVolume(vol + 10.f);
     }
 }
-static void downVolume(std::vector<sf::Music*> mvec) {
+static void downVolume() {
+    auto& mvec = getGlobalState().getMusics();
     for (auto&& m : mvec) {
         float vol = m->getVolume();
         if (vol >= 10)
@@ -59,10 +60,10 @@ static void downVolume(std::vector<sf::Music*> mvec) {
     }
 }
 //for the level with the value l, set the music from mvec and upload it to the scene
-static void SetLevel(int level,int l, sf::Music* music, std::vector<sf::Music*> mvec, std::unique_ptr<GameScene> &gameScene) {
-    if (level == l && music->getStatus() != sf::Music::Playing) {
+static void SetLevel(int level, int l, sf::Music& music, std::unique_ptr<GameScene> &gameScene) {
+    if (level == l && music.getStatus() != sf::Music::Playing) {
         gameScene = std::make_unique<GameScene>("map/lvl" + std::to_string(level) + ".tmx");
-        playMusic(music, mvec);
+        playMusic(music);
         gameScene->playerBody->SetTransform(b2Vec2(gameScene->player.start_pos.x, gameScene->player.start_pos.y), 0.f);//initial position of the player
     }
 }
@@ -84,9 +85,10 @@ void BaseWindow::draw(sf::RenderWindow& window) {
 }
 
 MenuWindow::MenuWindow() {
+    auto& Gl = getGlobalState();
     menuMusic.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 1.ogg");
     menuMusic.setLoop(true);
-    MusicVector.push_back(&menuMusic);
+    Gl.recordMusic(&menuMusic);
 
     Objects.emplace_back(std::make_unique<Object>("images/Free Pixel Art Hill/ajys.png", 0.f, 0.f));
 
@@ -104,8 +106,8 @@ MenuWindow::MenuWindow() {
 }
 
 void MenuWindow::update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) {
-    if (MusicVector[0]->getStatus() != sf::Music::Playing) { //once when window changes
-        playMusic(MusicVector[0], MusicVector);
+    if (menuMusic.getStatus() != sf::Music::Playing) { //once when window changes
+        playMusic(menuMusic);
         view.reset(sf::FloatRect(0.0f, 0.0f, windowSize.x, windowSize.y));
         is_pause = false;
     }
@@ -113,12 +115,13 @@ void MenuWindow::update(sf::RenderWindow& window, sf::View& view, const sf::Vect
 }
 
 GameWindow::GameWindow() {
-    for (int i = 0; i <= num_levels; ++i) {
+    auto& Gl = getGlobalState();
+    for (int i = 0; i < num_levels; ++i) {
         gameMusic[i].openFromFile("audio/Pixel Music Pack/Ogg/Pixel " + std::to_string(i % 12 + 1) + ".ogg");
         gameMusic[i].setLoop(true);
-        MusicVector.push_back(&gameMusic[i]);
+        Gl.recordMusic(&gameMusic[i]);
     }
-    SetLevel(lvl, 1, MusicVector[1], MusicVector, gameScene);
+    SetLevel(lvl, 1, gameMusic[0], gameScene);
 
     Objects.emplace_back(std::make_unique<Object>("images/light.png", 0, 80));
     Objects.emplace_back(std::make_unique<Object>("images/line.png", 0, 80));
@@ -148,8 +151,8 @@ void GameWindow::update(sf::RenderWindow& window, sf::View& view, const sf::Vect
         BaseWindow::update(window, view, windowSize);
         return;
     }
-    for (int i = 1; i <= num_levels; ++i) {
-        SetLevel(lvl, i, &gameMusic[i], MusicVector, gameScene);
+    for (int i = 0; i < num_levels; ++i) {
+        SetLevel(lvl, i+1, gameMusic[i], gameScene);
     }
 
     if (view.getSize().x != window.getSize().x / 2)
@@ -169,10 +172,10 @@ SettingsWindow::SettingsWindow() {
     MenuBtn->registerFunction(onMenu);
 
     auto& VolUp = Buttons.emplace_back(std::make_unique<PushButton>("images/sound_up.png", sf::FloatRect(sf::Vector2f(476, 200), sf::Vector2f())));
-    VolUp->registerFunction(upVolume, std::ref(MusicVector));
+    VolUp->registerFunction(upVolume);
 
     auto& VolDown = Buttons.emplace_back(std::make_unique<PushButton>("images/sound_down.png", sf::FloatRect(sf::Vector2f(100, 200), sf::Vector2f())));
-    VolDown->registerFunction(downVolume, std::ref(MusicVector));
+    VolDown->registerFunction(downVolume);
 
     for (float i = 0; i < 10; ++i)
         volume_set.emplace_back(std::make_unique<Object>("images/wbox.png", 220 + 24 * i, 228));
@@ -180,7 +183,9 @@ SettingsWindow::SettingsWindow() {
 void SettingsWindow::draw(sf::RenderWindow& window) {
     BaseWindow::draw(window);
 
-    int vol = static_cast<int>(MusicVector[0]->getVolume() / 10.f);
+    auto& Music = getGlobalState().getMusics().front();
+
+    int vol = static_cast<int>(Music->getVolume() / 10.f);
     for (int i = 0; i < vol; ++i)
         volume_set[i]->draw(window);
 }
