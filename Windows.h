@@ -36,7 +36,7 @@ public:
     static inline constexpr int num_levels = 4;// кол-во уровней. изменить при добавлении нового уровня на +1. Также в levelWindow можно добавить соответствующую кнопку
 private:
     std::unique_ptr<GameScene> gameScene;
-    std::vector <sf::Music> gameMusic{ num_levels };
+    std::vector <sf::Music> gameMusic{ num_levels+1 };
     int CurrLvl = 1;
     bool IsPause = false;
 public:

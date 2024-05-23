@@ -115,7 +115,7 @@ void MenuWindow::update(sf::RenderWindow& window, sf::View& view, const sf::Vect
 
 GameWindow::GameWindow() {
     auto& Gl = getGlobalState();
-    for (int i = 0; i < num_levels; ++i) {
+    for (int i = 0; i <= num_levels; ++i) {
         gameMusic[i].openFromFile("audio/Pixel Music Pack/Ogg/Pixel " + std::to_string(i % 12 + 1) + ".ogg");
         gameMusic[i].setLoop(true);
         Gl.recordMusic(&gameMusic[i]);
@@ -150,8 +150,8 @@ void GameWindow::update(sf::RenderWindow& window, sf::View& view, const sf::Vect
         BaseWindow::update(window, view, windowSize);
         return;
     }
-    for (int i = 0; i < num_levels; ++i) {
-        SetLevel(CurrLvl, i+1, gameMusic[i], gameScene);
+    for (int i = 1; i <= num_levels; ++i) {
+        SetLevel(CurrLvl, i, gameMusic[i], gameScene);
     }
 
     if (view.getSize().x != window.getSize().x / 2)
