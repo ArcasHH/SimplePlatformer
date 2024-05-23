@@ -1,9 +1,8 @@
 #include "Scene.h"
 #include "Windows.h"
-#include <math.h>
+#include "GlobalState.h"
 
-static const float PLAYER_SPEED = 10000000;
-static float PLAYER_SPEED_FOR_FRAME = PLAYER_SPEED;
+#include <math.h>
 
 void GameScene::CreateStaticObjects() {
     for (auto&& block : blocks) {
@@ -63,10 +62,12 @@ GameScene::GameScene(const std::string & file){
 
     blocks = level.GetAllObjects("block");
     CreateStaticObjects();
+
+    MovePlayerToStart();
 }
 
 void GameScene::InputGameScene() {
-    world.Step(timeStep, velocityIterations, positionIterations);
+    Step();
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         playerBody->ApplyForceToCenter(b2Vec2(PLAYER_SPEED_FOR_FRAME/2, 0), true);
@@ -114,10 +115,12 @@ void GameScene::UpdateGameScene( sf::RenderWindow& window, sf::View& view, const
     if (playerBody->GetContactList()) {
         if (playerBody->GetContactList()->contact->GetManifold()->localNormal.y>0)
             on_ground = true;
-    }
-
-    else
+    } else
         on_ground = false;
+}
+
+void GameScene::MovePlayerToStart() {
+    playerBody->SetTransform(b2Vec2(player.start_pos.x, player.start_pos.y), 0.f);//initial position of the player
 }
 
 void GameScene::DrawGameScene( sf::RenderWindow &window){
@@ -129,10 +132,6 @@ void GameScene::DrawGameScene( sf::RenderWindow &window){
     window.draw(player.sprite);
 }
 
-void DestroyGameScene(GameScene*& pScene){
-    delete pScene;
-    pScene = nullptr;
-}
 void GameScene::SetSpriteTexture(std::string file) {
     player.texture.loadFromFile(file);
     player.sprite.setTexture(player.texture);
@@ -166,4 +165,9 @@ void GameScene::ChangeTexture() {
         SetSpriteTexture("images/hero/right.png");
         return;
     }
+}
+
+void GameScene::Step() {
+    static const float timeStep = 1.f / frames;
+    world.Step(timeStep, velocityIterations, positionIterations);
 }

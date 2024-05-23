@@ -64,7 +64,6 @@ static void SetLevel(int level, int l, sf::Music& music, std::unique_ptr<GameSce
     if (level == l && music.getStatus() != sf::Music::Playing) {
         gameScene = std::make_unique<GameScene>("map/lvl" + std::to_string(level) + ".tmx");
         playMusic(music);
-        gameScene->playerBody->SetTransform(b2Vec2(gameScene->player.start_pos.x, gameScene->player.start_pos.y), 0.f);//initial position of the player
     }
 }
 
@@ -157,7 +156,7 @@ void GameWindow::update(sf::RenderWindow& window, sf::View& view, const sf::Vect
 
     if (view.getSize().x != window.getSize().x / 2)
         view.setSize(static_cast<float>(window.getSize().x) / 2, static_cast<float>(window.getSize().y) / 2);
-    gameScene->world.Step(timeStep, gameScene->velocityIterations, gameScene->positionIterations);
+    gameScene->Step();
     gameScene->UpdateGameScene(window, view, windowSize, CurrLvl);
 }
 void GameWindow::draw(sf::RenderWindow& window) {

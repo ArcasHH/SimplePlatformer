@@ -1,17 +1,12 @@
 #pragma once
 #include "Object.h"
-#include "GlobalState.h"
 
-static const float SCALE = 32.f;
-static const float DEG = 57.29578f;
-static int frames = 120;
-static const float timeStep = 1.f / frames;
-
-
-struct GameView;
-class Game;
-struct GameScene{
+struct GameScene {
+    static inline constexpr int frames = 120;
     GameScene(const std::string& file);
+private:
+    const float PLAYER_SPEED = 10000000.f;
+    float PLAYER_SPEED_FOR_FRAME = PLAYER_SPEED;
 
     TmxLevel level;
 
@@ -27,11 +22,15 @@ struct GameScene{
     std::vector<b2Body*> coinBodies;
 
     std::vector<TmxObject> blocks;
-    
+
     const int32 velocityIterations = 8;
     const int32 positionIterations = 3;
     b2Vec2 gravity{ 0.f, 1.f * frames };
     b2World world{ gravity };
+
+public:
+    void MovePlayerToStart();
+    void Step();
 
     void CreateStaticObjects();
     void CreateDynamicObjects(std::vector<TmxObject> &vec, std::vector<b2Body*> &bodyvec, float fixture);
