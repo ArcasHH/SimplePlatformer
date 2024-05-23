@@ -84,7 +84,7 @@ void BaseWindow::draw(sf::RenderWindow& window) {
         Obj->draw(window);
 }
 
-MenuWindow::MenuWindow() {
+MenuWindow::MenuWindow(GameWindow &GW) : GW{ GW } {
     auto& Gl = getGlobalState();
     menuMusic.openFromFile("audio/Pixel Music Pack/Ogg/Pixel 1.ogg");
     menuMusic.setLoop(true);
@@ -93,7 +93,7 @@ MenuWindow::MenuWindow() {
     Objects.emplace_back(std::make_unique<Object>("images/Free Pixel Art Hill/ajys.png", 0.f, 0.f));
 
     auto& StartBtn = Buttons.emplace_back(std::make_unique<PushButton>("images/playBTN.png", sf::FloatRect(sf::Vector2f(100, 200), sf::Vector2f())));
-    StartBtn->registerFunction(onStartGame, std::ref(lvl), 1);
+    StartBtn->registerFunction(onStartGame, std::ref(GW.getCurrLvl()), 1);
 
     auto& LevelBtn = Buttons.emplace_back(std::make_unique<PushButton>("images/levelBTN.png", sf::FloatRect(sf::Vector2f(100, 350), sf::Vector2f())));
     LevelBtn->registerFunction(onLevel);
@@ -109,7 +109,7 @@ void MenuWindow::update(sf::RenderWindow& window, sf::View& view, const sf::Vect
     if (menuMusic.getStatus() != sf::Music::Playing) { //once when window changes
         playMusic(menuMusic);
         view.reset(sf::FloatRect(0.0f, 0.0f, windowSize.x, windowSize.y));
-        is_pause = false;
+        GW.getPause() = false;
     }
     BaseWindow::update(window, view, windowSize);
 }
@@ -121,13 +121,13 @@ GameWindow::GameWindow() {
         gameMusic[i].setLoop(true);
         Gl.recordMusic(&gameMusic[i]);
     }
-    SetLevel(lvl, 1, gameMusic[0], gameScene);
+    SetLevel(CurrLvl, 1, gameMusic[0], gameScene);
 
     Objects.emplace_back(std::make_unique<Object>("images/light.png", 0, 80));
     Objects.emplace_back(std::make_unique<Object>("images/line.png", 0, 80));
 
     auto& PlayBtn = Buttons.emplace_back(std::make_unique<PushButton>("images/play96.png", sf::FloatRect(sf::Vector2f(100, 128), sf::Vector2f())));
-    PlayBtn->registerFunction(onPause, std::ref(is_pause));
+    PlayBtn->registerFunction(onPause, std::ref(IsPause));
 
     auto& MenuBtn = Buttons.emplace_back(std::make_unique<PushButton>("images/menu96.png", sf::FloatRect(sf::Vector2f(250, 128), sf::Vector2f())));
     MenuBtn->registerFunction(onMenu);
@@ -138,32 +138,32 @@ GameWindow::GameWindow() {
 
 void GameWindow::input(const sf::RenderWindow& window, const sf::View& view) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-        is_pause = true;
-    if (is_pause)
+        IsPause = true;
+    if (IsPause)
         BaseWindow::input(window, view);
     gameScene->InputGameScene();
 }
 void GameWindow::update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) {
     sf::Vector2f view_center = view.getCenter();
     Objects[0]->sprite.setPosition(view_center.x - windowSize.x / 2 + 8, view_center.y - windowSize.y / 2 - 8);
-    if (is_pause) {
+    if (IsPause) {
         updatePauseScreen(view, Buttons, Objects);
         BaseWindow::update(window, view, windowSize);
         return;
     }
     for (int i = 0; i < num_levels; ++i) {
-        SetLevel(lvl, i+1, gameMusic[i], gameScene);
+        SetLevel(CurrLvl, i+1, gameMusic[i], gameScene);
     }
 
     if (view.getSize().x != window.getSize().x / 2)
         view.setSize(window.getSize().x / 2, window.getSize().y / 2);
     gameScene->world.Step(timeStep, gameScene->velocityIterations, gameScene->positionIterations);
-    gameScene->UpdateGameScene(window, view, windowSize, lvl);
+    gameScene->UpdateGameScene(window, view, windowSize, CurrLvl);
 }
 void GameWindow::draw(sf::RenderWindow& window) {
     gameScene.get()->DrawGameScene(window);
     Objects[0]->draw(window);
-    if (is_pause)
+    if (IsPause)
         BaseWindow::draw(window);
 }
 SettingsWindow::SettingsWindow() {
@@ -193,8 +193,8 @@ LevelWindow::LevelWindow(GameWindow& GW) : GW{ GW } {
     auto& MenuBtn = Buttons.emplace_back(std::make_unique<PushButton>("images/backBTN.png", sf::FloatRect(sf::Vector2f(100, 768), sf::Vector2f())));
     MenuBtn->registerFunction(onMenu);
 
-    for (int i = 1; i <= num_levels; ++i) {
+    for (int i = 1; i <= GameWindow::num_levels; ++i) {
         auto& Btn = Buttons.emplace_back(std::make_unique<PushButton>("images/" + std::to_string(i) + ".png", sf::FloatRect(sf::Vector2f(100 + 200 * (i - 1), 100), sf::Vector2f())));
-        Btn->registerFunction(onStartGame, std::ref(lvl), i);
+        Btn->registerFunction(onStartGame, std::ref(GW.getCurrLvl()), i);
     }
 }

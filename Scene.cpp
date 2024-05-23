@@ -102,7 +102,7 @@ void GameScene::UpdateGameScene( sf::RenderWindow& window, sf::View& view, const
             for (int j = 0; j < coinBodies.size(); ++j) {
                 coinBodies[j]->SetTransform(b2Vec2(coins[j].start_pos.x,coins[j].start_pos.y), 0);
             }
-            if (lvl == num_levels)
+            if (lvl == GameWindow::num_levels)
                 lvl = 1;
             else
                 ++lvl;

@@ -7,11 +7,6 @@
 #include <SFML/Audio.hpp>
 #include <map>
 
-inline bool is_pause = false;
-inline int lvl = 1;// уровень по умолчанию
-inline constexpr int num_levels = 4;// кол-во уровней. изменить при добавлении нового уровня на +1. Также в levelWindow можно добавить соответствующую кнопку
-
-
 class BaseWindow {
 protected:
     std::vector<std::unique_ptr<Object>> Objects{};
@@ -25,23 +20,32 @@ public:
     virtual void draw(sf::RenderWindow& window);
 };
 
+class GameWindow;
 class MenuWindow final : public BaseWindow {
+    GameWindow& GW;
     sf::Music menuMusic;
 public:
     static constexpr auto Name = "menu";
     
-    MenuWindow();
+    MenuWindow(GameWindow&);
     void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) override;
 };
 
 class GameWindow final : public BaseWindow {
+public:
+    static inline constexpr int num_levels = 4;// кол-во уровней. изменить при добавлении нового уровня на +1. Также в levelWindow можно добавить соответствующую кнопку
+private:
     std::unique_ptr<GameScene> gameScene;
     std::vector <sf::Music> gameMusic{ num_levels };
     int CurrLvl = 1;
+    bool IsPause = false;
 public:
     static constexpr auto Name = "game1";
 
     GameWindow();
+
+    auto& getCurrLvl() { return CurrLvl; }
+    auto& getPause() { return IsPause; }
 
     void input(const sf::RenderWindow& window, const sf::View& view) override;
     void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) override;

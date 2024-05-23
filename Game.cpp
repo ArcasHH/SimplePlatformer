@@ -11,10 +11,10 @@ void Game::start() {
     
     auto& Glob = getGlobalState();
 
-    Glob.addWindow<MenuWindow>(MenuWindow::Name);
     Glob.addWindow<SettingsWindow>(SettingsWindow::Name);
     GameWindow* GW = Glob.addWindow<GameWindow>(GameWindow::Name);
     Glob.addWindow<LevelWindow>(LevelWindow::Name, *GW);
+    Glob.addWindow<MenuWindow>(MenuWindow::Name, *GW);
 
     Glob.setCurrWindow(MenuWindow::Name);
 
