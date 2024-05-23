@@ -18,7 +18,7 @@ void onLevel();
 void downVolume(std::vector<sf::Music*> mvec);
 void upVolume(std::vector<sf::Music*> mvec);
 
-void updatePauseScreen(sf::View& view, std::vector<PushButton*>& Buttons, std::vector<Object*>& Objects);
+void updatePauseScreen(sf::View& view, std::vector<std::unique_ptr<PushButton>>& Buttons, std::vector<std::unique_ptr<Object>>& Objects);
 void SetLevel(int level, int l, sf::Music* music, std::vector<sf::Music*> mvec, std::unique_ptr<GameScene> &gameScene);
 
 void playMusic(sf::Music* music, std::vector<sf::Music*> mvec);
@@ -30,20 +30,16 @@ inline constexpr int num_levels = 4;// кол-во уровней. изменить при добавлении н
 
 
 class BaseWindow {
+    std::string Name{};
 protected:
-    std::vector<Object*> Objects;
-    std::vector<PushButton*> Buttons;
+    std::vector<std::unique_ptr<Object>> Objects{};
+    std::vector<std::unique_ptr<PushButton>> Buttons{};
     
 public:
-    std::string Name;
-    BaseWindow() {};
-    virtual ~BaseWindow() {
-        for (auto* Obj : Objects)
-            delete Obj;
-        for (auto* Obj : Buttons)
-            delete Obj;
-    }
-    virtual void input(sf::RenderWindow& window, sf::View& view) {
+    BaseWindow() = default;
+    virtual ~BaseWindow() = default;
+    
+    virtual void input(const sf::RenderWindow& window, const sf::View& view) {
         for (auto&& Obj : Buttons) 
             Obj->input(window, view);
     }
@@ -69,24 +65,19 @@ public:
         menuMusic.setLoop(true);
         MusicVector.push_back(&menuMusic);
 
-        auto* background = new Object{ "images/Free Pixel Art Hill/ajys.png",0.f,0.f };
-        Objects.push_back(background);
-        
-        auto* StartGameBtn = new PushButton{ "images/playBTN.png",sf::FloatRect(sf::Vector2f(100,200),sf::Vector2f()) };
-        StartGameBtn->registerFunction(onStartGame, std::ref(lvl), 1);
-        Buttons.push_back(StartGameBtn);
+        Objects.emplace_back(std::make_unique<Object>("images/Free Pixel Art Hill/ajys.png", 0.f, 0.f));
 
-        auto* LevelBtn = new PushButton{ "images/levelBTN.png", sf::FloatRect(sf::Vector2f(100,350),sf::Vector2f()) };
+        auto &StartBtn = Buttons.emplace_back(std::make_unique<PushButton>("images/playBTN.png", sf::FloatRect(sf::Vector2f(100, 200), sf::Vector2f())));
+        StartBtn->registerFunction(onStartGame, std::ref(lvl), 1);
+
+        auto& LevelBtn = Buttons.emplace_back(std::make_unique<PushButton>("images/levelBTN.png", sf::FloatRect(sf::Vector2f(100, 350), sf::Vector2f())));
         LevelBtn->registerFunction(onLevel);
-        Buttons.push_back(LevelBtn);
 
-        auto* SettingsBtn = new PushButton{ "images/settingsBTN.png", sf::FloatRect(sf::Vector2f(100,500),sf::Vector2f()) };
+        auto& SettingsBtn = Buttons.emplace_back(std::make_unique<PushButton>("images/settingsBTN.png", sf::FloatRect(sf::Vector2f(100, 500), sf::Vector2f())));
         SettingsBtn->registerFunction(onSettings);
-        Buttons.push_back(SettingsBtn);
 
-        auto* ExitBtn = new PushButton{ "images/exitBTN.png", sf::FloatRect(sf::Vector2f(100,650),sf::Vector2f()) };
+        auto& ExitBtn = Buttons.emplace_back(std::make_unique<PushButton>("images/exitBTN.png", sf::FloatRect(sf::Vector2f(100, 650), sf::Vector2f())));
         ExitBtn->registerFunction(onExit);
-        Buttons.push_back(ExitBtn);
     }
     void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) override {
         if (MusicVector[0]->getStatus() != sf::Music::Playing) { //once when window changes
@@ -111,33 +102,25 @@ public:
         }
         SetLevel(lvl, 1, MusicVector[1], MusicVector, gameScene);
 
-        auto* light = new Object{ "images/light.png", 0, 80 };
-        Objects.push_back(light);
+        Objects.emplace_back(std::make_unique<Object>("images/light.png", 0, 80));
+        Objects.emplace_back(std::make_unique<Object>("images/line.png", 0, 80));
 
+        auto& PlayBtn = Buttons.emplace_back(std::make_unique<PushButton>("images/play96.png", sf::FloatRect(sf::Vector2f(100, 128), sf::Vector2f())));
+        PlayBtn->registerFunction(onPause, std::ref(is_pause));
 
-        auto* box = new Object{ "images/line.png", 0, 80 };
-        Objects.push_back(box);
-
-        auto* playBtn = new PushButton{ "images/play96.png", sf::FloatRect(sf::Vector2f(100,128),sf::Vector2f()) };
-        playBtn->registerFunction(onPause, std::ref(is_pause));
-        Buttons.push_back(playBtn);
-
-        auto* MenuBtn = new PushButton{ "images/menu96.png", sf::FloatRect(sf::Vector2f(250,128),sf::Vector2f()) };
+        auto& MenuBtn = Buttons.emplace_back(std::make_unique<PushButton>("images/menu96.png", sf::FloatRect(sf::Vector2f(250, 128), sf::Vector2f())));
         MenuBtn->registerFunction(onMenu);
-        Buttons.push_back(MenuBtn);
 
-        auto* ExitBtn = new PushButton{ "images/exit96.png", sf::FloatRect(sf::Vector2f(550,128),sf::Vector2f()) };
+        auto& ExitBtn = Buttons.emplace_back(std::make_unique<PushButton>("images/exit96.png", sf::FloatRect(sf::Vector2f(550, 128), sf::Vector2f())));
         ExitBtn->registerFunction(onExit);
-        Buttons.push_back(ExitBtn);
     }
-    ~GameWindow() = default;
 
-    void input(sf::RenderWindow& window, sf::View & view) override {
+    void input(const sf::RenderWindow& window, const sf::View & view) override {
         if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             if (!is_pause) is_pause = true;
         if (is_pause) 
             BaseWindow::input(window, view);
-        gameScene.get()->InputGameScene(window);
+        gameScene->InputGameScene();
     }
     void update(sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize) override {
         sf::Vector2f view_center = view.getCenter();
@@ -154,7 +137,7 @@ public:
         if(view.getSize().x != window.getSize().x / 2)
             view.setSize(window.getSize().x / 2, window.getSize().y / 2);
         gameScene->world.Step(timeStep, gameScene->velocityIterations, gameScene->positionIterations);
-        gameScene.get()->UpdateGameScene(window, view, windowSize, lvl);
+        gameScene->UpdateGameScene(window, view, windowSize, lvl);
     }
     void draw(sf::RenderWindow& window) override {
         gameScene.get()->DrawGameScene(window);
@@ -165,29 +148,24 @@ public:
 };
 
 class SettingsWindow final : public BaseWindow {
-    std::vector<Object*> volume_set;
+    std::vector<std::unique_ptr<Object>> volume_set;
 public:
     static constexpr auto Name = "settings";
     SettingsWindow() {
 
-        auto* MenuBtn = new PushButton{ "images/backBTN.png", sf::FloatRect(sf::Vector2f(100,768),sf::Vector2f() )};
+        auto& MenuBtn = Buttons.emplace_back(std::make_unique<PushButton>("images/backBTN.png", sf::FloatRect(sf::Vector2f(100, 768), sf::Vector2f())));
         MenuBtn->registerFunction(onMenu);
-        Buttons.push_back(MenuBtn);
 
-        auto* volume_upBtn = new PushButton{ "images/sound_up.png", sf::FloatRect(sf::Vector2f(476,200),sf::Vector2f()) };
-        volume_upBtn->registerFunction(upVolume, std::ref(MusicVector));
-        Buttons.push_back(volume_upBtn);
+        auto& VolUp = Buttons.emplace_back(std::make_unique<PushButton>("images/sound_up.png", sf::FloatRect(sf::Vector2f(476, 200), sf::Vector2f())));
+        VolUp->registerFunction(upVolume, std::ref(MusicVector));
 
-        auto* volume_downBtn = new PushButton{ "images/sound_down.png", sf::FloatRect(sf::Vector2f(100,200),sf::Vector2f()) };
-        volume_downBtn->registerFunction(downVolume, std::ref(MusicVector));
-        Buttons.push_back(volume_downBtn);
+        auto& VolDown = Buttons.emplace_back(std::make_unique<PushButton>("images/sound_down.png", sf::FloatRect(sf::Vector2f(100, 200), sf::Vector2f())));
+        VolDown->registerFunction(downVolume, std::ref(MusicVector));
 
-        for (float i = 0; i < 10; ++i) {
-            auto* box = new Object{ "images/wbox.png", 220 + 24*i, 228 };
-            volume_set.push_back(box);
-        }
+        for (float i = 0; i < 10; ++i)
+            volume_set.emplace_back(std::make_unique<Object>("images/wbox.png", 220 + 24 * i, 228));
     }
-    void draw (sf::RenderWindow& window)override {
+    void draw (sf::RenderWindow& window) override {
         BaseWindow::draw(window);
         
         float vol = MusicVector[0]->getVolume()/10.f;
@@ -199,15 +177,13 @@ public:
 class LevelWindow final : public BaseWindow {
 public:
     static constexpr auto Name = "level";
-    std::vector<PushButton> pButtons{num_levels};
     LevelWindow() {
-        auto* MenuBtn = new PushButton{ "images/backBTN.png", sf::FloatRect(sf::Vector2f(100,768),sf::Vector2f()) };
+        auto& MenuBtn = Buttons.emplace_back(std::make_unique<PushButton>("images/backBTN.png", sf::FloatRect(sf::Vector2f(100, 768), sf::Vector2f())));
         MenuBtn->registerFunction(onMenu);
-        Buttons.push_back(MenuBtn);
+
         for (int i = 1; i <= num_levels; ++i) {
-            pButtons[i - 1].setButton(&pButtons[i - 1], "images/" + std::to_string(i) + ".png", sf::FloatRect(sf::Vector2f(100 + 200 * (i - 1), 100), sf::Vector2f()));
-            pButtons[i - 1].registerFunction(onStartGame, std::ref(lvl), i);
-            Buttons.push_back(&pButtons[i-1]);
+            auto& Btn = Buttons.emplace_back(std::make_unique<PushButton>("images/" + std::to_string(i) + ".png", sf::FloatRect(sf::Vector2f(100 + 200 * (i - 1), 100), sf::Vector2f())));
+            Btn->registerFunction(onStartGame, std::ref(lvl), i);
         }
     }
 };

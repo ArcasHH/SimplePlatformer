@@ -40,7 +40,7 @@ struct GameScene{
     void SetSpriteTexture(std::string file);
     void ChangeTexture();
 
-    void InputGameScene(sf::RenderWindow& window);
+    void InputGameScene();
     void UpdateGameScene( sf::RenderWindow& window, sf::View& view, const sf::Vector2f windowSize, int& lvl);
     void DrawGameScene( sf::RenderWindow& window);
 };

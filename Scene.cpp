@@ -65,7 +65,7 @@ GameScene::GameScene(const std::string & file){
     CreateStaticObjects();
 }
 
-void GameScene::InputGameScene(sf::RenderWindow& window) {
+void GameScene::InputGameScene() {
     world.Step(timeStep, velocityIterations, positionIterations);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {

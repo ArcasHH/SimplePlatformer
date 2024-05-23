@@ -57,18 +57,17 @@ class PushButton final : Object {
 	sf::Color base_color;
 	sf::Color clicked_color;
 
+	bool  is_pos(const sf::RenderWindow& window, const sf::View& view) const;
+
 public:
 	bool is_clicked;
-	bool  is_pos(sf::RenderWindow& window, sf::View& view);
 	using OnClickFunc = std::function<void()>;
 	OnClickFunc OnClick;
 
 	PushButton(std::string file, sf::FloatRect area = sf::FloatRect(), sf::Color b_color = sf::Color(200,157,100), sf::Color c_color = sf::Color(154, 182, 154));
-	PushButton() {};
-	void setButton(PushButton *btn, std::string file, sf::FloatRect r, sf::Color b_color = sf::Color(200, 157, 100), sf::Color c_color = sf::Color(154, 182, 154));
 	~PushButton() = default;
 
-	void input(sf::RenderWindow& window, sf::View& view);
+	void input(const sf::RenderWindow& window, const sf::View& view);
 	void update(sf::RenderWindow& window, sf::View& view);
 	void draw(sf::RenderWindow& window) override;
 	void setPosition(float x, float y);
