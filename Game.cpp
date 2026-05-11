@@ -1,8 +1,8 @@
 #include "Game.h"
 Game::Game() {
-    windowSize.x = static_cast<float>(sf::VideoMode::getDesktopMode().width);
-    windowSize.y = static_cast<float>(sf::VideoMode::getDesktopMode().height);
-    window.create(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Simple Game");
+    windowSize.x = static_cast<float>(1920);
+    windowSize.y = static_cast<float>(1080);
+    window.create(sf::VideoMode(1920, 1080), "Simple Game");
     window.setVerticalSyncEnabled(false);
     window.setFramerateLimit(GameScene::frames);
 }
