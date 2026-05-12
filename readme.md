@@ -18,3 +18,4 @@ Well, as this project is somewhat experimental, building routine is tedious and 
 3. Specify include an lib paths to installed files for SFML and box2d in project settings
 4. Specify LD\_LIBRARY path to SFML/bin for execution, as it requires .dll (or copy all .dll in output directory)
 
+![Demo](https://github.com/ArcasHH/SimplePlatformer/blob/e190ed6e4d4e1de0a6811cdc7f0ee5372f060265/PlatformerPreview.gif)
